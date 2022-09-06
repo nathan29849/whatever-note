@@ -1,0 +1,2 @@
+-   create-react-app
+-   TypeScript 설치
