@@ -1,2 +1,3 @@
 -   create-react-app
 -   TypeScript 설치
+-   Sass 설치

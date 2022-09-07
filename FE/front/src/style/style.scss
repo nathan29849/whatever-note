@@ -1,0 +1,16 @@
+$light-yellow: #F1C685;
+$pale-yellow: #FFFDEE;
+$ivory-yellow: #FFFDEE;
+$light-green: #CCD5AE;
+$pale-green: #E9EDC9;
+
+.App{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background-color: $ivory-yellow;
+}
+

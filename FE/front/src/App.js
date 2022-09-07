@@ -1,14 +1,11 @@
-import "./App.css";
+import "./style/style.css";
+import Collection from "./component/collection";
 
 function App() {
     return (
         <div className="App">
-            <header className="App-header">
-                <p>header</p>
-            </header>
-            <main>
-                <p>hi</p>
-            </main>
+            <p>Notes</p>
+            <Collection />
         </div>
     );
 }
