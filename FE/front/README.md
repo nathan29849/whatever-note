@@ -1,3 +1,4 @@
 -   create-react-app
 -   TypeScript 설치
 -   Sass 설치
+-   [React Todo List Tutorial, mdn](https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/React_components)
