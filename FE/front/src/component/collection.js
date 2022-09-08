@@ -1,21 +1,6 @@
 import { useState } from "react";
 
-const DATA = [
-    { name: "TOEIC", completed: false, id: "1" },
-    { name: "매일매일단어장", completed: false, id: "2" },
-    { name: "가끔보는단어장", completed: false, id: "3" },
-];
-
-function Note(props) {
-    return (
-        <li>
-            {props.name}
-            <input type="checkbox" defaultChecked={props.completed} />
-        </li>
-    );
-}
-
-export default function Collection(props) {
+export default function Collection() {
     const [newNoteName, setnewNoteName] = useState("");
     const [notes, setNote] = useState([]);
 
@@ -28,7 +13,6 @@ export default function Collection(props) {
         const newId = notes.length;
         const newNote = {
             name: newNoteName,
-            completed: false,
             id: newId,
         };
         if (!notes) {
@@ -56,21 +40,17 @@ export default function Collection(props) {
                 <button type="submit" className="input-btn" onClick={addNote}>
                     add
                 </button>
-                <button onClick={consoleNote}>check</button>
             </div>
             <ul
                 role="list"
-                className="collection--list stack-large"
+                className="note-collection stack-large"
                 aria-labelledby="list-heading"
             >
                 {notes.map((e) => {
                     return (
-                        <li key={e.id}>
+                        <li key={e.id} className="note">
                             {e.name}
-                            <input
-                                type="checkbox"
-                                defaultChecked={e.completed}
-                            />
+                            <div className="note--edit-btn">수정</div>
                         </li>
                     );
                 })}

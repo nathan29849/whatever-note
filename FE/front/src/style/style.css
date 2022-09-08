@@ -1,10 +1,33 @@
 .App {
   height: 100vh;
+  width: 800px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: #FFFDEE;
+}
+
+.note-collection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 25px 0 25px;
+}
+
+.note {
+  background-color: #E9EDC9;
+  display: flex;
+  width: 750px;
+  height: 100px;
+  margin-bottom: 22px;
+  list-style: none;
+}
+.note--edit-btn {
+  width: 200px;
+  height: 100px;
+  background-color: #CCD5AE;
+  border: 1px;
 }
 
 /*# sourceMappingURL=style.css.map */
