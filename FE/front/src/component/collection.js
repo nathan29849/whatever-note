@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Draggable from "./draggable";
 
 export default function Collection() {
     const [newNoteName, setnewNoteName] = useState("");
@@ -50,7 +51,9 @@ export default function Collection() {
                     return (
                         <li key={e.id} className="note">
                             {e.name}
-                            <div className="note--edit-btn">수정</div>
+                            <Draggable>
+                                <div className="note--edit-btn">수정</div>
+                            </Draggable>
                         </li>
                     );
                 })}
