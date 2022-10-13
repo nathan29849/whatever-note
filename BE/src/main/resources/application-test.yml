@@ -1,0 +1,24 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/whatever-note?&characterEncoding=UTF-8&serverTimeZone=Asia/Seoul
+    username: root
+    password: sonya-nathan
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    team15:
+      airbnb: debug
