@@ -1,4 +1,4 @@
-package dev.whatevernote.be.hello.service.dto.response;
+package dev.whatevernote.be.service.dto.response;
 
 public class NoteResponseDto {
 

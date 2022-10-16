@@ -11,9 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.whatevernote.be.hello.web.controller.NoteController;
-import dev.whatevernote.be.hello.service.NoteService;
-import dev.whatevernote.be.hello.service.dto.response.NoteResponseDto;
+import dev.whatevernote.be.service.NoteService;
+import dev.whatevernote.be.service.dto.response.NoteResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;

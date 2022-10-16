@@ -1,6 +1,6 @@
-package dev.whatevernote.be.hello.service;
+package dev.whatevernote.be.service;
 
-import dev.whatevernote.be.hello.service.dto.response.NoteResponseDto;
+import dev.whatevernote.be.service.dto.response.NoteResponseDto;
 import org.springframework.stereotype.Service;
 
 @Service
