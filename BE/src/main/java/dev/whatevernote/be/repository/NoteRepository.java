@@ -1,5 +1,8 @@
 package dev.whatevernote.be.repository;
 
-public class NoteRepository {
+import dev.whatevernote.be.service.domain.Note;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface NoteRepository extends JpaRepository<Note, Long> {
 
 }
