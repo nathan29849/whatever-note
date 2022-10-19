@@ -1,37 +1,39 @@
 package dev.whatevernote.be.service.domain;
 
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Note {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 
 	@Column(name="note_order")
-	private Long order;
+	@NotNull
+	private Integer seq;
+
 	private String title;
 
 	public Note() {}
 
-	private Note(Long order, String title) {
-		this.order = order;
+	private Note(Integer seq, String title) {
+		this.seq = seq;
 		this.title = title;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public Long getOrder() {
-		return order;
+	public Integer getSeq() {
+		return seq;
 	}
 
 	public String getTitle() {
@@ -39,7 +41,7 @@ public class Note {
 	}
 
 	public static Note from(NoteRequestDto noteRequestDto) {
-		return new Note(noteRequestDto.getOrder(), noteRequestDto.getTitle());
+		return new Note(noteRequestDto.getSeq(), noteRequestDto.getTitle());
 	}
 
 

@@ -53,8 +53,8 @@ class NoteControllerTest {
 	@Test
 	void 단어장을_id에_따라_조회하면_해당_단어장을_반환한다() throws Exception {
 	    //given
-		NoteResponseDto noteResponseDto = new NoteResponseDto(1L, 1L, "note-1");
-		when(noteService.findById(1L)).thenReturn(noteResponseDto);
+		NoteResponseDto noteResponseDto = new NoteResponseDto(1, 1, "note-1");
+		when(noteService.findById(1)).thenReturn(noteResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/api/note/1")
@@ -78,8 +78,8 @@ class NoteControllerTest {
 	@Test
 	void 단어장을_생성하면_생성된_단어장의_id를_가진_URI로_리다이렉트_된다() throws Exception {
 	    //given
-		NoteRequestDto noteRequestDto = new NoteRequestDto(1L, "첫번째 노트");
-		NoteResponseDto noteResponseDto = new NoteResponseDto(1L, 1L, "첫번째 노트");
+		NoteRequestDto noteRequestDto = new NoteRequestDto(1, "첫번째 노트");
+		NoteResponseDto noteResponseDto = new NoteResponseDto(1, 1, "첫번째 노트");
 		when(noteService.create(refEq(noteRequestDto))).thenReturn(noteResponseDto);
 
 		//when

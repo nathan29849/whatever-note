@@ -20,7 +20,7 @@ public class NoteService {
 		this.noteRepository = noteRepository;
 	}
 
-	public NoteResponseDto findById(final Long noteId) {
+	public NoteResponseDto findById(final Integer noteId) {
 		return null;
 	}
 

@@ -4,6 +4,7 @@ import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
 import java.net.URI;
+import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,12 +26,12 @@ public class NoteController {
 	}
 
 	@GetMapping("/{noteId}")
-	public ResponseEntity<NoteResponseDto> findById(@PathVariable final Long noteId) {
+	public ResponseEntity<NoteResponseDto> findById(@PathVariable final Integer noteId) {
 		return ResponseEntity.ok(noteService.findById(noteId));
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> create(@RequestBody final NoteRequestDto noteRequestDto) {
+	public ResponseEntity<Void> create(@RequestBody NoteRequestDto noteRequestDto) {
 		final NoteResponseDto noteResponseDto = noteService.create(noteRequestDto);
 		return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
 			.location(URI.create("/api/note/" + noteResponseDto.getId())).build();

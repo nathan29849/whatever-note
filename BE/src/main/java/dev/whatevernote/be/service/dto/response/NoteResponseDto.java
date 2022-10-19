@@ -4,22 +4,22 @@ import dev.whatevernote.be.service.domain.Note;
 
 public class NoteResponseDto {
 
-	private Long id;
-	private Long order;
+	private Integer id;
+	private Integer seq;
 	private String title;
 
-	public NoteResponseDto(Long id, Long order, String title) {
+	public NoteResponseDto(Integer id, Integer seq, String title) {
 		this.id = id;
-		this.order = order;
+		this.seq = seq;
 		this.title = title;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public Long getOrder() {
-		return order;
+	public Integer getSeq() {
+		return seq;
 	}
 
 	public String getTitle() {
@@ -29,7 +29,7 @@ public class NoteResponseDto {
 	public static NoteResponseDto from(Note note) {
 		return new NoteResponseDto(
 			note.getId(),
-			note.getOrder(),
+			note.getSeq(),
 			note.getTitle()
 		);
 	}
