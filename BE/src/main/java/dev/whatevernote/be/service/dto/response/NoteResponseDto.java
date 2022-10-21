@@ -1,26 +1,37 @@
 package dev.whatevernote.be.service.dto.response;
 
+import dev.whatevernote.be.service.domain.Note;
+
 public class NoteResponseDto {
 
-	private Long id;
-	private Integer order;
+	private Integer id;
+	private Integer seq;
 	private String title;
 
-	public NoteResponseDto(Long id, Integer order, String title) {
+	public NoteResponseDto(Integer id, Integer seq, String title) {
 		this.id = id;
-		this.order = order;
+		this.seq = seq;
 		this.title = title;
 	}
 
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public Integer getOrder() {
-		return order;
+	public Integer getSeq() {
+		return seq;
 	}
 
 	public String getTitle() {
 		return title;
 	}
+
+	public static NoteResponseDto from(Note note) {
+		return new NoteResponseDto(
+			note.getId(),
+			note.getSeq(),
+			note.getTitle()
+		);
+	}
+
 }

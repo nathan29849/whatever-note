@@ -3,11 +3,10 @@
 :toclevels: 2
 :sectlinks:
 
-[[resources-get]]
-== Get
+== 단어장(Note)
 
 [[resources-get-create]]
-=== GET 생성
+=== 1. [GET] 단어장 단일 조회
 
 ==== HTTP request
 
@@ -19,3 +18,20 @@ include::{snippets}/get-all-notes/http-response.adoc[]
 
 ==== Fields
 include::{snippets}/get-all-notes/response-fields.adoc[]
+
+
+[[resources-post-create]]
+=== 2. [POST] 단어장 생성
+
+==== HTTP request
+
+include::{snippets}/create-note/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/create-note/http-response.adoc[]
+
+==== Fields
+include::{snippets}/create-note/request-fields.adoc[]
+
+---
