@@ -1,7 +1,7 @@
 package dev.whatevernote.be.web.controller;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
+import static org.mockito.Mockito.description;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -27,14 +27,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
-@ActiveProfiles("test")
 @WebMvcTest(NoteController.class)
 class NoteControllerTest {
 
@@ -70,7 +68,7 @@ class NoteControllerTest {
 				preprocessResponse(prettyPrint()),
 				responseFields(
 					fieldWithPath("id").type(JsonFieldType.NUMBER).description("note id"),
-					fieldWithPath("order").type(JsonFieldType.NUMBER).description("note order"),
+					fieldWithPath("seq").type(JsonFieldType.NUMBER).description("note seq"),
 					fieldWithPath("title").type(JsonFieldType.STRING).description("title")
 				)));
 	}
@@ -94,10 +92,13 @@ class NoteControllerTest {
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				requestFields(
-					fieldWithPath("order").type(JsonFieldType.NUMBER).description("note order"),
-					fieldWithPath("title").type(JsonFieldType.STRING).description("title")
+					fieldWithPath("seq").type(JsonFieldType.NUMBER)
+						.description("노트 생성 위치를 받습니다. +" + "\n"
+							+ "만약 생성위치를 담지 않고, 요청을 보내면 가장 첫 번째 순서로 노트가 생성됩니다."),
+					fieldWithPath("title").type(JsonFieldType.STRING)
+						.description("노트 제목을 받습니다. +" + "\n"
+							+ "만약 노트 제목을 담지 않고, 요청을 보내면 빈 문자열을 제목으로 가진 노트가 생성됩니다.")
 				)));
-
 	}
 
 }

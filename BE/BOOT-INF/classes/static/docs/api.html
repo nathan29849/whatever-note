@@ -477,11 +477,11 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 51
+Content-Length: 49
 
 {
   "id" : 1,
-  "order" : 1,
+  "seq" : 1,
   "title" : "note-1"
 }</code></pre>
 </div>
@@ -509,9 +509,9 @@ Content-Length: 51
 <td class="tableblock halign-left valign-top"><p class="tableblock">note id</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>order</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>seq</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">note order</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">note seq</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
@@ -530,11 +530,11 @@ Content-Length: 51
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/note HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 49
+Content-Length: 47
 Host: localhost:8080
 
 {
-  "order" : 1,
+  "seq" : 1,
   "title" : "첫번째 노트"
 }</code></pre>
 </div>
@@ -566,14 +566,16 @@ Location: /api/note/1</code></pre>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>order</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>seq</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">note order</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노트 생성 위치를 받습니다.
+만약 생성위치를 담지 않고, 요청을 보내면 가장 첫 번째 순서로 노트가 생성됩니다.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">title</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">노트 제목을 받습니다.
+만약 노트 제목을 담지 않고, 요청을 보내면 빈 문자열을 제목으로 가진 노트가 생성됩니다.</p></td>
 </tr>
 </tbody>
 </table>

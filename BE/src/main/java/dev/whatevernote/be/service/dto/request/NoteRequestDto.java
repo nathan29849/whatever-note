@@ -5,6 +5,9 @@ public class NoteRequestDto {
 	private Integer seq;
 	private String title;
 
+	public NoteRequestDto() {
+	}
+
 	public NoteRequestDto(Integer seq, String title) {
 		this.seq = seq;
 		this.title = title;

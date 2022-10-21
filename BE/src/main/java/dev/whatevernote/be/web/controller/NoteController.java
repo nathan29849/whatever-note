@@ -4,7 +4,6 @@ import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
 import java.net.URI;
-import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
