@@ -26,8 +26,11 @@ public class NoteService {
 		this.noteRepository = noteRepository;
 	}
 
+	@Transactional(readOnly = true)
 	public NoteResponseDto findById(final Integer noteId) {
-		return null;
+		Note note = noteRepository.findById(noteId)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 ID 입니다."));
+		return NoteResponseDto.from(note);
 	}
 
 	@Transactional

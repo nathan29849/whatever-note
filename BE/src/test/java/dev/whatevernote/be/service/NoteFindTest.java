@@ -21,7 +21,7 @@ import org.springframework.data.domain.PageRequest;
 @SpringBootTest
 class NoteFindTest {
 
-	private static final int NUMBER_OF_NOTE = 100;
+	private static final int NUMBER_OF_NOTE = 30;
 	private static final int PAGE_NUMBER = 1;
 	private static final int PAGE_SIZE = 10;
 
@@ -39,7 +39,32 @@ class NoteFindTest {
 
 	private void createNotes(int numberOfNote) {
 		for (int i = 0; i < numberOfNote; i++) {
-			noteService.create(new NoteRequestDto(i, "note-" + i));
+			noteService.create(new NoteRequestDto(i, "note-" + (i+1)));
+		}
+	}
+
+	@Nested
+	@DisplayName("노트를 단건 조회할 때")
+	class FindOneTest {
+
+		@Nested
+		@DisplayName("정상적인 요청이라면")
+		class NormalFindOneTest {
+
+
+			@DisplayName("해당 ID의 노트가 조회된다.")
+			@Test
+			void normal_find_one() {
+				//given
+				Integer tmpNoteId = 10;
+
+				//when
+				NoteResponseDto noteResponseDto = noteService.findById(tmpNoteId);
+
+				//then
+				assertThat(noteResponseDto.getId()).isEqualTo(tmpNoteId);
+				assertThat(noteResponseDto.getTitle()).isEqualTo("note-" + tmpNoteId);
+			}
 		}
 	}
 
@@ -54,7 +79,7 @@ class NoteFindTest {
 
 			@DisplayName("size 요청 횟수 만큼 조회된다.")
 			@Test
-			void normal_find_all_with_no_page_size() {
+			void normal_find_all() {
 				//given
 				PageRequest defaultPageRequest = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
 				NoteResponseDtos noteRequestDtos = noteService.findAll(defaultPageRequest);
