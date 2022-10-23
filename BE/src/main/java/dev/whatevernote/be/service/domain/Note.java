@@ -1,15 +1,19 @@
 package dev.whatevernote.be.service.domain;
 
+import dev.whatevernote.be.common.BaseEntity;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
+import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
-public class Note {
+public class Note extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
