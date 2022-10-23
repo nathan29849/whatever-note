@@ -15,7 +15,7 @@ public class Note {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(name="note_order")
+	@Column(name="note_order", unique = true)
 	@NotNull
 	private Integer seq;
 

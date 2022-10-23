@@ -10,18 +10,37 @@
 
 ==== HTTP request
 
+include::{snippets}/get-one-note/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/get-one-note/http-response.adoc[]
+
+
+==== Fields
+include::{snippets}/get-one-note/response-fields.adoc[]
+
+
+[[resources-get-create]]
+=== 2. [GET] 단어장 모두 조회
+
+==== HTTP request
+
 include::{snippets}/get-all-notes/http-request.adoc[]
 
 ==== HTTP response
 
 include::{snippets}/get-all-notes/http-response.adoc[]
 
+==== Query Parameters
+
+include::{snippets}/get-all-notes/request-parameters.adoc[]
+
 ==== Fields
 include::{snippets}/get-all-notes/response-fields.adoc[]
 
-
 [[resources-post-create]]
-=== 2. [POST] 단어장 생성
+=== 3. [POST] 단어장 생성
 
 ==== HTTP request
 
