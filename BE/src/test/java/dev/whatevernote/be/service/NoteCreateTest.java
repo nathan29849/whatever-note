@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@DisplayName("통합 테스트 : Note")
+@DisplayName("통합 테스트 : Note 생성")
 @SpringBootTest
-class NoteServiceTest {
+class NoteCreateTest {
 
 	private static final int DEFAULT_RANGE = 1_000;
 
@@ -31,7 +31,7 @@ class NoteServiceTest {
 
 	@Nested
 	@DisplayName("노트를 생성할 때")
-	class NoteCreateTest {
+	class CreateTest {
 
 		@Nested
 		@DisplayName("정상적인 생성 요청이라면")

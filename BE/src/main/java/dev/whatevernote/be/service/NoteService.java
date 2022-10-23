@@ -4,10 +4,13 @@ import dev.whatevernote.be.repository.NoteRepository;
 import dev.whatevernote.be.service.domain.Note;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
+import dev.whatevernote.be.service.dto.response.NoteResponseDtos;
 import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +26,11 @@ public class NoteService {
 		this.noteRepository = noteRepository;
 	}
 
+	@Transactional(readOnly = true)
 	public NoteResponseDto findById(final Integer noteId) {
-		return null;
+		Note note = noteRepository.findById(noteId)
+			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 ID 입니다."));
+		return NoteResponseDto.from(note);
 	}
 
 	@Transactional
@@ -56,5 +62,11 @@ public class NoteService {
 		final Note savedNote = noteRepository.save(Note.from(noteRequestDto));
 		logger.debug("[CREATE Note] ID = {}, SEQ = {}", savedNote.getId(), savedNote.getSeq());
 		return NoteResponseDto.from(savedNote);
+	}
+
+	@Transactional(readOnly = true)
+	public NoteResponseDtos findAll(Pageable pageable) {
+		Slice<Note> notes = noteRepository.findAllByOrderBySeq(pageable);
+		return NoteResponseDtos.from(notes);
 	}
 }
