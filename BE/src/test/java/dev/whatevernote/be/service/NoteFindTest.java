@@ -3,6 +3,7 @@ package dev.whatevernote.be.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.whatevernote.be.repository.NoteRepository;
+import dev.whatevernote.be.service.domain.Note;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDtos;
@@ -55,14 +56,17 @@ class NoteFindTest {
 			@Test
 			void normal_find_one() {
 				//given
-				Integer tmpNoteId = 10;
+				List<Note> notes = noteRepository.findAllByOrderBySeq();
+				int seq = 10;
+				int tmpNoteId = notes.get(seq).getId();
+
 
 				//when
 				NoteResponseDto noteResponseDto = noteService.findById(tmpNoteId);
 
 				//then
 				assertThat(noteResponseDto.getId()).isEqualTo(tmpNoteId);
-				assertThat(noteResponseDto.getTitle()).isEqualTo("note-" + tmpNoteId);
+				assertThat(noteResponseDto.getTitle()).isEqualTo("note-" + (seq+1));
 			}
 		}
 	}
