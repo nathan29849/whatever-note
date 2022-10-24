@@ -2,15 +2,12 @@ package dev.whatevernote.be.service.domain;
 
 import dev.whatevernote.be.common.BaseEntity;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
-import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 public class Note extends BaseEntity {
@@ -49,4 +46,11 @@ public class Note extends BaseEntity {
 	}
 
 
+	public void updateTitle(String title) {
+		this.title = title;
+	}
+
+	public void updateSeq(NoteRequestDto noteRequestDto) {
+		this.seq = noteRequestDto.getSeq();
+	}
 }

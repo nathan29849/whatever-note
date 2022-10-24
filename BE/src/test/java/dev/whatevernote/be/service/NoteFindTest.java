@@ -51,7 +51,6 @@ class NoteFindTest {
 		@DisplayName("정상적인 요청이라면")
 		class NormalFindOneTest {
 
-
 			@DisplayName("해당 ID의 노트가 조회된다.")
 			@Test
 			void normal_find_one() {
