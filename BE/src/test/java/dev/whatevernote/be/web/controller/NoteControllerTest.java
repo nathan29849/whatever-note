@@ -2,6 +2,7 @@ package dev.whatevernote.be.web.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -12,6 +13,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -36,6 +38,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -61,6 +64,7 @@ class NoteControllerTest {
 	private NoteRepository noteRepository;
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final Integer NOTE_ID = 1;
 
 	@BeforeEach
 	public void init(WebApplicationContext wc, RestDocumentationContextProvider provider) {
@@ -75,11 +79,12 @@ class NoteControllerTest {
 	@Test
 	void 단어장을_id에_따라_조회하면_해당_단어장을_반환한다() throws Exception {
 	    //given
-		NoteResponseDto noteResponseDto = new NoteResponseDto(1, 1, "note-1");
+		NoteResponseDto noteResponseDto = new NoteResponseDto(NOTE_ID, 1, "note-1");
 		when(noteService.findById(1)).thenReturn(noteResponseDto);
 
 		//when
-		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/api/note/1")
+		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
+				.get("/api/note/{NOTE_ID}", NOTE_ID)
 				.accept(MediaType.APPLICATION_JSON_VALUE)
 				.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -90,6 +95,9 @@ class NoteControllerTest {
 			.andDo(document("get-one-note",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
+				pathParameters(
+					parameterWithName("NOTE_ID").description("note id")
+				),
 				responseFields(
 					fieldWithPath("id").type(JsonFieldType.NUMBER).description("note id"),
 					fieldWithPath("seq").type(JsonFieldType.NUMBER).description("note seq"),
@@ -136,7 +144,7 @@ class NoteControllerTest {
 	void 단어장을_생성하면_생성된_단어장의_id를_가진_URI로_리다이렉트_된다() throws Exception {
 	    //given
 		NoteRequestDto noteRequestDto = new NoteRequestDto(1, "첫번째 노트");
-		NoteResponseDto noteResponseDto = new NoteResponseDto(1, 1, "첫번째 노트");
+		NoteResponseDto noteResponseDto = new NoteResponseDto(NOTE_ID, 1, "첫번째 노트");
 		when(noteService.create(refEq(noteRequestDto))).thenReturn(noteResponseDto);
 
 		//when
@@ -164,11 +172,12 @@ class NoteControllerTest {
 	void 단어장을_수정하면_수정된_단어장을_반환한다() throws Exception {
 	    //given
 		NoteRequestDto noteRequestDto = new NoteRequestDto(0, null);
-		NoteResponseDto noteResponseDto = new NoteResponseDto(1, DEFAULT_RANGE, "단어장 제목 제목");
+		NoteResponseDto noteResponseDto = new NoteResponseDto(NOTE_ID, DEFAULT_RANGE, "단어장 제목 제목");
 		when(noteService.update(any(), any())).thenReturn(noteResponseDto);
 
 	    //when
-		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.put("/api/note/1")
+		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
+			.put("/api/note/{NOTE_ID}", NOTE_ID)
 			.content(objectMapper.writeValueAsString(noteRequestDto))
 			.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -178,6 +187,9 @@ class NoteControllerTest {
 			.andDo(document("update-note",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
+				pathParameters(
+					parameterWithName("NOTE_ID").description("note id")
+				),
 				requestFields(
 					fieldWithPath("seq").type(JsonFieldType.NUMBER)
 						.description("수정할 노트의 위치(=옮길 위치 이전의 노트 개수)를 받습니다. +" + "\n"
@@ -197,6 +209,26 @@ class NoteControllerTest {
 
 			)
 		);
+	}
+
+	@Test
+	void 단어장을_삭제하면_soft_delete_한다() throws Exception {
+	    //given
+		doNothing().when(noteService).delete(any());
+
+	    //when
+		ResultActions resultActions = this.mockMvc
+			.perform(RestDocumentationRequestBuilders
+				.delete("/api/note/{NOTE_ID}", NOTE_ID));
+
+	    //then
+		resultActions.andExpect(status().isOk())
+			.andDo(document("delete-note",
+				preprocessRequest(prettyPrint()),
+				pathParameters(
+					parameterWithName("NOTE_ID").description("note id")
+				)
+			));
 	}
 
 }

@@ -451,6 +451,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#resources-get-create">2. [GET] 단어장 모두 조회</a></li>
 <li><a href="#resources-post-create">3. [POST] 단어장 생성</a></li>
 <li><a href="#resources-update-note">4. [PUT] 단어장 수정</a></li>
+<li><a href="#resources-delete-note">5. [DELETE] 단어장 삭제</a></li>
 </ul>
 </li>
 </ul>
@@ -490,6 +491,28 @@ Content-Length: 49
 </div>
 </div>
 <div class="sect3">
+<h4 id="_path_parameter"><a class="link" href="#_path_parameter">Path Parameter</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. /api/note/{NOTE_ID}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NOTE_ID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">note id</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
 <h4 id="_fields"><a class="link" href="#_fields">Fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -522,6 +545,7 @@ Content-Length: 49
 </tr>
 </tbody>
 </table>
+<hr>
 </div>
 </div>
 <div class="sect2">
@@ -633,6 +657,7 @@ Content-Length: 245
 </tr>
 </tbody>
 </table>
+<hr>
 </div>
 </div>
 <div class="sect2">
@@ -692,6 +717,7 @@ Location: /api/note/1</code></pre>
 </tr>
 </tbody>
 </table>
+<hr>
 </div>
 </div>
 <div class="sect2">
@@ -740,6 +766,28 @@ Content-Length: 69
 }</code></pre>
 </div>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_path_parameter_2"><a class="link" href="#_path_parameter_2">Path Parameter</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. /api/note/{NOTE_ID}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NOTE_ID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">note id</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="_request_fields"><a class="link" href="#_request_fields">Request Fields</a></h4>
@@ -808,13 +856,56 @@ Content-Length: 69
 <hr>
 </div>
 </div>
+<div class="sect2">
+<h3 id="resources-delete-note"><a class="link" href="#resources-delete-note">5. [DELETE] 단어장 삭제</a></h3>
+<div class="sect3">
+<h4 id="_http_request_5"><a class="link" href="#_http_request_5">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/note/1 HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_http_response_5"><a class="link" href="#_http_response_5">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_path_parameter_3"><a class="link" href="#_path_parameter_3">Path Parameter</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. /api/note/{NOTE_ID}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NOTE_ID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">note id</p></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-10-24 14:28:12 +0900
+Last updated 2022-10-26 00:22:46 +0900
 </div>
 </div>
 </body>
