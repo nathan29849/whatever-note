@@ -1,8 +1,9 @@
-package dev.whatevernote.be.service;
+package dev.whatevernote.be.service.note;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.whatevernote.be.repository.NoteRepository;
+import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
 import org.junit.jupiter.api.BeforeEach;
