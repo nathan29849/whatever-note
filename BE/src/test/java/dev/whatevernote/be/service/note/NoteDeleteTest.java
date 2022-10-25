@@ -2,23 +2,23 @@ package dev.whatevernote.be.service.note;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.catchThrowable;
 
 import dev.whatevernote.be.repository.NoteRepository;
 import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.domain.Note;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
-import dev.whatevernote.be.service.dto.response.NoteResponseDto;
 import java.util.List;
-import org.assertj.core.api.Assertions;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
 @DisplayName("통합 테스트 : Note 삭제")
+@Sql("/truncate.sql")
 @SpringBootTest
 class NoteDeleteTest {
 
@@ -61,9 +61,11 @@ class NoteDeleteTest {
 
 				//when
 				noteService.delete(deleteNoteId);
+				Optional<Note> note = noteRepository.findById(deleteNoteId);
 				List<Note> afterDelete = noteRepository.findAllByOrderBySeq();
 
 				//then
+				assertThat(note).isEmpty();
 				assertThat(afterDelete).hasSize(NUMBER_OF_NOTE-1);
 				assertThatThrownBy(() -> noteService.findById(deleteNoteId))
 					.isInstanceOf(Exception.class)

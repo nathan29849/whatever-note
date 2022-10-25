@@ -10,6 +10,7 @@ import dev.whatevernote.be.service.dto.response.NoteResponseDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDtos;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -17,9 +18,10 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.jdbc.Sql;
 
 @DisplayName("통합 테스트 : Note 조회")
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Sql("/truncate.sql")
 @SpringBootTest
 class NoteFindTest {
 
@@ -33,7 +35,7 @@ class NoteFindTest {
 	@Autowired
 	private NoteRepository noteRepository;
 
-	@BeforeAll
+	@BeforeEach
 	void init() {
 		noteRepository.deleteAll();
 		createNotes(NUMBER_OF_NOTE);
