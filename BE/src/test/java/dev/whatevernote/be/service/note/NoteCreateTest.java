@@ -1,8 +1,9 @@
-package dev.whatevernote.be.service;
+package dev.whatevernote.be.service.note;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.whatevernote.be.repository.NoteRepository;
+import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +12,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
 @DisplayName("통합 테스트 : Note 생성")
+@Sql("/truncate.sql")
 @SpringBootTest
 class NoteCreateTest {
 

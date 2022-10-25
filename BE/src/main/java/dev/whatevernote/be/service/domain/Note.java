@@ -8,7 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
+@SQLDelete(sql = "UPDATE note SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 @Entity
 public class Note extends BaseEntity {
 

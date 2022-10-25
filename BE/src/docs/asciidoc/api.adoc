@@ -5,6 +5,8 @@
 
 == 단어장(Note)
 
+---
+
 [[resources-get-create]]
 === 1. [GET] 단어장 단일 조회
 
@@ -16,10 +18,13 @@ include::{snippets}/get-one-note/http-request.adoc[]
 
 include::{snippets}/get-one-note/http-response.adoc[]
 
+==== Path Parameter
+include::{snippets}/get-one-note/path-parameters.adoc[]
 
 ==== Fields
 include::{snippets}/get-one-note/response-fields.adoc[]
 
+---
 
 [[resources-get-create]]
 === 2. [GET] 단어장 모두 조회
@@ -39,6 +44,8 @@ include::{snippets}/get-all-notes/request-parameters.adoc[]
 ==== Fields
 include::{snippets}/get-all-notes/response-fields.adoc[]
 
+---
+
 [[resources-post-create]]
 === 3. [POST] 단어장 생성
 
@@ -52,6 +59,8 @@ include::{snippets}/create-note/http-response.adoc[]
 
 ==== Fields
 include::{snippets}/create-note/request-fields.adoc[]
+
+---
 
 [[resources-update-note]]
 === 4. [PUT] 단어장 수정
@@ -68,10 +77,29 @@ include::{snippets}/update-note/http-request.adoc[]
 
 include::{snippets}/update-note/http-response.adoc[]
 
+==== Path Parameter
+include::{snippets}/update-note/path-parameters.adoc[]
+
 ==== Request Fields
 include::{snippets}/update-note/request-fields.adoc[]
 
 ==== Response Fields
 include::{snippets}/update-note/response-fields.adoc[]
+
+---
+
+[[resources-delete-note]]
+=== 5. [DELETE] 단어장 삭제
+
+==== HTTP request
+
+include::{snippets}/delete-note/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/delete-note/http-response.adoc[]
+
+==== Path Parameter
+include::{snippets}/delete-note/path-parameters.adoc[]
 
 ---

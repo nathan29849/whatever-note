@@ -8,6 +8,7 @@ import java.net.URI;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,6 +49,12 @@ public class NoteController {
 	public ResponseEntity<NoteResponseDto> update(@PathVariable final Integer noteId,
 		@RequestBody final NoteRequestDto noteRequestDto) {
 		return ResponseEntity.ok(noteService.update(noteId, noteRequestDto));
+	}
+
+	@DeleteMapping("/{noteId}")
+	public ResponseEntity<Void> delete(@PathVariable final Integer noteId) {
+		noteService.delete(noteId);
+		return ResponseEntity.ok().build();
 	}
 
 }

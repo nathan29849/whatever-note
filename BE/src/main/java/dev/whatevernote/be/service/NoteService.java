@@ -29,9 +29,13 @@ public class NoteService {
 
 	@Transactional(readOnly = true)
 	public NoteResponseDto findById(final Integer noteId) {
-		Note note = noteRepository.findById(noteId)
-			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_NOTE_ID));
+		Note note = findNoteById(noteId);
 		return NoteResponseDto.from(note);
+	}
+
+	private Note findNoteById(Integer noteId) {
+		return noteRepository.findById(noteId)
+			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_NOTE_ID));
 	}
 
 	@Transactional
@@ -50,8 +54,7 @@ public class NoteService {
 
 	@Transactional
 	public NoteResponseDto update(Integer updateNoteId, NoteRequestDto noteRequestDto) {
-		Note note = noteRepository.findById(updateNoteId)
-			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_NOTE_ID));
+		Note note = findNoteById(updateNoteId);
 		logger.debug("현재 노트의 Seq={}", note.getSeq());
 
 		if (noteRequestDto.getTitle() != null) {
@@ -97,4 +100,12 @@ public class NoteService {
 
 		return new NoteRequestDto((notes.size() + 1) * DEFAULT_RANGE, noteRequestDto.getTitle());
 	}
+
+	@Transactional
+	public void delete(Integer noteId) {
+		Note note = findNoteById(noteId);
+		noteRepository.delete(note);
+	}
+
+
 }
