@@ -141,7 +141,7 @@ class NoteControllerTest {
 	}
 
 	@Test
-	void 단어장을_생성하면_생성된_단어장의_id를_가진_URI로_리다이렉트_된다() throws Exception {
+	void 단어장을_생성하면_생성된_단어장을_반환한다() throws Exception {
 	    //given
 		NoteRequestDto noteRequestDto = new NoteRequestDto(1, "첫번째 노트");
 		NoteResponseDto noteResponseDto = new NoteResponseDto(NOTE_ID, 1, "첫번째 노트");
@@ -153,8 +153,7 @@ class NoteControllerTest {
 			.contentType(MediaType.APPLICATION_JSON_VALUE));
 
 		//then
-		resultActions.andExpect(status().isMovedPermanently())
-			.andExpect(redirectedUrl("/api/note/1"))
+		resultActions.andExpect(status().isOk())
 			.andDo(document("create-note",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),

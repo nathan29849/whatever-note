@@ -39,10 +39,8 @@ public class NoteController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> create(@RequestBody final NoteRequestDto noteRequestDto) {
-		final NoteResponseDto noteResponseDto = noteService.create(noteRequestDto);
-		return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
-			.location(URI.create("/api/note/" + noteResponseDto.getId())).build();
+	public ResponseEntity<NoteResponseDto> create(@RequestBody final NoteRequestDto noteRequestDto) {
+		return ResponseEntity.ok(noteService.create(noteRequestDto));
 	}
 
 	@PutMapping("/{noteId}")

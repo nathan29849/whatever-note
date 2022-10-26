@@ -461,6 +461,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_단어장note"><a class="link" href="#_단어장note">단어장(Note)</a></h2>
 <div class="sectionbody">
+<hr>
 <div class="sect2">
 <h3 id="resources-get-create"><a class="link" href="#resources-get-create">1. [GET] 단어장 단일 조회</a></h3>
 <div class="sect3">
@@ -682,8 +683,15 @@ Host: localhost:8080
 <h4 id="_http_response_3"><a class="link" href="#_http_response_3">HTTP response</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 301 Moved Permanently
-Location: /api/note/1</code></pre>
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json;charset=UTF-8
+Content-Length: 59
+
+{
+  "id" : 1,
+  "seq" : 1,
+  "title" : "첫번째 노트"
+}</code></pre>
 </div>
 </div>
 </div>
@@ -905,7 +913,7 @@ Host: localhost:8080</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-10-26 00:22:46 +0900
+Last updated 2022-10-26 00:33:50 +0900
 </div>
 </div>
 </body>
