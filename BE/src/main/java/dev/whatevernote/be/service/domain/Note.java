@@ -20,13 +20,13 @@ public class Note extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(name="note_order", unique = true)
+	@Column(name="note_order")
 	@NotNull
 	private Integer seq;
 
 	private String title;
 
-	public Note() {}
+	protected Note() {}
 
 	private Note(Integer seq, String title) {
 		this.seq = seq;
