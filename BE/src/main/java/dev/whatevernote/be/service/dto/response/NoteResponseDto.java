@@ -4,9 +4,9 @@ import dev.whatevernote.be.service.domain.Note;
 
 public class NoteResponseDto {
 
-	private Integer id;
-	private Integer seq;
-	private String title;
+	private final Integer id;
+	private final Integer seq;
+	private final String title;
 
 	public NoteResponseDto(Integer id, Integer seq, String title) {
 		this.id = id;
