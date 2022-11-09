@@ -21,7 +21,6 @@ public class NoteController {
 
 	private final NoteService noteService;
 
-
 	public NoteController(final NoteService noteService) {
 		this.noteService = noteService;
 	}

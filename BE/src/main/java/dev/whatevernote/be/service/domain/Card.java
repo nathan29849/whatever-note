@@ -18,7 +18,7 @@ public class Card extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Id;
+	private Long id;
 
 	protected Card() {}
 

@@ -103,3 +103,26 @@ include::{snippets}/delete-note/http-response.adoc[]
 include::{snippets}/delete-note/path-parameters.adoc[]
 
 ---
+
+== 단어 카드(Card)
+
+---
+
+[[resources-create-card]]
+=== 1. [POST] 단어 카드 생성
+
+==== HTTP request
+
+include::{snippets}/create-card/http-request.adoc[]
+
+==== Request Fields
+include::{snippets}/create-card/request-fields.adoc[]
+
+==== HTTP response
+
+include::{snippets}/create-card/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/create-card/response-fields.adoc[]
+
+---
