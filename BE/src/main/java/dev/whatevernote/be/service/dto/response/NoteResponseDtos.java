@@ -6,9 +6,9 @@ import org.springframework.data.domain.Slice;
 
 public class NoteResponseDtos {
 
-	private List<NoteResponseDto> notes;
-	private boolean hasNext;
-	private int pageNumber;
+	private final List<NoteResponseDto> notes;
+	private final boolean hasNext;
+	private final int pageNumber;
 
 	public NoteResponseDtos(List<NoteResponseDto> notes, boolean hasNext, int pageNumber) {
 		this.notes = notes;

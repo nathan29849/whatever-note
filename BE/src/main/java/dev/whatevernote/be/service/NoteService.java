@@ -14,6 +14,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Transactional(readOnly = true)
 @Service
 public class NoteService {
 
@@ -27,7 +28,6 @@ public class NoteService {
 		this.noteRepository = noteRepository;
 	}
 
-	@Transactional(readOnly = true)
 	public NoteResponseDto findById(final Integer noteId) {
 		Note note = findNoteById(noteId);
 		return NoteResponseDto.from(note);
@@ -46,7 +46,6 @@ public class NoteService {
 		return NoteResponseDto.from(savedNote);
 	}
 
-	@Transactional(readOnly = true)
 	public NoteResponseDtos findAll(Pageable pageable) {
 		Slice<Note> notes = noteRepository.findAllByOrderBySeq(pageable);
 		return NoteResponseDtos.from(notes);

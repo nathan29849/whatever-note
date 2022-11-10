@@ -1,24 +1,23 @@
 package dev.whatevernote.be.service.dto.request;
 
-public class NoteRequestDto {
+public class CardRequestDto {
 
-	private Integer seq;
+	private Long seq;
 	private String title;
 
-	private NoteRequestDto() {
+	private CardRequestDto() {
 	}
 
-	public NoteRequestDto(Integer seq, String title) {
+	public CardRequestDto(Long seq, String title) {
 		this.seq = seq;
 		this.title = title;
 	}
 
-	public Integer getSeq() {
+	public Long getSeq() {
 		return seq;
 	}
 
 	public String getTitle() {
 		return title;
 	}
-
 }
