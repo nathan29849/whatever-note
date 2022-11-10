@@ -1,6 +1,7 @@
 package dev.whatevernote.be.service.domain;
 
 import dev.whatevernote.be.common.BaseEntity;
+import dev.whatevernote.be.service.dto.request.CardRequestDto;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,6 +23,11 @@ public class Card extends BaseEntity {
 
 	protected Card() {}
 
+	private Card(Long seq, String title) {
+		this.seq = seq;
+		this.title = title;
+	}
+
 	@Column(name="card_order")
 	private Long seq;
 
@@ -30,4 +36,20 @@ public class Card extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name="note_id")
 	private Note note;
+
+	public static Card from(CardRequestDto cardRequestDto) {
+		return new Card(cardRequestDto.getSeq(), cardRequestDto.getTitle());
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public Long getSeq() {
+		return seq;
+	}
+
+	public String getTitle() {
+		return title;
+	}
 }

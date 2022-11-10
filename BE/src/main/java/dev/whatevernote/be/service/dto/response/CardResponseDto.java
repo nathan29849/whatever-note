@@ -1,5 +1,7 @@
 package dev.whatevernote.be.service.dto.response;
 
+import dev.whatevernote.be.service.domain.Card;
+
 public class CardResponseDto {
 
 	private final Long id;
@@ -10,6 +12,10 @@ public class CardResponseDto {
 		this.id = id;
 		this.title = title;
 		this.seq = seq;
+	}
+
+	public static CardResponseDto from(Card card) {
+		return new CardResponseDto(card.getId(), card.getTitle(), card.getSeq());
 	}
 
 	public Long getId() {
