@@ -1,6 +1,7 @@
 package dev.whatevernote.be.service.dto.response;
 
 import dev.whatevernote.be.service.domain.Card;
+import java.util.List;
 
 public class CardResponseDto {
 

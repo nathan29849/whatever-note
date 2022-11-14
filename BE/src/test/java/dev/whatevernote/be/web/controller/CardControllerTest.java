@@ -1,5 +1,6 @@
 package dev.whatevernote.be.web.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -10,13 +11,24 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.whatevernote.be.service.CardService;
+import dev.whatevernote.be.service.domain.Card;
+import dev.whatevernote.be.service.domain.Note;
 import dev.whatevernote.be.service.dto.request.CardRequestDto;
+import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
+import dev.whatevernote.be.service.dto.response.CardResponseDtos;
+import dev.whatevernote.be.service.dto.response.NoteResponseDto;
+import dev.whatevernote.be.service.dto.response.NoteResponseDtos;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,6 +52,8 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @WebMvcTest(CardController.class)
 public class CardControllerTest {
 
+	private static final long DEFAULT_RANGE = 1_000L;
+
 	@Autowired
 	private MockMvc mockMvc;
 
@@ -60,9 +74,16 @@ public class CardControllerTest {
 	@Test
 	void 카드를_생성하면_생성된_카드를_반환한다() throws Exception {
 		//given
-		CardRequestDto cardRequestDto = new CardRequestDto(1L, "첫번째 카드");
-		CardResponseDto cardResponseDto = new CardResponseDto(1L, "첫번째 카드", 1L);
-		when(cardService.create(refEq(cardRequestDto))).thenReturn(cardResponseDto);
+		Integer noteId = 1;
+		Long expectedCardId = 1L;
+		NoteRequestDto noteRequestDto = new NoteRequestDto(noteId, "첫번째 노트");
+		Note note = Note.from(noteRequestDto);
+		CardRequestDto cardRequestDto = new CardRequestDto(expectedCardId, "첫번째 카드");
+		Card card = Card.from(cardRequestDto, note);
+
+
+		CardResponseDto cardResponseDto = new CardResponseDto(expectedCardId, "첫번째 카드", DEFAULT_RANGE);
+		when(cardService.create(refEq(cardRequestDto), refEq(noteId))).thenReturn(cardResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.post("/api/note/1/card")
@@ -89,6 +110,42 @@ public class CardControllerTest {
 					fieldWithPath("title").type(JsonFieldType.STRING)
 						.description("카드 제목"))
 				));
+	}
+
+	@Test
+	void 단어장_id에_해당하는_카드들을_전체_조회하면_해당_단어장의_모든_카드들이_반환된다() throws Exception {
+		//given
+		List<CardResponseDto> dtos = new ArrayList<>();
+		dtos.add(new CardResponseDto(1L, "card-1", DEFAULT_RANGE));
+		dtos.add(new CardResponseDto(2L, "card-2", DEFAULT_RANGE*2));
+		dtos.add(new CardResponseDto(3L, "card-3", DEFAULT_RANGE*3));
+
+		CardResponseDtos cardResponseDtos = new CardResponseDtos(dtos, false, 0);
+		when(cardService.findAll(any(), any())).thenReturn(cardResponseDtos);
+
+		//when
+		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/api/note/1/card?page=0&size=5")
+			.accept(MediaType.APPLICATION_JSON_VALUE)
+			.contentType(MediaType.APPLICATION_JSON_VALUE));
+
+		//then
+		resultActions.andExpect(status().isOk())
+			.andExpect(content().string(objectMapper.writeValueAsString(cardResponseDtos)))
+			.andDo(document("get-all-cards",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				requestParameters(
+					parameterWithName("page").description("The page to retrieve"),
+					parameterWithName("size").description("Entries page size")
+				),
+				responseFields(
+					fieldWithPath("cards[].id").type(JsonFieldType.NUMBER).description("card id"),
+					fieldWithPath("cards[].seq").type(JsonFieldType.NUMBER).description("card seq"),
+					fieldWithPath("cards[].title").type(JsonFieldType.STRING).description("title"),
+					fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("has Next"),
+					fieldWithPath("pageNumber").type(JsonFieldType.NUMBER).description("현재 페이지의 넘버")
+				)
+			));
 	}
 
 }

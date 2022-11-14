@@ -16,8 +16,9 @@ public class Content {
 	private Long id;
 
 	@Lob
-	private String content;
+	private String info;
 
+	private Long seq;
 	private Boolean isImage = Boolean.FALSE;
 
 	@ManyToOne
@@ -27,8 +28,29 @@ public class Content {
 	protected Content() {
 	}
 
-	private Content(String content, Boolean isImage, Card card) {
-		this.content = content;
+	public Long getId() {
+		return id;
+	}
+
+	public String getInfo() {
+		return info;
+	}
+
+	public Long getSeq() {
+		return seq;
+	}
+
+	public Boolean getImage() {
+		return isImage;
+	}
+
+	public Card getCard() {
+		return card;
+	}
+
+	private Content(String info, Long seq, Boolean isImage, Card card) {
+		this.info = info;
+		this.seq = seq;
 		this.isImage = isImage;
 		this.card = card;
 	}
