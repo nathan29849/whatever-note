@@ -4,12 +4,12 @@
 - [wiki 바로가기](https://github.com/nathan29849/whatever-note/wiki)
 
 
-## 소개
+## 프로젝트 소개 
 
 - 사용자가 원하는 단어 또는 문장을 모아 나만의 단어장을 만들어 사용합니다.
+- [피그마 디자인, 기획서 링크](https://www.figma.com/file/gQJB7CsB38FuJV2NIfd5vd/%EC%95%84%EB%AC%B4%EB%8B%A8%EC%96%B4%EC%9E%A5%2C-%EC%8F%98%EB%83%90%26%EB%82%98%EB%8B%A8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-_-%EB%94%94%EC%9E%90%EC%9D%B8?node-id=46%3A46)
 
-
-## 팀
+## 팀원 소개
 
 |**FE**|**BE**|
 |---|---|
