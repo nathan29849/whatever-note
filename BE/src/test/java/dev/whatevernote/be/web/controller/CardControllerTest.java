@@ -2,6 +2,7 @@ package dev.whatevernote.be.web.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.whatevernote.be.common.BaseResponse;
 import dev.whatevernote.be.service.CardService;
 import dev.whatevernote.be.service.domain.Card;
 import dev.whatevernote.be.service.domain.Note;
@@ -25,8 +27,6 @@ import dev.whatevernote.be.service.dto.request.CardRequestDto;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDtos;
-import dev.whatevernote.be.service.dto.response.NoteResponseDto;
-import dev.whatevernote.be.service.dto.response.NoteResponseDtos;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -84,6 +84,8 @@ public class CardControllerTest {
 
 		CardResponseDto cardResponseDto = new CardResponseDto(expectedCardId, "첫번째 카드", DEFAULT_RANGE);
 		when(cardService.create(refEq(cardRequestDto), refEq(noteId))).thenReturn(cardResponseDto);
+		BaseResponse<CardResponseDtos> baseResponse = new BaseResponse("code", "message", cardResponseDto);
+
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.post("/api/note/1/card")
@@ -103,12 +105,11 @@ public class CardControllerTest {
 						.description("카드 제목을 받습니다. +" + "\n"
 							+ "만약 카드 제목을 담지 않고, 요청을 보내면 빈 문자열을 제목으로 가진 카드가 생성됩니다.")),
 				responseFields(
-					fieldWithPath("id").type(JsonFieldType.NUMBER)
-						.description("카드 ID"),
-					fieldWithPath("seq").type(JsonFieldType.NUMBER)
-						.description("카드 생성 위치"),
-					fieldWithPath("title").type(JsonFieldType.STRING)
-						.description("카드 제목"))
+					fieldWithPath("code").type(JsonFieldType.STRING).description("response code"),
+					fieldWithPath("message").type(JsonFieldType.STRING).description("response message"),
+					fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("카드 ID"),
+					fieldWithPath("data.seq").type(JsonFieldType.NUMBER).description("카드 생성 위치"),
+					fieldWithPath("data.title").type(JsonFieldType.STRING).description("카드 제목"))
 				));
 	}
 
@@ -122,6 +123,8 @@ public class CardControllerTest {
 
 		CardResponseDtos cardResponseDtos = new CardResponseDtos(dtos, false, 0);
 		when(cardService.findAll(any(), any())).thenReturn(cardResponseDtos);
+		BaseResponse<CardResponseDtos> baseResponse = new BaseResponse("code", "message", cardResponseDtos);
+
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/api/note/1/card?page=0&size=5")
@@ -130,7 +133,7 @@ public class CardControllerTest {
 
 		//then
 		resultActions.andExpect(status().isOk())
-			.andExpect(content().string(objectMapper.writeValueAsString(cardResponseDtos)))
+			.andExpect(content().string(objectMapper.writeValueAsString(baseResponse)))
 			.andDo(document("get-all-cards",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
@@ -139,11 +142,13 @@ public class CardControllerTest {
 					parameterWithName("size").description("Entries page size")
 				),
 				responseFields(
-					fieldWithPath("cards[].id").type(JsonFieldType.NUMBER).description("card id"),
-					fieldWithPath("cards[].seq").type(JsonFieldType.NUMBER).description("card seq"),
-					fieldWithPath("cards[].title").type(JsonFieldType.STRING).description("title"),
-					fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("has Next"),
-					fieldWithPath("pageNumber").type(JsonFieldType.NUMBER).description("현재 페이지의 넘버")
+					fieldWithPath("code").type(JsonFieldType.STRING).description("response code"),
+					fieldWithPath("message").type(JsonFieldType.STRING).description("response message"),
+					fieldWithPath("data.cards[].id").type(JsonFieldType.NUMBER).description("card id"),
+					fieldWithPath("data.cards[].seq").type(JsonFieldType.NUMBER).description("card seq"),
+					fieldWithPath("data.cards[].title").type(JsonFieldType.STRING).description("title"),
+					fieldWithPath("data.hasNext").type(JsonFieldType.BOOLEAN).description("has Next"),
+					fieldWithPath("data.pageNumber").type(JsonFieldType.NUMBER).description("현재 페이지의 넘버")
 				)
 			));
 	}

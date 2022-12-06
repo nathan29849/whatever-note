@@ -1,9 +1,11 @@
 package dev.whatevernote.be.web.controller;
 
+import dev.whatevernote.be.common.BaseResponse;
 import dev.whatevernote.be.service.CardService;
 import dev.whatevernote.be.service.dto.request.CardRequestDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDtos;
+import org.apache.coyote.Response;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,13 +26,14 @@ public class CardController {
 	}
 
 	@PostMapping
-	public ResponseEntity<CardResponseDto> create(@RequestBody final CardRequestDto cardRequestDto,
-		@PathVariable final Integer noteId) {
-		return ResponseEntity.ok(cardService.create(cardRequestDto, noteId));
+	public BaseResponse<CardResponseDto> create(@RequestBody final CardRequestDto cardRequestDto, @PathVariable final Integer noteId) {
+		CardResponseDto cardResponseDto = cardService.create(cardRequestDto, noteId);
+		return new BaseResponse("code", "message", cardResponseDto);
 	}
 
 	@GetMapping
-	public ResponseEntity<CardResponseDtos> findAll(final Pageable pageable, @PathVariable final Integer noteId) {
-		return ResponseEntity.ok(cardService.findAll(pageable, noteId));
+	public BaseResponse<CardResponseDtos> findAll(final Pageable pageable, @PathVariable final Integer noteId) {
+		CardResponseDtos cardResponseDtos = cardService.findAll(pageable, noteId);
+		return new BaseResponse("code", "message", cardResponseDtos);
 	}
 }
