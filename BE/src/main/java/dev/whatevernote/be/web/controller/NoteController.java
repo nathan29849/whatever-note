@@ -1,11 +1,11 @@
 package dev.whatevernote.be.web.controller;
 
+import dev.whatevernote.be.common.BaseResponse;
 import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDtos;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,30 +26,30 @@ public class NoteController {
 	}
 
 	@GetMapping("/{noteId}")
-	public ResponseEntity<NoteResponseDto> findById(@PathVariable final Integer noteId) {
-		return ResponseEntity.ok(noteService.findById(noteId));
+	public BaseResponse<NoteResponseDto> findById(@PathVariable final Integer noteId) {
+		return new BaseResponse("code", "message", noteService.findById(noteId));
 	}
 
 	@GetMapping
-	public ResponseEntity<NoteResponseDtos> findAll(final Pageable pageable) {
-		return ResponseEntity.ok(noteService.findAll(pageable));
+	public BaseResponse<NoteResponseDtos> findAll(final Pageable pageable) {
+		return new BaseResponse("code", "message", noteService.findAll(pageable));
 	}
 
 	@PostMapping
-	public ResponseEntity<NoteResponseDto> create(@RequestBody final NoteRequestDto noteRequestDto) {
-		return ResponseEntity.ok(noteService.create(noteRequestDto));
+	public BaseResponse<NoteResponseDto> create(@RequestBody final NoteRequestDto noteRequestDto) {
+		return new BaseResponse("code", "message", noteService.create(noteRequestDto));
 	}
 
 	@PutMapping("/{noteId}")
-	public ResponseEntity<NoteResponseDto> update(@PathVariable final Integer noteId,
+	public BaseResponse<NoteResponseDto> update(@PathVariable final Integer noteId,
 		@RequestBody final NoteRequestDto noteRequestDto) {
-		return ResponseEntity.ok(noteService.update(noteId, noteRequestDto));
+		return new BaseResponse("code", "message", noteService.update(noteId, noteRequestDto));
 	}
 
 	@DeleteMapping("/{noteId}")
-	public ResponseEntity<Void> delete(@PathVariable final Integer noteId) {
+	public BaseResponse<Void> delete(@PathVariable final Integer noteId) {
 		noteService.delete(noteId);
-		return ResponseEntity.ok().build();
+		return new BaseResponse("code", "message", null);
 	}
 
 }

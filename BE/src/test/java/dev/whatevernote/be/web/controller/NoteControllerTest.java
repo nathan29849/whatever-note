@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.whatevernote.be.repository.NoteRepository;
+import dev.whatevernote.be.common.BaseResponse;
 import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
@@ -59,9 +59,6 @@ class NoteControllerTest {
 	@MockBean
 	private NoteService noteService;
 
-	@MockBean
-	private NoteRepository noteRepository;
-
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	private final Integer NOTE_ID = 1;
 
@@ -80,6 +77,7 @@ class NoteControllerTest {
 	    //given
 		NoteResponseDto noteResponseDto = new NoteResponseDto(NOTE_ID, 1, "note-1");
 		when(noteService.findById(1)).thenReturn(noteResponseDto);
+		BaseResponse baseResponse = new BaseResponse("code", "message", noteResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
@@ -90,7 +88,7 @@ class NoteControllerTest {
 
 	    //then
 		resultActions.andExpect(status().isOk())
-			.andExpect(content().string(objectMapper.writeValueAsString(noteResponseDto)))
+			.andExpect(content().string(objectMapper.writeValueAsString(baseResponse)))
 			.andDo(document("get-one-note",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
@@ -98,9 +96,11 @@ class NoteControllerTest {
 					parameterWithName("NOTE_ID").description("note id")
 				),
 				responseFields(
-					fieldWithPath("id").type(JsonFieldType.NUMBER).description("note id"),
-					fieldWithPath("seq").type(JsonFieldType.NUMBER).description("note seq"),
-					fieldWithPath("title").type(JsonFieldType.STRING).description("title")
+					fieldWithPath("code").type(JsonFieldType.STRING).description("response code"),
+					fieldWithPath("message").type(JsonFieldType.STRING).description("response message"),
+					fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("note id"),
+					fieldWithPath("data.seq").type(JsonFieldType.NUMBER).description("note seq"),
+					fieldWithPath("data.title").type(JsonFieldType.STRING).description("title")
 				)));
 	}
 
@@ -113,6 +113,7 @@ class NoteControllerTest {
 		dtos.add(new NoteResponseDto(3, DEFAULT_RANGE*3, "note-3"));
 		NoteResponseDtos noteResponseDtos = new NoteResponseDtos(dtos, false, 0);
 		when(noteService.findAll(any())).thenReturn(noteResponseDtos);
+		BaseResponse baseResponse = new BaseResponse("code", "message", noteResponseDtos);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/api/note?page=0&size=5")
@@ -121,7 +122,7 @@ class NoteControllerTest {
 
 		//then
 		resultActions.andExpect(status().isOk())
-			.andExpect(content().string(objectMapper.writeValueAsString(noteResponseDtos)))
+			.andExpect(content().string(objectMapper.writeValueAsString(baseResponse)))
 			.andDo(document("get-all-notes",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
@@ -130,11 +131,13 @@ class NoteControllerTest {
 					parameterWithName("size").description("Entries page size")
 				),
 				responseFields(
-					fieldWithPath("notes[].id").type(JsonFieldType.NUMBER).description("note id"),
-					fieldWithPath("notes[].seq").type(JsonFieldType.NUMBER).description("note seq"),
-					fieldWithPath("notes[].title").type(JsonFieldType.STRING).description("title"),
-					fieldWithPath("hasNext").type(JsonFieldType.BOOLEAN).description("has Next"),
-					fieldWithPath("pageNumber").type(JsonFieldType.NUMBER).description("현재 페이지의 넘버")
+					fieldWithPath("code").type(JsonFieldType.STRING).description("response code"),
+					fieldWithPath("message").type(JsonFieldType.STRING).description("response message"),
+					fieldWithPath("data.notes[].id").type(JsonFieldType.NUMBER).description("note id"),
+					fieldWithPath("data.notes[].seq").type(JsonFieldType.NUMBER).description("note seq"),
+					fieldWithPath("data.notes[].title").type(JsonFieldType.STRING).description("title"),
+					fieldWithPath("data.hasNext").type(JsonFieldType.BOOLEAN).description("has Next"),
+					fieldWithPath("data.pageNumber").type(JsonFieldType.NUMBER).description("현재 페이지의 넘버")
 				)
 			));
 	}
@@ -145,6 +148,7 @@ class NoteControllerTest {
 		NoteRequestDto noteRequestDto = new NoteRequestDto(1, "첫번째 노트");
 		NoteResponseDto noteResponseDto = new NoteResponseDto(NOTE_ID, 1, "첫번째 노트");
 		when(noteService.create(refEq(noteRequestDto))).thenReturn(noteResponseDto);
+		BaseResponse baseResponse = new BaseResponse("code", "message", noteResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.post("/api/note")
@@ -153,14 +157,19 @@ class NoteControllerTest {
 
 		//then
 		resultActions.andExpect(status().isOk())
+			.andExpect(content().string(objectMapper.writeValueAsString(baseResponse)))
 			.andDo(document("create-note",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
-				requestFields(
-					fieldWithPath("seq").type(JsonFieldType.NUMBER)
+				responseFields(
+					fieldWithPath("code").type(JsonFieldType.STRING).description("response code"),
+					fieldWithPath("message").type(JsonFieldType.STRING).description("response message"),
+					fieldWithPath("data.id").type(JsonFieldType.NUMBER)
+						.description("생성된 노트의 ID를 받습니다."),
+					fieldWithPath("data.seq").type(JsonFieldType.NUMBER)
 						.description("노트 생성 위치를 받습니다. +" + "\n"
 							+ "만약 생성위치를 담지 않고, 요청을 보내면 가장 첫 번째 순서로 노트가 생성됩니다."),
-					fieldWithPath("title").type(JsonFieldType.STRING)
+					fieldWithPath("data.title").type(JsonFieldType.STRING)
 						.description("노트 제목을 받습니다. +" + "\n"
 							+ "만약 노트 제목을 담지 않고, 요청을 보내면 빈 문자열을 제목으로 가진 노트가 생성됩니다.")
 				)));
@@ -172,8 +181,10 @@ class NoteControllerTest {
 		NoteRequestDto noteRequestDto = new NoteRequestDto(0, null);
 		NoteResponseDto noteResponseDto = new NoteResponseDto(NOTE_ID, DEFAULT_RANGE, "단어장 제목 제목");
 		when(noteService.update(any(), any())).thenReturn(noteResponseDto);
+		BaseResponse baseResponse = new BaseResponse("code", "message", noteResponseDto);
 
-	    //when
+
+		//when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
 			.put("/api/note/{NOTE_ID}", NOTE_ID)
 			.content(objectMapper.writeValueAsString(noteRequestDto))
@@ -181,7 +192,7 @@ class NoteControllerTest {
 
 	    //then
 		resultActions.andExpect(status().isOk())
-			.andExpect(content().string(objectMapper.writeValueAsString(noteResponseDto)))
+			.andExpect(content().string(objectMapper.writeValueAsString(baseResponse)))
 			.andDo(document("update-note",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
@@ -198,11 +209,13 @@ class NoteControllerTest {
 							+ "만약 노트 제목을 담지 않고, 요청을 보내면 제목은 변하지 않습니다.")
 						.optional()),
 				responseFields(
-					fieldWithPath("id").type(JsonFieldType.NUMBER)
+					fieldWithPath("code").type(JsonFieldType.STRING).description("response code"),
+					fieldWithPath("message").type(JsonFieldType.STRING).description("response message"),
+					fieldWithPath("data.id").type(JsonFieldType.NUMBER)
 						.description("수정된 노트의 ID를 받습니다."),
-					fieldWithPath("seq").type(JsonFieldType.NUMBER)
+					fieldWithPath("data.seq").type(JsonFieldType.NUMBER)
 						.description("수정된 노트 위치를 받습니다."),
-					fieldWithPath("title").type(JsonFieldType.STRING)
+					fieldWithPath("data.title").type(JsonFieldType.STRING)
 						.description("수정된 노트 제목을 받습니다."))
 
 			)
@@ -213,6 +226,7 @@ class NoteControllerTest {
 	void 단어장을_삭제하면_soft_delete_한다() throws Exception {
 	    //given
 		doNothing().when(noteService).delete(any());
+		BaseResponse baseResponse = new BaseResponse("code", "message", null);
 
 	    //when
 		ResultActions resultActions = this.mockMvc
@@ -221,12 +235,18 @@ class NoteControllerTest {
 
 	    //then
 		resultActions.andExpect(status().isOk())
+			.andExpect(content().string(objectMapper.writeValueAsString(baseResponse)))
 			.andDo(document("delete-note",
 				preprocessRequest(prettyPrint()),
 				pathParameters(
 					parameterWithName("NOTE_ID").description("note id")
-				)
-			));
+				),
+				responseFields(
+					fieldWithPath("code").type(JsonFieldType.STRING).description("response code"),
+					fieldWithPath("message").type(JsonFieldType.STRING).description("response message"),
+					fieldWithPath("data").type(JsonFieldType.NULL).description("null")
+			))
+			);
 	}
 
 }
