@@ -996,7 +996,7 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 129
+Content-Length: 147
 
 {
   "code" : "code",
@@ -1004,7 +1004,8 @@ Content-Length: 129
   "data" : {
     "id" : 1,
     "title" : "첫번째 카드",
-    "seq" : 1000
+    "seq" : 1000,
+    "noteId" : 1
   }
 }</code></pre>
 </div>
@@ -1050,6 +1051,11 @@ Content-Length: 129
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.title</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카드 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.noteId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">note id</p></td>
 </tr>
 </tbody>
 </table>
@@ -1100,7 +1106,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 336
+Content-Length: 396
 
 {
   "code" : "code",
@@ -1109,15 +1115,18 @@ Content-Length: 336
     "cards" : [ {
       "id" : 1,
       "title" : "card-1",
-      "seq" : 1000
+      "seq" : 1000,
+      "noteId" : 1
     }, {
       "id" : 2,
       "title" : "card-2",
-      "seq" : 2000
+      "seq" : 2000,
+      "noteId" : 1
     }, {
       "id" : 3,
       "title" : "card-3",
-      "seq" : 3000
+      "seq" : 3000,
+      "noteId" : 1
     } ],
     "hasNext" : false,
     "pageNumber" : 0
@@ -1166,6 +1175,11 @@ Content-Length: 336
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.cards[].title</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">title</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.cards[].noteId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">note id</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.hasNext</code></p></td>

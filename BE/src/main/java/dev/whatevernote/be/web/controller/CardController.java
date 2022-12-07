@@ -29,6 +29,12 @@ public class CardController {
 		return new BaseResponse("code", "message", cardResponseDto);
 	}
 
+	@GetMapping("/{cardId}")
+	public BaseResponse<CardResponseDto> findById(@PathVariable final Integer noteId, @PathVariable final Long cardId) {
+		CardResponseDto cardResponseDto = cardService.findById(noteId, cardId);
+		return new BaseResponse("code", "message", cardResponseDto);
+	}
+
 	@GetMapping
 	public BaseResponse<CardResponseDtos> findAll(final Pageable pageable, @PathVariable final Integer noteId) {
 		CardResponseDtos cardResponseDtos = cardService.findAll(pageable, noteId);

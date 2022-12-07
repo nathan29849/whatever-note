@@ -22,7 +22,7 @@ public class CardService {
 
 	private static final Logger logger = LoggerFactory.getLogger(CardService.class);
 	private static final long DEFAULT_RANGE = 1_000L;
-	private static final String NOT_FOUNT_NOTE_ID = "존재하지 않는 ID 입니다.";
+	private static final String NOT_FOUNT_ID = "존재하지 않는 ID 입니다.";
 
 	private final CardRepository cardRepository;
 	private final NoteRepository noteRepository;
@@ -45,7 +45,7 @@ public class CardService {
 
 	private Note findNoteById(Integer noteId) {
 		return noteRepository.findById(noteId)
-			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_NOTE_ID));
+			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
 	}
 
 	private CardRequestDto editSeq(CardRequestDto cardRequestDto) {
@@ -85,5 +85,11 @@ public class CardService {
 		Slice<Card> cards = cardRepository.findAllByNoteOrderBySeq(pageable, note);
 		logger.debug("Now Page Number = {}, has Next = {}", cards.getNumber(), cards.hasNext());
 		return CardResponseDtos.from(cards, noteId);
+	}
+
+	public CardResponseDto findById(Integer noteId, Long cardId) {
+		Card card = cardRepository.findById(cardId)
+			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
+		return CardResponseDto.from(card, noteId);
 	}
 }
