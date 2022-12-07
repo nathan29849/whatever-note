@@ -53,6 +53,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 public class CardControllerTest {
 
 	private static final long DEFAULT_RANGE = 1_000L;
+	private static final int NOTE_ID = 1;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -74,16 +75,15 @@ public class CardControllerTest {
 	@Test
 	void 카드를_생성하면_생성된_카드를_반환한다() throws Exception {
 		//given
-		Integer noteId = 1;
 		Long expectedCardId = 1L;
-		NoteRequestDto noteRequestDto = new NoteRequestDto(noteId, "첫번째 노트");
+		NoteRequestDto noteRequestDto = new NoteRequestDto(NOTE_ID, "첫번째 노트");
 		Note note = Note.from(noteRequestDto);
 		CardRequestDto cardRequestDto = new CardRequestDto(expectedCardId, "첫번째 카드");
 		Card card = Card.from(cardRequestDto, note);
 
 
-		CardResponseDto cardResponseDto = new CardResponseDto(expectedCardId, "첫번째 카드", DEFAULT_RANGE);
-		when(cardService.create(refEq(cardRequestDto), refEq(noteId))).thenReturn(cardResponseDto);
+		CardResponseDto cardResponseDto = new CardResponseDto(expectedCardId, "첫번째 카드", DEFAULT_RANGE, NOTE_ID);
+		when(cardService.create(refEq(cardRequestDto), refEq(NOTE_ID))).thenReturn(cardResponseDto);
 		BaseResponse<CardResponseDtos> baseResponse = new BaseResponse("code", "message", cardResponseDto);
 
 
@@ -117,9 +117,9 @@ public class CardControllerTest {
 	void 단어장_id에_해당하는_카드들을_전체_조회하면_해당_단어장의_모든_카드들이_반환된다() throws Exception {
 		//given
 		List<CardResponseDto> dtos = new ArrayList<>();
-		dtos.add(new CardResponseDto(1L, "card-1", DEFAULT_RANGE));
-		dtos.add(new CardResponseDto(2L, "card-2", DEFAULT_RANGE*2));
-		dtos.add(new CardResponseDto(3L, "card-3", DEFAULT_RANGE*3));
+		dtos.add(new CardResponseDto(1L, "card-1", DEFAULT_RANGE, NOTE_ID));
+		dtos.add(new CardResponseDto(2L, "card-2", DEFAULT_RANGE*2, NOTE_ID));
+		dtos.add(new CardResponseDto(3L, "card-3", DEFAULT_RANGE*3, NOTE_ID));
 
 		CardResponseDtos cardResponseDtos = new CardResponseDtos(dtos, false, 0);
 		when(cardService.findAll(any(), any())).thenReturn(cardResponseDtos);

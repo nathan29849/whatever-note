@@ -40,7 +40,7 @@ public class CardService {
 			Card.from(cardRequestDto, note)
 		);
 		logger.debug("[CREATE Card] ID = {}, SEQ = {}, Note ID = {}", savedCard.getId(), savedCard.getSeq(), note.getId());
-		return CardResponseDto.from(savedCard);
+		return CardResponseDto.from(savedCard, noteId);
 	}
 
 	private Note findNoteById(Integer noteId) {
@@ -84,6 +84,6 @@ public class CardService {
 		Note note = findNoteById(noteId);
 		Slice<Card> cards = cardRepository.findAllByNoteOrderBySeq(pageable, note);
 		logger.debug("Now Page Number = {}, has Next = {}", cards.getNumber(), cards.hasNext());
-		return CardResponseDtos.from(cards);
+		return CardResponseDtos.from(cards, noteId);
 	}
 }

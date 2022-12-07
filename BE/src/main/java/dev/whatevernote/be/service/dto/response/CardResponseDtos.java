@@ -29,9 +29,11 @@ public class CardResponseDtos {
 		return pageNumber;
 	}
 
-	public static CardResponseDtos from(Slice<Card> cards) {
+	public static CardResponseDtos from(Slice<Card> cards, int noteId) {
 		return new CardResponseDtos(
-			cards.map(CardResponseDto::from).getContent(),
+			cards.stream()
+				.map(c -> CardResponseDto.from(c, noteId))
+				.collect(Collectors.toList()),
 			cards.hasNext(),
 			cards.getNumber());
 	}
