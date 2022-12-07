@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import dev.whatevernote.be.repository.CardRepository;
 import dev.whatevernote.be.service.CardService;
 import dev.whatevernote.be.service.NoteService;
+import dev.whatevernote.be.service.domain.Card;
 import dev.whatevernote.be.service.dto.request.CardRequestDto;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
@@ -57,6 +58,34 @@ class CardFindTest {
 				cardService.create(cardRequestDto, SECOND_NOTE_ID);
 			}
 		}
+	}
+
+	@Nested
+	@DisplayName("카드를 단건 조회할 때")
+	class FindOneTest {
+
+		@Nested
+		@DisplayName("정상적인 요청이라면")
+		class NormalFindOneTest {
+
+			@DisplayName("해당 ID의 카드가 조회된다.")
+			@Test
+			void normal_find_one(){
+			    //given
+				List<Card> cards = cardRepository.findAllByOrderBySeq();
+				int seq = 8;
+				long tmpCardId = cards.get(seq).getId();
+
+				//when
+				CardResponseDto cardResponseDto = cardService.findById(FIRST_NOTE_ID, tmpCardId);
+
+				//then
+				assertThat(cardResponseDto.getId()).isEqualTo(tmpCardId);
+				assertThat(cardResponseDto.getNoteId()).isEqualTo(FIRST_NOTE_ID);
+				assertThat(cardResponseDto.getTitle()).isEqualTo("card-" + (seq + 1));
+			}
+		}
+
 	}
 
 	@Nested
