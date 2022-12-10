@@ -58,7 +58,7 @@ include::{snippets}/create-note/http-request.adoc[]
 include::{snippets}/create-note/http-response.adoc[]
 
 ==== Fields
-include::{snippets}/create-note/request-fields.adoc[]
+include::{snippets}/create-note/response-fields.adoc[]
 
 ---
 
