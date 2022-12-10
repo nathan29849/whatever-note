@@ -23,9 +23,10 @@ public class Card extends BaseEntity {
 
 	protected Card() {}
 
-	private Card(Long seq, String title) {
+	private Card(Long seq, String title, Note note) {
 		this.seq = seq;
 		this.title = title;
+		this.note = note;
 	}
 
 	@Column(name="card_order")
@@ -37,8 +38,8 @@ public class Card extends BaseEntity {
 	@JoinColumn(name="note_id")
 	private Note note;
 
-	public static Card from(CardRequestDto cardRequestDto) {
-		return new Card(cardRequestDto.getSeq(), cardRequestDto.getTitle());
+	public static Card from(CardRequestDto cardRequestDto, Note note) {
+		return new Card(cardRequestDto.getSeq(), cardRequestDto.getTitle(), note);
 	}
 
 	public Long getId() {
@@ -51,5 +52,9 @@ public class Card extends BaseEntity {
 
 	public String getTitle() {
 		return title;
+	}
+
+	public Note getNote() {
+		return note;
 	}
 }

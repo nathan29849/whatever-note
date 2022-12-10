@@ -7,15 +7,17 @@ public class CardResponseDto {
 	private final Long id;
 	private final String title;
 	private final Long seq;
+	private final Integer noteId;
 
-	public CardResponseDto(Long id, String title, Long seq) {
+	public CardResponseDto(Long id, String title, Long seq, Integer noteId) {
 		this.id = id;
 		this.title = title;
 		this.seq = seq;
+		this.noteId = noteId;
 	}
 
-	public static CardResponseDto from(Card card) {
-		return new CardResponseDto(card.getId(), card.getTitle(), card.getSeq());
+	public static CardResponseDto from(Card card, int noteId) {
+		return new CardResponseDto(card.getId(), card.getTitle(), card.getSeq(), noteId);
 	}
 
 	public Long getId() {
@@ -28,5 +30,9 @@ public class CardResponseDto {
 
 	public Long getSeq() {
 		return seq;
+	}
+
+	public Integer getNoteId() {
+		return noteId;
 	}
 }

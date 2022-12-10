@@ -126,3 +126,22 @@ include::{snippets}/create-card/http-response.adoc[]
 include::{snippets}/create-card/response-fields.adoc[]
 
 ---
+
+[[resources-create-card]]
+=== 2. [GET] 단어 모두 조회
+
+==== HTTP request
+
+include::{snippets}/get-all-cards/http-request.adoc[]
+
+==== Query Parameters
+include::{snippets}/get-all-cards/request-parameters.adoc[]
+
+==== HTTP response
+
+include::{snippets}/get-all-cards/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/get-all-cards/response-fields.adoc[]
+
+---
