@@ -26,6 +26,7 @@ import dev.whatevernote.be.service.domain.Card;
 import dev.whatevernote.be.service.domain.Note;
 import dev.whatevernote.be.service.dto.request.CardRequestDto;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
+import dev.whatevernote.be.service.dto.response.CardDetailResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDtos;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
@@ -80,16 +81,11 @@ class CardControllerTest {
 	void 카드를_생성하면_생성된_카드를_반환한다() throws Exception {
 		//given
 		Long expectedCardId = 1L;
-		NoteRequestDto noteRequestDto = new NoteRequestDto(NOTE_ID, "첫번째 노트");
-		Note note = Note.from(noteRequestDto);
 		CardRequestDto cardRequestDto = new CardRequestDto(expectedCardId, "첫번째 카드");
-		Card card = Card.from(cardRequestDto, note);
-
 
 		CardResponseDto cardResponseDto = new CardResponseDto(expectedCardId, "첫번째 카드", DEFAULT_RANGE, NOTE_ID);
 		when(cardService.create(refEq(cardRequestDto), refEq(NOTE_ID))).thenReturn(cardResponseDto);
-		BaseResponse<CardResponseDtos> baseResponse = new BaseResponse("code", "message", cardResponseDto);
-
+		BaseResponse<CardResponseDto> baseResponse = new BaseResponse("code", "message", cardResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.post("/api/note/1/card")
@@ -122,10 +118,6 @@ class CardControllerTest {
 	@Test
 	void 단어장id와_카드id를_조회하면_해당_카드를_반환한다() throws Exception {
 		//given
-		NoteRequestDto noteRequestDto = new NoteRequestDto(NOTE_ID, "첫번째 노트");
-		Note note = Note.from(noteRequestDto);
-		CardRequestDto cardRequestDto = new CardRequestDto(CARD_ID, "첫번째 카드");
-		Card card = Card.from(cardRequestDto, note);
 		CardResponseDto cardResponseDto = new CardResponseDto(CARD_ID, "첫번째 카드", DEFAULT_RANGE, NOTE_ID);
 
 		when(cardService.findById(NOTE_ID, CARD_ID)).thenReturn(cardResponseDto);
