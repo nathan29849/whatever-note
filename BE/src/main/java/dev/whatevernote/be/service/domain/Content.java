@@ -1,5 +1,6 @@
 package dev.whatevernote.be.service.domain;
 
+import dev.whatevernote.be.service.dto.request.ContentRequestDto;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -40,7 +41,7 @@ public class Content {
 		return seq;
 	}
 
-	public Boolean getImage() {
+	public Boolean getIsImage() {
 		return isImage;
 	}
 
@@ -54,4 +55,14 @@ public class Content {
 		this.isImage = isImage;
 		this.card = card;
 	}
+
+	public static Content from(ContentRequestDto contentRequest, Card card) {
+		return new Content(
+			contentRequest.getInfo(),
+			contentRequest.getSeq(),
+			contentRequest.getIsImage(),
+			card
+		);
+	}
+
 }
