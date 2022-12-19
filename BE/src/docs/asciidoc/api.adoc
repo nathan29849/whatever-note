@@ -145,3 +145,19 @@ include::{snippets}/get-all-cards/http-response.adoc[]
 include::{snippets}/get-all-cards/response-fields.adoc[]
 
 ---
+
+[[resources-create-card]]
+=== 3. [GET] 단어 단일 조회
+
+==== HTTP request
+
+include::{snippets}/get-one-card/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/get-one-card/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/get-one-card/response-fields.adoc[]
+
+---

@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 
 @DisplayName("통합 테스트 : Card 조회")
@@ -34,8 +35,6 @@ class CardFindTest {
 	private static final int SECOND_NOTE_ID = 2;
 	private static final int PAGE_NUMBER = 0;
 	private static final int PAGE_SIZE = 5;
-	private static final long FIRST_CARD_ID = 1L;
-	private static final long SECOND_CARD_ID = 2L;
 	private static final String CONTENT_INFO = "contentInfo-";
 
 	@Autowired
@@ -52,29 +51,36 @@ class CardFindTest {
 
 	@BeforeEach
 	void init() {
-		cardRepository.deleteAll();
 		createNotesAndCardsAndContents(NUMBER_OF_CARD);
 	}
 
 	private void createNotesAndCardsAndContents(int numberOfCard){
+
 		for (int i = 0; i < 2; i++) {
 			noteService.create(new NoteRequestDto(i, "note-" + (i + 1)));
 		}
+		long firstCardId = 0L;
 		for (int i = 0; i < numberOfCard; i++) {
 			CardRequestDto cardRequestDto = new CardRequestDto((long) i, "card-" + (i + 1));
+			CardResponseDto cardResponseDto;
 			ContentRequestDto contentRequestDto;
 			if (i < (numberOfCard / 2)) {
-				cardService.create(cardRequestDto, FIRST_NOTE_ID);
+				cardResponseDto = cardService.create(cardRequestDto, FIRST_NOTE_ID);
 				contentRequestDto = new ContentRequestDto(CONTENT_INFO + (i), (long) i, Boolean.FALSE);
 			} else {
-				cardService.create(cardRequestDto, SECOND_NOTE_ID);
+				cardResponseDto = cardService.create(cardRequestDto, SECOND_NOTE_ID);
 				contentRequestDto = new ContentRequestDto(CONTENT_INFO + (i), (long) i, Boolean.TRUE);
 			}
 
-			contentService.create(contentRequestDto, FIRST_CARD_ID);
-			if (i > 0) {
-				contentService.create(contentRequestDto, SECOND_CARD_ID);
+			if (i == 0) {
+				firstCardId = 	cardResponseDto.getId();
 			}
+
+			contentService.create(contentRequestDto, firstCardId);
+			if (i > 0) {
+				contentService.create(contentRequestDto, firstCardId+1);
+			}
+
 		}
 	}
 
@@ -97,6 +103,7 @@ class CardFindTest {
 				//when
 				CardDetailResponseDto cardDetailResponseDto = cardService.findById(FIRST_NOTE_ID, tmpCardId);
 				List<ContentResponseDto> contents = cardDetailResponseDto.getContents();
+
 
 				//then
 				//card
