@@ -57,16 +57,15 @@ public class CardService {
 	private CardRequestDto editSeq(CardRequestDto cardRequestDto) {
 		Long cardDtoSeq = cardRequestDto.getSeq();
 		if (cardDtoSeq == null || cardDtoSeq == 0) {
-			return getNoteRequestDtoWithFirstSeq(cardRequestDto);
+			return getCardRequestDtoWithFirstSeq(cardRequestDto);
 		}
 		return getCardRequestDto(cardRequestDto);
 	}
 
-	private CardRequestDto getNoteRequestDtoWithFirstSeq(CardRequestDto cardRequestDto) {
-		String noteDtoTitle = cardRequestDto.getTitle();
-		Optional<Card> card = cardRepository.findFirstByOrderBySeq();
-		return card.map(value -> new CardRequestDto(value.getSeq() / 2, noteDtoTitle))
-			.orElseGet(() -> new CardRequestDto(DEFAULT_RANGE, noteDtoTitle));
+	private CardRequestDto getCardRequestDtoWithFirstSeq(CardRequestDto cardRequestDto) {
+		return cardRepository.findFirstByOrderBySeq()
+			.map(value -> new CardRequestDto(value.getSeq() / 2, cardRequestDto.getTitle()))
+			.orElseGet(() -> new CardRequestDto(DEFAULT_RANGE, cardRequestDto.getTitle()));
 	}
 
 	private CardRequestDto getCardRequestDto(CardRequestDto cardRequestDto) {
