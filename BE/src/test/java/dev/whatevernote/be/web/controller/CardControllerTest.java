@@ -153,14 +153,15 @@ class CardControllerTest {
 				responseFields(
 					fieldWithPath("code").type(JsonFieldType.STRING).description("response code"),
 					fieldWithPath("message").type(JsonFieldType.STRING).description("response message"),
-					fieldWithPath("data.card.id").type(JsonFieldType.NULL).description("card id"),
-					fieldWithPath("data.card.seq").type(JsonFieldType.NUMBER).description("card seq"),
-					fieldWithPath("data.card.title").type(JsonFieldType.STRING).description("card title"),
-					fieldWithPath("data.card.noteId").type(JsonFieldType.NUMBER).description("note id"),
+					fieldWithPath("data.cardId").type(JsonFieldType.NULL).description("card id"),
+					fieldWithPath("data.cardSeq").type(JsonFieldType.NUMBER).description("card seq"),
+					fieldWithPath("data.cardTitle").type(JsonFieldType.STRING).description("card title"),
+					fieldWithPath("data.noteId").type(JsonFieldType.NUMBER).description("note id"),
 					fieldWithPath("data.contents[].id").type(JsonFieldType.NULL).description("content id"),
 					fieldWithPath("data.contents[].seq").type(JsonFieldType.NUMBER).description("content seq"),
 					fieldWithPath("data.contents[].info").type(JsonFieldType.STRING).description("content info"),
-					fieldWithPath("data.contents[].isImage").type(JsonFieldType.BOOLEAN).description("content isImage")
+					fieldWithPath("data.contents[].isImage").type(JsonFieldType.BOOLEAN).description("content isImage"),
+					fieldWithPath("data.contents[].cardId").type(JsonFieldType.NULL).description("card id")
 				)));
 	}
 

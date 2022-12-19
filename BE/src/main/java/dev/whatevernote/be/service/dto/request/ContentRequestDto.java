@@ -6,6 +6,9 @@ public class ContentRequestDto {
 	private Long seq;
 	private Boolean isImage;
 
+	private ContentRequestDto() {
+	}
+
 	public ContentRequestDto(String info, Long seq, Boolean isImage) {
 		this.info = info;
 		this.seq = seq;

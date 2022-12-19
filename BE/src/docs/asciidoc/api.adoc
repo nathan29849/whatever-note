@@ -161,3 +161,26 @@ include::{snippets}/get-one-card/http-response.adoc[]
 include::{snippets}/get-one-card/response-fields.adoc[]
 
 ---
+
+== 카드 내용(Content)
+
+---
+
+[[resources-create-content]]
+=== 1. [POST] 내용 생성
+
+==== HTTP request
+
+include::{snippets}/create-content/http-request.adoc[]
+
+==== Request Fields
+include::{snippets}/create-content/request-fields.adoc[]
+
+==== HTTP response
+
+include::{snippets}/create-content/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/create-content/response-fields.adoc[]
+
+---
