@@ -1,6 +1,9 @@
 package dev.whatevernote.be.service.domain;
 
+import dev.whatevernote.be.common.BaseEntity;
+import dev.whatevernote.be.service.dto.request.ContentRequestDto;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -9,7 +12,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Content {
+public class Content extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +43,7 @@ public class Content {
 		return seq;
 	}
 
-	public Boolean getImage() {
+	public Boolean getIsImage() {
 		return isImage;
 	}
 
@@ -54,4 +57,14 @@ public class Content {
 		this.isImage = isImage;
 		this.card = card;
 	}
+
+	public static Content from(ContentRequestDto contentRequest, Card card) {
+		return new Content(
+			contentRequest.getInfo(),
+			contentRequest.getSeq(),
+			contentRequest.getIsImage(),
+			card
+		);
+	}
+
 }

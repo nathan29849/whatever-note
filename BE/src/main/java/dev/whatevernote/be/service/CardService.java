@@ -1,10 +1,13 @@
 package dev.whatevernote.be.service;
 
 import dev.whatevernote.be.repository.CardRepository;
+import dev.whatevernote.be.repository.ContentRepository;
 import dev.whatevernote.be.repository.NoteRepository;
 import dev.whatevernote.be.service.domain.Card;
+import dev.whatevernote.be.service.domain.Content;
 import dev.whatevernote.be.service.domain.Note;
 import dev.whatevernote.be.service.dto.request.CardRequestDto;
+import dev.whatevernote.be.service.dto.response.CardDetailResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDtos;
 import java.util.List;
@@ -26,10 +29,12 @@ public class CardService {
 
 	private final CardRepository cardRepository;
 	private final NoteRepository noteRepository;
+	private final ContentRepository contentRepository;
 
-	public CardService(CardRepository cardRepository, NoteRepository noteRepository) {
+	public CardService(CardRepository cardRepository, NoteRepository noteRepository, ContentRepository contentRepository) {
 		this.cardRepository = cardRepository;
 		this.noteRepository = noteRepository;
+		this.contentRepository = contentRepository;
 	}
 
 	@Transactional
@@ -39,7 +44,8 @@ public class CardService {
 		final Card savedCard = cardRepository.save(
 			Card.from(cardRequestDto, note)
 		);
-		logger.debug("[CREATE Card] ID = {}, SEQ = {}, Note ID = {}", savedCard.getId(), savedCard.getSeq(), note.getId());
+		logger.debug("[CREATE Card] ID = {}, SEQ = {}, Note ID = {}", savedCard.getId(),
+			savedCard.getSeq(), note.getId());
 		return CardResponseDto.from(savedCard, noteId);
 	}
 
@@ -51,16 +57,15 @@ public class CardService {
 	private CardRequestDto editSeq(CardRequestDto cardRequestDto) {
 		Long cardDtoSeq = cardRequestDto.getSeq();
 		if (cardDtoSeq == null || cardDtoSeq == 0) {
-			return getNoteRequestDtoWithFirstSeq(cardRequestDto);
+			return getCardRequestDtoWithFirstSeq(cardRequestDto);
 		}
 		return getCardRequestDto(cardRequestDto);
 	}
 
-	private CardRequestDto getNoteRequestDtoWithFirstSeq(CardRequestDto cardRequestDto) {
-		String noteDtoTitle = cardRequestDto.getTitle();
-		Optional<Card> card = cardRepository.findFirstByOrderBySeq();
-		return card.map(value -> new CardRequestDto(value.getSeq() / 2, noteDtoTitle))
-			.orElseGet(() -> new CardRequestDto(DEFAULT_RANGE, noteDtoTitle));
+	private CardRequestDto getCardRequestDtoWithFirstSeq(CardRequestDto cardRequestDto) {
+		return cardRepository.findFirstByOrderBySeq()
+			.map(value -> new CardRequestDto(value.getSeq() / 2, cardRequestDto.getTitle()))
+			.orElseGet(() -> new CardRequestDto(DEFAULT_RANGE, cardRequestDto.getTitle()));
 	}
 
 	private CardRequestDto getCardRequestDto(CardRequestDto cardRequestDto) {
@@ -70,10 +75,10 @@ public class CardService {
 			return new CardRequestDto(DEFAULT_RANGE, cardRequestDto.getTitle());
 		}
 
-		if (cards.size() > cardDtoSeq){
+		if (cards.size() > cardDtoSeq) {
 			Long seq = cards.get(cardDtoSeq.intValue()).getSeq();
-			Long preSeq = cards.get((int) (cardDtoSeq -1)).getSeq();
-			logger.debug("seq={}, preSeq={}, updateSeq={}", seq, preSeq, (seq+preSeq)/2);
+			Long preSeq = cards.get((int) (cardDtoSeq - 1)).getSeq();
+			logger.debug("seq={}, preSeq={}, updateSeq={}", seq, preSeq, (seq + preSeq) / 2);
 			return new CardRequestDto((seq + preSeq) / 2, cardRequestDto.getTitle());
 		}
 
@@ -87,9 +92,17 @@ public class CardService {
 		return CardResponseDtos.from(cards, noteId);
 	}
 
-	public CardResponseDto findById(Integer noteId, Long cardId) {
+	public CardDetailResponseDto findById(Integer noteId, Long cardId) {
 		Card card = cardRepository.findById(cardId)
 			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
-		return CardResponseDto.from(card, noteId);
+		List<Content> contents = findContentsById(cardId);
+		return CardDetailResponseDto.from(card, noteId, contents);
 	}
+
+	private List<Content> findContentsById(Long cardId) {
+		List<Content> contents = contentRepository.findAllByCardId(cardId);
+		contents.sort((o1, o2) -> (int) (o1.getSeq() - o2.getSeq()));
+		return contents;
+	}
+
 }

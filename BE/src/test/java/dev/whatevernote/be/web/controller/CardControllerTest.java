@@ -2,7 +2,6 @@ package dev.whatevernote.be.web.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -23,12 +22,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.whatevernote.be.common.BaseResponse;
 import dev.whatevernote.be.service.CardService;
 import dev.whatevernote.be.service.domain.Card;
+import dev.whatevernote.be.service.domain.Content;
 import dev.whatevernote.be.service.domain.Note;
 import dev.whatevernote.be.service.dto.request.CardRequestDto;
+import dev.whatevernote.be.service.dto.request.ContentRequestDto;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
+import dev.whatevernote.be.service.dto.response.CardDetailResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDtos;
-import dev.whatevernote.be.service.dto.response.NoteResponseDto;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,6 +59,7 @@ class CardControllerTest {
 	private static final long DEFAULT_RANGE = 1_000L;
 	private static final int NOTE_ID = 1;
 	private static final long CARD_ID = 1;
+	private static final String TEMP_IMAGE_URL = "https://en.wikipedia.org/wiki/Image#/media/File:Image_created_with_a_mobile_phone.png";
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -80,16 +82,11 @@ class CardControllerTest {
 	void 카드를_생성하면_생성된_카드를_반환한다() throws Exception {
 		//given
 		Long expectedCardId = 1L;
-		NoteRequestDto noteRequestDto = new NoteRequestDto(NOTE_ID, "첫번째 노트");
-		Note note = Note.from(noteRequestDto);
 		CardRequestDto cardRequestDto = new CardRequestDto(expectedCardId, "첫번째 카드");
-		Card card = Card.from(cardRequestDto, note);
-
 
 		CardResponseDto cardResponseDto = new CardResponseDto(expectedCardId, "첫번째 카드", DEFAULT_RANGE, NOTE_ID);
 		when(cardService.create(refEq(cardRequestDto), refEq(NOTE_ID))).thenReturn(cardResponseDto);
-		BaseResponse<CardResponseDtos> baseResponse = new BaseResponse("code", "message", cardResponseDto);
-
+		BaseResponse<CardResponseDto> baseResponse = new BaseResponse("code", "message", cardResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.post("/api/note/1/card")
@@ -126,10 +123,15 @@ class CardControllerTest {
 		Note note = Note.from(noteRequestDto);
 		CardRequestDto cardRequestDto = new CardRequestDto(CARD_ID, "첫번째 카드");
 		Card card = Card.from(cardRequestDto, note);
-		CardResponseDto cardResponseDto = new CardResponseDto(CARD_ID, "첫번째 카드", DEFAULT_RANGE, NOTE_ID);
+		ContentRequestDto contentRequestDto1 = new ContentRequestDto("첫 번째 컨텐트", DEFAULT_RANGE, Boolean.FALSE);
+		ContentRequestDto contentRequestDto2 = new ContentRequestDto(TEMP_IMAGE_URL, DEFAULT_RANGE, Boolean.TRUE);
+		List<Content> contents = new ArrayList<>();
+		contents.add(Content.from(contentRequestDto1, card));
+		contents.add(Content.from(contentRequestDto2, card));
 
-		when(cardService.findById(NOTE_ID, CARD_ID)).thenReturn(cardResponseDto);
-		BaseResponse baseResponse = new BaseResponse("code", "message", cardResponseDto);
+		CardDetailResponseDto cardDetailResponseDto = CardDetailResponseDto.from(card, NOTE_ID, contents);
+		when(cardService.findById(NOTE_ID, CARD_ID)).thenReturn(cardDetailResponseDto);
+		BaseResponse<CardDetailResponseDto> baseResponse = new BaseResponse("code", "message", cardDetailResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
@@ -151,10 +153,15 @@ class CardControllerTest {
 				responseFields(
 					fieldWithPath("code").type(JsonFieldType.STRING).description("response code"),
 					fieldWithPath("message").type(JsonFieldType.STRING).description("response message"),
-					fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("card id"),
-					fieldWithPath("data.seq").type(JsonFieldType.NUMBER).description("card seq"),
-					fieldWithPath("data.title").type(JsonFieldType.STRING).description("card title"),
-					fieldWithPath("data.noteId").type(JsonFieldType.NUMBER).description("note id")
+					fieldWithPath("data.cardId").type(JsonFieldType.NULL).description("card id"),
+					fieldWithPath("data.cardSeq").type(JsonFieldType.NUMBER).description("card seq"),
+					fieldWithPath("data.cardTitle").type(JsonFieldType.STRING).description("card title"),
+					fieldWithPath("data.noteId").type(JsonFieldType.NUMBER).description("note id"),
+					fieldWithPath("data.contents[].id").type(JsonFieldType.NULL).description("content id"),
+					fieldWithPath("data.contents[].seq").type(JsonFieldType.NUMBER).description("content seq"),
+					fieldWithPath("data.contents[].info").type(JsonFieldType.STRING).description("content info"),
+					fieldWithPath("data.contents[].isImage").type(JsonFieldType.BOOLEAN).description("content isImage"),
+					fieldWithPath("data.contents[].cardId").type(JsonFieldType.NULL).description("card id")
 				)));
 	}
 

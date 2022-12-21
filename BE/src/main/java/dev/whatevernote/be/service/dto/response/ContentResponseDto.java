@@ -4,16 +4,21 @@ import dev.whatevernote.be.service.domain.Content;
 
 public class ContentResponseDto {
 
-	private final Long id;
-	private final Long seq;
-	private final String info;
-	private final Boolean isImage;
+	private Long id;
+	private Long seq;
+	private String info;
+	private Boolean isImage;
+	private Long cardId;
 
-	public ContentResponseDto(Long id, Long seq, String info, Boolean isImage) {
+	protected ContentResponseDto() {
+	}
+
+	public ContentResponseDto(Long id, Long seq, String info, Boolean isImage, Long cardId) {
 		this.id = id;
 		this.seq = seq;
 		this.info = info;
 		this.isImage = isImage;
+		this.cardId = cardId;
 	}
 
 	public static ContentResponseDto from(Content content) {
@@ -21,7 +26,28 @@ public class ContentResponseDto {
 			content.getId(),
 			content.getSeq(),
 			content.getInfo(),
-			content.getImage()
+			content.getIsImage(),
+			content.getCard().getId()
 		);
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public Long getSeq() {
+		return seq;
+	}
+
+	public String getInfo() {
+		return info;
+	}
+
+	public Boolean getIsImage() {
+		return isImage;
+	}
+
+	public Long getCardId() {
+		return cardId;
 	}
 }

@@ -3,6 +3,7 @@ package dev.whatevernote.be.web.controller;
 import dev.whatevernote.be.common.BaseResponse;
 import dev.whatevernote.be.service.CardService;
 import dev.whatevernote.be.service.dto.request.CardRequestDto;
+import dev.whatevernote.be.service.dto.response.CardDetailResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDtos;
 import org.springframework.data.domain.Pageable;
@@ -30,9 +31,9 @@ public class CardController {
 	}
 
 	@GetMapping("/{cardId}")
-	public BaseResponse<CardResponseDto> findById(@PathVariable final Integer noteId, @PathVariable final Long cardId) {
-		CardResponseDto cardResponseDto = cardService.findById(noteId, cardId);
-		return new BaseResponse("code", "message", cardResponseDto);
+	public BaseResponse<CardDetailResponseDto> findById(@PathVariable final Integer noteId, @PathVariable final Long cardId) {
+		CardDetailResponseDto cardDetailResponseDto = cardService.findById(noteId, cardId);
+		return new BaseResponse("code", "message", cardDetailResponseDto);
 	}
 
 	@GetMapping

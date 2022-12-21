@@ -4,12 +4,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.whatevernote.be.repository.CardRepository;
 import dev.whatevernote.be.service.CardService;
+import dev.whatevernote.be.service.ContentService;
 import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.domain.Card;
 import dev.whatevernote.be.service.dto.request.CardRequestDto;
+import dev.whatevernote.be.service.dto.request.ContentRequestDto;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
+import dev.whatevernote.be.service.dto.response.CardDetailResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDtos;
+import dev.whatevernote.be.service.dto.response.ContentResponseDto;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,9 +22,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 
-@DisplayName("통합 테스트 : Card 조회")
+@DisplayName("통합 테스트 : Card & Content 조회")
 @Sql("/truncate.sql")
 @SpringBootTest
 class CardFindTest {
@@ -30,6 +35,7 @@ class CardFindTest {
 	private static final int SECOND_NOTE_ID = 2;
 	private static final int PAGE_NUMBER = 0;
 	private static final int PAGE_SIZE = 5;
+	private static final String CONTENT_INFO = "contentInfo-";
 
 	@Autowired
 	private CardService cardService;
@@ -38,25 +44,43 @@ class CardFindTest {
 	private NoteService noteService;
 
 	@Autowired
+	private ContentService contentService;
+
+	@Autowired
 	private CardRepository cardRepository;
 
 	@BeforeEach
 	void init() {
-		cardRepository.deleteAll();
-		createNotesAndCards(NUMBER_OF_CARD);
+		createNotesAndCardsAndContents(NUMBER_OF_CARD);
 	}
 
-	private void createNotesAndCards(int numberOfCard){
+	private void createNotesAndCardsAndContents(int numberOfCard){
+
 		for (int i = 0; i < 2; i++) {
 			noteService.create(new NoteRequestDto(i, "note-" + (i + 1)));
 		}
+		long firstCardId = 0L;
 		for (int i = 0; i < numberOfCard; i++) {
 			CardRequestDto cardRequestDto = new CardRequestDto((long) i, "card-" + (i + 1));
+			CardResponseDto cardResponseDto;
+			ContentRequestDto contentRequestDto;
 			if (i < (numberOfCard / 2)) {
-				cardService.create(cardRequestDto, FIRST_NOTE_ID);
+				cardResponseDto = cardService.create(cardRequestDto, FIRST_NOTE_ID);
+				contentRequestDto = new ContentRequestDto(CONTENT_INFO + (i), (long) i, Boolean.FALSE);
 			} else {
-				cardService.create(cardRequestDto, SECOND_NOTE_ID);
+				cardResponseDto = cardService.create(cardRequestDto, SECOND_NOTE_ID);
+				contentRequestDto = new ContentRequestDto(CONTENT_INFO + (i), (long) i, Boolean.TRUE);
 			}
+
+			if (i == 0) {
+				firstCardId = 	cardResponseDto.getId();
+			}
+
+			contentService.create(contentRequestDto, firstCardId);
+			if (i > 0) {
+				contentService.create(contentRequestDto, firstCardId+1);
+			}
+
 		}
 	}
 
@@ -73,16 +97,25 @@ class CardFindTest {
 			void normal_find_one(){
 			    //given
 				List<Card> cards = cardRepository.findAllByOrderBySeq();
-				int seq = 8;
+				int seq = 0;
 				long tmpCardId = cards.get(seq).getId();
 
 				//when
-				CardResponseDto cardResponseDto = cardService.findById(FIRST_NOTE_ID, tmpCardId);
+				CardDetailResponseDto cardDetailResponseDto = cardService.findById(FIRST_NOTE_ID, tmpCardId);
+				List<ContentResponseDto> contents = cardDetailResponseDto.getContents();
+
 
 				//then
-				assertThat(cardResponseDto.getId()).isEqualTo(tmpCardId);
-				assertThat(cardResponseDto.getNoteId()).isEqualTo(FIRST_NOTE_ID);
-				assertThat(cardResponseDto.getTitle()).isEqualTo("card-" + (seq + 1));
+				//card
+				assertThat(cardDetailResponseDto.getCardId()).isEqualTo(tmpCardId);
+				assertThat(cardDetailResponseDto.getNoteId()).isEqualTo(FIRST_NOTE_ID);
+				assertThat(cardDetailResponseDto.getCardTitle()).isEqualTo("card-" + (seq + 1));
+
+				//contents
+				assertThat(cardDetailResponseDto.getContents()).hasSize(NUMBER_OF_CARD);
+				assertThat(contents.get(0).getCardId()).isEqualTo(tmpCardId);
+				assertThat(contents.get(0).getInfo()).isEqualTo(CONTENT_INFO+"0");
+				assertThat(contents.get(0).getIsImage()).isFalse();
 			}
 		}
 
@@ -119,6 +152,35 @@ class CardFindTest {
 					assertThat(card.getSeq()).isGreaterThan(preSeq);
 					preSeq = card.getSeq();
 				}
+			}
+		}
+
+	}
+
+	@Nested
+	@DisplayName("카드의 내용을 단건 조회할 때")
+	class FindOneContentTest {
+
+		@Nested
+		@DisplayName("정상적인 요청이라면")
+		class NormalFindOneContentTest {
+
+			@DisplayName("해당 ID를 가진 카드의 내용이 조회된다.")
+			@Test
+			void normal_find_one_content(){
+				//given
+				long tmpCardId = 1L;
+				long tmpContentId = 1L;
+
+				//when
+				ContentResponseDto contentResponseDto = contentService.findById(tmpContentId);
+
+				//then
+				assertThat(contentResponseDto.getId()).isEqualTo(tmpContentId);
+				assertThat(contentResponseDto.getInfo()).isEqualTo("contentInfo-0");
+				assertThat(contentResponseDto.getSeq()).isEqualTo(1000);
+				assertThat(contentResponseDto.getIsImage()).isFalse();
+				assertThat(contentResponseDto.getCardId()).isEqualTo(tmpCardId);
 			}
 		}
 
