@@ -25,7 +25,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.jdbc.Sql;
 
-@DisplayName("통합 테스트 : Card 조회")
+@DisplayName("통합 테스트 : Card & Content 조회")
 @Sql("/truncate.sql")
 @SpringBootTest
 class CardFindTest {
@@ -152,6 +152,35 @@ class CardFindTest {
 					assertThat(card.getSeq()).isGreaterThan(preSeq);
 					preSeq = card.getSeq();
 				}
+			}
+		}
+
+	}
+
+	@Nested
+	@DisplayName("카드의 내용을 단건 조회할 때")
+	class FindOneContentTest {
+
+		@Nested
+		@DisplayName("정상적인 요청이라면")
+		class NormalFindOneContentTest {
+
+			@DisplayName("해당 ID를 가진 카드의 내용이 조회된다.")
+			@Test
+			void normal_find_one_content(){
+				//given
+				long tmpCardId = 1L;
+				long tmpContentId = 1L;
+
+				//when
+				ContentResponseDto contentResponseDto = contentService.findById(tmpContentId);
+
+				//then
+				assertThat(contentResponseDto.getId()).isEqualTo(tmpContentId);
+				assertThat(contentResponseDto.getInfo()).isEqualTo("contentInfo-0");
+				assertThat(contentResponseDto.getSeq()).isEqualTo(1000);
+				assertThat(contentResponseDto.getIsImage()).isFalse();
+				assertThat(contentResponseDto.getCardId()).isEqualTo(tmpCardId);
 			}
 		}
 

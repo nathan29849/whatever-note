@@ -1259,28 +1259,28 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json;charset=UTF-8
-Content-Length: 483
+Content-Length: 512
 
 {
   "code" : "code",
   "message" : "message",
   "data" : {
-    "card" : {
-      "id" : null,
-      "title" : "첫번째 카드",
-      "seq" : 1,
-      "noteId" : 1
-    },
+    "cardId" : null,
+    "cardSeq" : 1,
+    "cardTitle" : "첫번째 카드",
+    "noteId" : 1,
     "contents" : [ {
       "id" : null,
       "seq" : 1000,
       "info" : "첫 번째 컨텐트",
-      "isImage" : false
+      "isImage" : false,
+      "cardId" : null
     }, {
       "id" : null,
       "seq" : 1000,
       "info" : "https://en.wikipedia.org/wiki/Image#/media/File:Image_created_with_a_mobile_phone.png",
-      "isImage" : true
+      "isImage" : true,
+      "cardId" : null
     } ]
   }
 }</code></pre>
@@ -1314,22 +1314,22 @@ Content-Length: 483
 <td class="tableblock halign-left valign-top"><p class="tableblock">response message</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.card.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.cardId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">card id</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.card.seq</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.cardSeq</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">card seq</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.card.title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.cardTitle</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">card title</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.card.noteId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.noteId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">note id</p></td>
 </tr>
@@ -1352,6 +1352,11 @@ Content-Length: 483
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.contents[].isImage</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">content isImage</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.contents[].cardId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">card id</p></td>
 </tr>
 </tbody>
 </table>

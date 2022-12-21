@@ -81,4 +81,11 @@ public class ContentService {
 			(contents.size() + 1) * DEFAULT_RANGE, contentRequestDto.getIsImage());
 	}
 
+	public ContentResponseDto findById(Long contentId) {
+
+		Content content = contentRepository.findById(contentId)
+			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
+
+		return ContentResponseDto.from(content);
+	}
 }
