@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-@SQLDelete(sql = "UPDATE note SET deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE card SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 @Entity
 public class Card extends BaseEntity {
