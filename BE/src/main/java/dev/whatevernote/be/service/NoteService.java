@@ -1,6 +1,10 @@
 package dev.whatevernote.be.service;
 
+import dev.whatevernote.be.repository.CardRepository;
+import dev.whatevernote.be.repository.ContentRepository;
 import dev.whatevernote.be.repository.NoteRepository;
+import dev.whatevernote.be.service.domain.Card;
+import dev.whatevernote.be.service.domain.Content;
 import dev.whatevernote.be.service.domain.Note;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
@@ -23,9 +27,15 @@ public class NoteService {
 	private static final String NOT_FOUNT_NOTE_ID = "존재하지 않는 ID 입니다.";
 
 	private final NoteRepository noteRepository;
+	private final CardRepository cardRepository;
+	private final ContentRepository contentRepository;
 
-	public NoteService(NoteRepository noteRepository) {
+	public NoteService(NoteRepository noteRepository,
+		CardRepository cardRepository,
+		ContentRepository contentRepository) {
 		this.noteRepository = noteRepository;
+		this.cardRepository = cardRepository;
+		this.contentRepository = contentRepository;
 	}
 
 	public NoteResponseDto findById(final Integer noteId) {
@@ -103,7 +113,15 @@ public class NoteService {
 	@Transactional
 	public void delete(Integer noteId) {
 		Note note = findNoteById(noteId);
+		List<Card> cards = cardRepository.findAllByNoteId(noteId);
+		for (Card card : cards) {
+			contentRepository.deleteAll(card.getId());
+			logger.debug("[CONTENT ALL DELETED] (CARD ID = {})'s contents delete", card.getId());
+		}
+		cardRepository.deleteAll(noteId);
+		logger.debug("[CARD ALL DELETED] (NOTE ID = {})'s cards delete", note.getId());
 		noteRepository.delete(note);
+		logger.debug("[NOTE DELETED] NOTE ID = {}", note.getId());
 	}
 
 

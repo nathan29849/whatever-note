@@ -3,28 +3,22 @@ package dev.whatevernote.be.service.note;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.whatevernote.be.repository.NoteRepository;
+import dev.whatevernote.be.service.InitIntegrationTest;
 import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.domain.Note;
-import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDtos;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.jdbc.Sql;
 
 @DisplayName("통합 테스트 : Note 조회")
-@Sql("/truncate.sql")
-@SpringBootTest
-class NoteFindTest {
+class NoteFindTest extends InitIntegrationTest {
 
-	private static final int NUMBER_OF_NOTE = 30;
-	private static final int PAGE_NUMBER = 1;
+	private static final int PAGE_NUMBER = 0;
 	private static final int PAGE_SIZE = 10;
 
 	@Autowired
@@ -32,18 +26,6 @@ class NoteFindTest {
 
 	@Autowired
 	private NoteRepository noteRepository;
-
-	@BeforeEach
-	void init() {
-		noteRepository.deleteAll();
-		createNotes(NUMBER_OF_NOTE);
-	}
-
-	private void createNotes(int numberOfNote) {
-		for (int i = 0; i < numberOfNote; i++) {
-			noteService.create(new NoteRequestDto(i, "note-" + (i+1)));
-		}
-	}
 
 	@Nested
 	@DisplayName("노트를 단건 조회할 때")
@@ -58,8 +40,8 @@ class NoteFindTest {
 			void normal_find_one() {
 				//given
 				List<Note> notes = noteRepository.findAllByOrderBySeq();
-				int seq = 10;
-				int tmpNoteId = notes.get(seq).getId();
+				int seq = 2;
+				int tmpNoteId = notes.get(2).getId();
 
 
 				//when
@@ -67,7 +49,7 @@ class NoteFindTest {
 
 				//then
 				assertThat(noteResponseDto.getId()).isEqualTo(tmpNoteId);
-				assertThat(noteResponseDto.getTitle()).isEqualTo("note-" + (seq+1));
+				assertThat(noteResponseDto.getTitle()).isEqualTo("noteTitle-" + (seq+1));
 			}
 		}
 	}
@@ -95,9 +77,9 @@ class NoteFindTest {
 				int preSeq = 0;
 
 				//then
-				assertThat(notes).hasSize(PAGE_SIZE);
+				assertThat(notes.size()).isLessThan(PAGE_SIZE);
 				assertThat(pageNumber).isEqualTo(PAGE_NUMBER);
-				assertThat(hasNext).isTrue();
+				assertThat(hasNext).isFalse();
 				for (NoteResponseDto note : notes) {
 					assertThat(note.getSeq()).isGreaterThan(preSeq);
 					preSeq = note.getSeq();

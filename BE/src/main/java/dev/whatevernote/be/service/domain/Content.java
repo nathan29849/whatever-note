@@ -2,15 +2,19 @@ package dev.whatevernote.be.service.domain;
 
 import dev.whatevernote.be.common.BaseEntity;
 import dev.whatevernote.be.service.dto.request.ContentRequestDto;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
+@SQLDelete(sql = "UPDATE content SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 @Entity
 public class Content extends BaseEntity {
 
@@ -21,6 +25,7 @@ public class Content extends BaseEntity {
 	@Lob
 	private String info;
 
+	@Column(name="content_order")
 	private Long seq;
 	private Boolean isImage = Boolean.FALSE;
 

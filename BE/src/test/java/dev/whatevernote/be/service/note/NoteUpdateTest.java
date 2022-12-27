@@ -3,25 +3,21 @@ package dev.whatevernote.be.service.note;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.whatevernote.be.repository.NoteRepository;
+import dev.whatevernote.be.service.InitIntegrationTest;
 import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.domain.Note;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
 
 @DisplayName("통합 테스트 : Note 조회")
-@Sql("/truncate.sql")
-@SpringBootTest
-class NoteUpdateTest {
+class NoteUpdateTest extends InitIntegrationTest {
 
-	private static final int NUMBER_OF_NOTE = 10;
+	private static final int NUMBER_OF_NOTE = 3;
 	private static final int DEFAULT_RANGE = 1_000;
 
 	@Autowired
@@ -29,18 +25,6 @@ class NoteUpdateTest {
 
 	@Autowired
 	private NoteRepository noteRepository;
-
-	@BeforeEach
-	void init() {
-		noteRepository.deleteAll();
-		createNotes(NUMBER_OF_NOTE);
-	}
-
-	private void createNotes(int numberOfNote) {
-		for (int i = 0; i < numberOfNote; i++) {
-			noteService.create(new NoteRequestDto(i, "note-" + (i+1)));
-		}
-	}
 
 	@Nested
 	@DisplayName("노트를 수정 할 때")
@@ -55,7 +39,7 @@ class NoteUpdateTest {
 			void note_title_update(){
 			    //given
 				List<Note> notes = noteRepository.findAllByOrderBySeq();
-				int seq = 3;
+				int seq = 2;
 				int updateNoteId = notes.get(seq).getId();
 				String updateTitle = "제목 바꾼 노트";
 				NoteRequestDto noteRequestDto = new NoteRequestDto(null, updateTitle);
@@ -79,7 +63,7 @@ class NoteUpdateTest {
 			void note_seq_update_to_first(){
 				//given
 				List<Note> notes = noteRepository.findAllByOrderBySeq();
-				int seq = 3;
+				int seq = 2;
 				int updateNoteId = notes.get(seq).getId();
 				int updateSeq = 0;
 				NoteRequestDto noteRequestDto = new NoteRequestDto(updateSeq, null);
@@ -97,9 +81,9 @@ class NoteUpdateTest {
 			void note_seq_update(){
 				//given
 				List<Note> notes = noteRepository.findAllByOrderBySeq();
-				int seq = 3;
+				int seq = 2;
 				int updateNoteId = notes.get(seq).getId();
-				int updateSeq = 7;
+				int updateSeq = 1;
 				int preNoteSeq = DEFAULT_RANGE * updateSeq;
 				int nextNoteSeq = DEFAULT_RANGE * (updateSeq+1);
 				NoteRequestDto noteRequestDto = new NoteRequestDto(updateSeq, null);
@@ -117,7 +101,7 @@ class NoteUpdateTest {
 			void note_seq_update_to_last(){
 				//given
 				List<Note> notes = noteRepository.findAllByOrderBySeq();
-				int seq = 3;
+				int seq = 2;
 				int updateNoteId = notes.get(seq).getId();
 				int updateSeq = NUMBER_OF_NOTE;
 				NoteRequestDto noteRequestDto = new NoteRequestDto(updateSeq, null);
@@ -135,7 +119,7 @@ class NoteUpdateTest {
 			void note_seq_update_to_same_seq(){
 				//given
 				List<Note> notes = noteRepository.findAllByOrderBySeq();
-				int seq = 3;
+				int seq = 2;
 				int updateNoteId = notes.get(seq).getId();
 				int updateSeq = 3;
 				NoteRequestDto noteRequestDto = new NoteRequestDto(updateSeq, null);

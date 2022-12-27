@@ -11,7 +11,6 @@ import dev.whatevernote.be.service.dto.response.CardDetailResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDtos;
 import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -39,13 +38,13 @@ public class CardService {
 
 	@Transactional
 	public CardResponseDto create(CardRequestDto cardRequestDto, Integer noteId) {
-		cardRequestDto = editSeq(cardRequestDto);
+		cardRequestDto = editSeq(cardRequestDto, noteId);
 		Note note = findNoteById(noteId);
 		final Card savedCard = cardRepository.save(
 			Card.from(cardRequestDto, note)
 		);
-		logger.debug("[CREATE Card] ID = {}, SEQ = {}, Note ID = {}", savedCard.getId(),
-			savedCard.getSeq(), note.getId());
+		logger.debug("[CREATE Card] ID = {}, SEQ = {}, TITLE = {}, Note ID = {}", savedCard.getId(),
+			savedCard.getSeq(), savedCard.getTitle(), note.getId());
 		return CardResponseDto.from(savedCard, noteId);
 	}
 
@@ -54,23 +53,26 @@ public class CardService {
 			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
 	}
 
-	private CardRequestDto editSeq(CardRequestDto cardRequestDto) {
+	private CardRequestDto editSeq(CardRequestDto cardRequestDto, Integer noteId) {
 		Long cardDtoSeq = cardRequestDto.getSeq();
 		if (cardDtoSeq == null || cardDtoSeq == 0) {
-			return getCardRequestDtoWithFirstSeq(cardRequestDto);
+			return getCardRequestDtoWithFirstSeq(cardRequestDto, noteId);
 		}
-		return getCardRequestDto(cardRequestDto);
+		return getCardRequestDto(cardRequestDto, noteId);
 	}
 
-	private CardRequestDto getCardRequestDtoWithFirstSeq(CardRequestDto cardRequestDto) {
-		return cardRepository.findFirstByOrderBySeq()
-			.map(value -> new CardRequestDto(value.getSeq() / 2, cardRequestDto.getTitle()))
-			.orElseGet(() -> new CardRequestDto(DEFAULT_RANGE, cardRequestDto.getTitle()));
+	private CardRequestDto getCardRequestDtoWithFirstSeq(CardRequestDto cardRequestDto, Integer noteId) {
+		List<Card> cards = getCardsByNoteId(noteId);
+
+		if (cards.isEmpty()) {
+			return new CardRequestDto(DEFAULT_RANGE, cardRequestDto.getTitle());
+		}
+		return new CardRequestDto(cards.get(0).getSeq() / 2, cardRequestDto.getTitle());
 	}
 
-	private CardRequestDto getCardRequestDto(CardRequestDto cardRequestDto) {
+	private CardRequestDto getCardRequestDto(CardRequestDto cardRequestDto, Integer noteId) {
 		Long cardDtoSeq = cardRequestDto.getSeq();
-		List<Card> cards = cardRepository.findAllByOrderBySeq();
+		List<Card> cards = getCardsByNoteId(noteId);
 		if (cards.isEmpty()) {
 			return new CardRequestDto(DEFAULT_RANGE, cardRequestDto.getTitle());
 		}
@@ -83,6 +85,14 @@ public class CardService {
 		}
 
 		return new CardRequestDto((cards.size() + 1) * DEFAULT_RANGE, cardRequestDto.getTitle());
+	}
+
+	private List<Card> getCardsByNoteId(Integer noteId) {
+		List<Card> cards = cardRepository.findAllByNoteId(noteId);
+		cards.sort(
+			(o1, o2) -> (int) (o1.getSeq() - o2.getSeq())
+		);
+		return cards;
 	}
 
 	public CardResponseDtos findAll(final Pageable pageable, Integer noteId) {
