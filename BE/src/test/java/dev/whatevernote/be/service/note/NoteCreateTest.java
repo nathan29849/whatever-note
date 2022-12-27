@@ -27,11 +27,6 @@ class NoteCreateTest {
 	@Autowired
 	private NoteRepository noteRepository;
 
-	@BeforeEach
-	void init() {
-		noteRepository.deleteAll();
-	}
-
 	@Nested
 	@DisplayName("노트를 생성할 때")
 	class CreateTest {

@@ -8,12 +8,15 @@ import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.dto.request.CardRequestDto;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
+import dev.whatevernote.be.service.dto.response.CardResponseDtos;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 
 @DisplayName("통합 테스트 : Card 생성")
 public class CardCreateTest extends InitIntegrationTest {
@@ -104,12 +107,13 @@ public class CardCreateTest extends InitIntegrationTest {
 			void seq_null_and_existing_card(){
 				//given
 				CardRequestDto cardRequestDto = new CardRequestDto(null, "나만의 단어장");
+				List<CardResponseDto> cards = cardService.findAll(Pageable.unpaged(), TEMP_NOTE_ID).getCards();
 
 				//when
 				CardResponseDto cardResponseDto = cardService.create(cardRequestDto, TEMP_NOTE_ID);
 
 				//then
-				assertThat(cardResponseDto.getSeq()).isEqualTo(500L);
+				assertThat(cardResponseDto.getSeq()).isEqualTo(cards.get(0).getSeq()/2);
 				assertThat(cardResponseDto.getTitle()).isEqualTo("나만의 단어장");
 			}
 
