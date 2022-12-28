@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  database:
+    image: mysql:8.0
+    container_name: mysql-whatever-note
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=whatever-note
+      - MYSQL_ROOT_PASSWORD=sonya-nathan
+      - TZ=Asia/Seoul
+    volumes:
+      - "./db/conf.d:/etc/mysql/conf.d"
+      #    command:
+      #- --character-set-server=utf8mb4
+      #- --collation-server=utf8mb4_unicode_ci
+

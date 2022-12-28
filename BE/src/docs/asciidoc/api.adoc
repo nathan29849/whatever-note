@@ -1,0 +1,186 @@
+= Spring REST Docs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== 단어장(Note)
+
+---
+
+[[resources-get-create]]
+=== 1. [GET] 단어장 단일 조회
+
+==== HTTP request
+
+include::{snippets}/get-one-note/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/get-one-note/http-response.adoc[]
+
+==== Path Parameter
+include::{snippets}/get-one-note/path-parameters.adoc[]
+
+==== Fields
+include::{snippets}/get-one-note/response-fields.adoc[]
+
+---
+
+[[resources-get-create]]
+=== 2. [GET] 단어장 모두 조회
+
+==== HTTP request
+
+include::{snippets}/get-all-notes/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/get-all-notes/http-response.adoc[]
+
+==== Query Parameters
+
+include::{snippets}/get-all-notes/request-parameters.adoc[]
+
+==== Fields
+include::{snippets}/get-all-notes/response-fields.adoc[]
+
+---
+
+[[resources-post-create]]
+=== 3. [POST] 단어장 생성
+
+==== HTTP request
+
+include::{snippets}/create-note/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/create-note/http-response.adoc[]
+
+==== Fields
+include::{snippets}/create-note/response-fields.adoc[]
+
+---
+
+[[resources-update-note]]
+=== 4. [PUT] 단어장 수정
+
+- 한 번에 위치와 제목을 모두 수정할수는 없습니다.
+- 수정할 데이터만 채워서 요청하시면 됩니다.
+- 수정하지 않을 데이터는 아예 넣지 않거나, null 처리를 하여 요청하시면 됩니다.
+
+==== HTTP request
+
+include::{snippets}/update-note/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/update-note/http-response.adoc[]
+
+==== Path Parameter
+include::{snippets}/update-note/path-parameters.adoc[]
+
+==== Request Fields
+include::{snippets}/update-note/request-fields.adoc[]
+
+==== Response Fields
+include::{snippets}/update-note/response-fields.adoc[]
+
+---
+
+[[resources-delete-note]]
+=== 5. [DELETE] 단어장 삭제
+
+==== HTTP request
+
+include::{snippets}/delete-note/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/delete-note/http-response.adoc[]
+
+==== Path Parameter
+include::{snippets}/delete-note/path-parameters.adoc[]
+
+---
+
+== 단어 카드(Card)
+
+---
+
+[[resources-create-card]]
+=== 1. [POST] 단어 카드 생성
+
+==== HTTP request
+
+include::{snippets}/create-card/http-request.adoc[]
+
+==== Request Fields
+include::{snippets}/create-card/request-fields.adoc[]
+
+==== HTTP response
+
+include::{snippets}/create-card/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/create-card/response-fields.adoc[]
+
+---
+
+[[resources-create-card]]
+=== 2. [GET] 단어 모두 조회
+
+==== HTTP request
+
+include::{snippets}/get-all-cards/http-request.adoc[]
+
+==== Query Parameters
+include::{snippets}/get-all-cards/request-parameters.adoc[]
+
+==== HTTP response
+
+include::{snippets}/get-all-cards/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/get-all-cards/response-fields.adoc[]
+
+---
+
+[[resources-create-card]]
+=== 3. [GET] 단어 단일 조회
+
+==== HTTP request
+
+include::{snippets}/get-one-card/http-request.adoc[]
+
+==== HTTP response
+
+include::{snippets}/get-one-card/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/get-one-card/response-fields.adoc[]
+
+---
+
+== 카드 내용(Content)
+
+---
+
+[[resources-create-content]]
+=== 1. [POST] 내용 생성
+
+==== HTTP request
+
+include::{snippets}/create-content/http-request.adoc[]
+
+==== Request Fields
+include::{snippets}/create-content/request-fields.adoc[]
+
+==== HTTP response
+
+include::{snippets}/create-content/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/create-content/response-fields.adoc[]
+
+---
