@@ -29,9 +29,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Spring - Test and Build with Gradle
-        run: ./gradlew clean build
-        with:
-          profile: ${{ secrets.PROFILE }}
+        run: ./gradlew clean build -Dspring.profiles.active=test
 
       # Docker
       - name: Docker - Setup Docker
