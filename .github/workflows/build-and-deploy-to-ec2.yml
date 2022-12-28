@@ -30,6 +30,8 @@ jobs:
 
       - name: Spring - Test and Build with Gradle
         run: ./gradlew clean build
+        with:
+          profile: ${{ secrets.PROFILE }}
 
       # Docker
       - name: Docker - Setup Docker
