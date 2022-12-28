@@ -24,12 +24,19 @@ jobs:
         with:
           java-version: "11"
           distribution: "temurin"
+          
+      - name: switch env file
+        run: |
+          cat /dev/null > ./src/main/resources/application.yml
+          cat /dev/null > ./src/test/resources/application.yml
+          echo "${{ secrets.APPLICATION_YML }}" >> ./src/main/resources/application.yml
+          
 
       - name: Spring - Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Spring - Test and Build with Gradle
-        run: ./gradlew clean build -Dspring.profiles.active=test
+        run: ./gradlew clean build
 
       # Docker
       - name: Docker - Setup Docker
