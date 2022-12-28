@@ -6,19 +6,20 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
-#    defer-datasource-initialization: true
-#  sql:
-#    init:
-#      mode: always
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:sql/data.sql
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    url: jdbc:mysql://${IP_ADDRESS}:3306/whatever-note?&characterEncoding=UTF-8&serverTimeZone=Asia/Seoul
-    password: sonya-nathan
+    username: ${MYSQL_USERNAME}
+    url: jdbc:mysql://${MYSQL_HOST}:3306/whatever-note?&characterEncoding=UTF-8&serverTimeZone=Asia/Seoul
+    password: ${MYSQL_PASSWORD}
 
 logging:
   level:
-    org.hibernate.SQL: debug
+    org.hibernate.SQL: info
     dev.whatevernote:
-      be: debug
+      be: info
