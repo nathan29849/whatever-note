@@ -6,11 +6,6 @@ spring:
       hibernate:
         format_sql: true
         use_sql_comments: true
-    defer-datasource-initialization: true
-  sql:
-    init:
-      mode: always
-      data-locations: classpath:sql/data.sql
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

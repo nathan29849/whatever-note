@@ -77,7 +77,7 @@ class NoteFindTest extends InitIntegrationTest {
 				int preSeq = 0;
 
 				//then
-				assertThat(notes.size()).isLessThan(PAGE_SIZE);
+				assertThat(notes).hasSizeLessThan(PAGE_SIZE);
 				assertThat(pageNumber).isEqualTo(PAGE_NUMBER);
 				assertThat(hasNext).isFalse();
 				for (NoteResponseDto note : notes) {
