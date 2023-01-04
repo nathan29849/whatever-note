@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,5 +41,12 @@ public class CardController {
 	public BaseResponse<CardResponseDtos> findAll(final Pageable pageable, @PathVariable final Integer noteId) {
 		CardResponseDtos cardResponseDtos = cardService.findAll(pageable, noteId);
 		return new BaseResponse("code", "message", cardResponseDtos);
+	}
+
+	@PutMapping("/{cardId}")
+	public BaseResponse<CardResponseDto> update(@PathVariable final Integer noteId,
+		@PathVariable final Long cardId, @RequestBody final CardRequestDto cardRequestDto) {
+		return new BaseResponse("code", "message",
+			cardService.update(noteId, cardId, cardRequestDto));
 	}
 }

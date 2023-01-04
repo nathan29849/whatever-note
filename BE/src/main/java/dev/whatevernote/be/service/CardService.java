@@ -11,6 +11,7 @@ import dev.whatevernote.be.service.dto.response.CardDetailResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDtos;
 import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -115,4 +116,28 @@ public class CardService {
 		return contents;
 	}
 
+	@Transactional
+	public CardResponseDto update(Integer noteId, Long cardId, CardRequestDto cardRequestDto) {
+		Card card = findByCardId(cardId);
+		// TODO
+		// 해당 카드가 노트와 연관이 있는 것인지 검증
+
+		if (cardRequestDto.getTitle() != null) {
+			card.updateTitle(cardRequestDto.getTitle());
+		} else {
+			List<Card> cards = getCardsByNoteId(noteId);
+			if (cards.indexOf(card) != cardRequestDto.getSeq()) {
+				card.updateSeq(editSeq(cardRequestDto, noteId).getSeq());
+			}
+		}
+
+		logger.debug("[CARD UPDATE] card id = {}, note id = {}, title = {}, seq = {}",
+			cardId, noteId, card.getTitle(), card.getSeq());
+		return CardResponseDto.from(card, noteId);
+	}
+
+	private Card findByCardId(Long cardId) {
+		return cardRepository.findById(cardId)
+			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
+	}
 }
