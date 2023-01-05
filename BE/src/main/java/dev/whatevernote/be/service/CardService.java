@@ -56,7 +56,7 @@ public class CardService {
 
 	private CardRequestDto editSeq(CardRequestDto cardRequestDto, Integer noteId) {
 		Long cardDtoSeq = cardRequestDto.getSeq();
-		if (cardDtoSeq == null || cardDtoSeq == 0) {
+		if (cardDtoSeq == null || cardDtoSeq == 0L) {
 			return getCardRequestDtoWithFirstSeq(cardRequestDto, noteId);
 		}
 		return getCardRequestDto(cardRequestDto, noteId);
@@ -119,6 +119,8 @@ public class CardService {
 	@Transactional
 	public CardResponseDto update(Integer noteId, Long cardId, CardRequestDto cardRequestDto) {
 		Card card = findByCardId(cardId);
+		logger.info("[BEFORE CARD UPDATE] card id = {}, note id = {}, title = {}, seq = {}",
+			cardId, noteId, card.getTitle(), card.getSeq());
 		// TODO
 		// 해당 카드가 노트와 연관이 있는 것인지 검증
 
@@ -126,12 +128,15 @@ public class CardService {
 			card.updateTitle(cardRequestDto.getTitle());
 		} else {
 			List<Card> cards = getCardsByNoteId(noteId);
-			if (cards.indexOf(card) != cardRequestDto.getSeq()) {
-				card.updateSeq(editSeq(cardRequestDto, noteId).getSeq());
+			int idx = cards.indexOf(card);
+			if (cardRequestDto.getSeq() == idx+1) {
+				return CardResponseDto.from(card, noteId);
 			}
+
+			card.updateSeq(editSeq(cardRequestDto, noteId).getSeq());
 		}
 
-		logger.debug("[CARD UPDATE] card id = {}, note id = {}, title = {}, seq = {}",
+		logger.info("[AFTER CARD UPDATE] card id = {}, note id = {}, title = {}, seq = {}",
 			cardId, noteId, card.getTitle(), card.getSeq());
 		return CardResponseDto.from(card, noteId);
 	}
