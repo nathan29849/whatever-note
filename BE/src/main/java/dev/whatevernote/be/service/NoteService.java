@@ -70,10 +70,12 @@ public class NoteService {
 			note.updateTitle(noteRequestDto.getTitle());
 		} else {
 			List<Note> notes = noteRepository.findAllByOrderBySeq();
-			logger.debug("이전 노트의 개수 = {}, 현재 NoteRequestDto의 Seq ={}", notes.indexOf(note), noteRequestDto.getSeq());
-			if (notes.indexOf(note) != noteRequestDto.getSeq()) {
-				note.updateSeq(editSeq(noteRequestDto));
+			int idx = notes.indexOf(note);
+			if (noteRequestDto.getSeq() == idx + 1) {
+				return NoteResponseDto.from(note);
 			}
+			logger.debug("이전 노트의 개수 = {}, 현재 NoteRequestDto의 Seq ={}", notes.indexOf(note), noteRequestDto.getSeq());
+			note.updateSeq(editSeq(noteRequestDto));
 		}
 		return NoteResponseDto.from(note);
 	}
