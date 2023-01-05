@@ -145,4 +145,13 @@ public class CardService {
 		return cardRepository.findById(cardId)
 			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
 	}
+
+	public void delete(Long cardId) {
+		Card card = findByCardId(cardId);
+		contentRepository.deleteAll(cardId);
+		logger.debug("[CONTENT ALL DELETED] (CARD ID = {})'s contents delete", card.getId());
+
+		cardRepository.delete(card);
+		logger.debug("[CARD DELETED] CARD ID = {}", card.getId());
+	}
 }

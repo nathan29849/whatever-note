@@ -7,6 +7,7 @@ import dev.whatevernote.be.service.dto.response.CardDetailResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDtos;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,4 +50,11 @@ public class CardController {
 		return new BaseResponse("code", "message",
 			cardService.update(noteId, cardId, cardRequestDto));
 	}
+
+	@DeleteMapping("/{cardId}")
+	public BaseResponse<Void> delete(@PathVariable final Long cardId) {
+		cardService.delete(cardId);
+		return new BaseResponse("code", "message", null);
+	}
+
 }
