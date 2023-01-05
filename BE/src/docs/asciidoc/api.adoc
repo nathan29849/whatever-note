@@ -109,21 +109,18 @@ include::{snippets}/delete-note/path-parameters.adoc[]
 ---
 
 [[resources-create-card]]
-=== 1. [POST] 단어 카드 생성
+=== 1. [GET] 단어 단일 조회
 
 ==== HTTP request
 
-include::{snippets}/create-card/http-request.adoc[]
-
-==== Request Fields
-include::{snippets}/create-card/request-fields.adoc[]
+include::{snippets}/get-one-card/http-request.adoc[]
 
 ==== HTTP response
 
-include::{snippets}/create-card/http-response.adoc[]
+include::{snippets}/get-one-card/http-response.adoc[]
 
 ==== Response Fields
-include::{snippets}/create-card/response-fields.adoc[]
+include::{snippets}/get-one-card/response-fields.adoc[]
 
 ---
 
@@ -147,18 +144,37 @@ include::{snippets}/get-all-cards/response-fields.adoc[]
 ---
 
 [[resources-create-card]]
-=== 3. [GET] 단어 단일 조회
+=== 3. [POST] 단어 카드 생성
 
 ==== HTTP request
 
-include::{snippets}/get-one-card/http-request.adoc[]
+include::{snippets}/create-card/http-request.adoc[]
+
+==== Request Fields
+include::{snippets}/create-card/request-fields.adoc[]
 
 ==== HTTP response
 
-include::{snippets}/get-one-card/http-response.adoc[]
+include::{snippets}/create-card/http-response.adoc[]
 
 ==== Response Fields
-include::{snippets}/get-one-card/response-fields.adoc[]
+include::{snippets}/create-card/response-fields.adoc[]
+
+---
+
+=== 4. [PUT] 단어 카드 수정
+
+==== HTTP request
+include::{snippets}/update-card/http-request.adoc[]
+
+==== Request Fields
+include::{snippets}/update-card/request-fields.adoc[]
+
+==== HTTP response
+include::{snippets}/update-card/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/update-card/response-fields.adoc[]
 
 ---
 

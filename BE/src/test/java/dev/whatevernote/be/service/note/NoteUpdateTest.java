@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@DisplayName("통합 테스트 : Note 조회")
+@DisplayName("통합 테스트 : Note 수정")
 class NoteUpdateTest extends InitIntegrationTest {
 
 	private static final int NUMBER_OF_NOTE = 3;
@@ -27,7 +27,7 @@ class NoteUpdateTest extends InitIntegrationTest {
 	private NoteRepository noteRepository;
 
 	@Nested
-	@DisplayName("노트를 수정 할 때")
+	@DisplayName("노트를 수정할 때")
 	class UpdateTest {
 
 		@Nested
@@ -63,8 +63,7 @@ class NoteUpdateTest extends InitIntegrationTest {
 			void note_seq_update_to_first(){
 				//given
 				List<Note> notes = noteRepository.findAllByOrderBySeq();
-				int seq = 2;
-				int updateNoteId = notes.get(seq).getId();
+				int updateNoteId = 1;
 				int updateSeq = 0;
 				NoteRequestDto noteRequestDto = new NoteRequestDto(updateSeq, null);
 
@@ -101,7 +100,7 @@ class NoteUpdateTest extends InitIntegrationTest {
 			void note_seq_update_to_last(){
 				//given
 				List<Note> notes = noteRepository.findAllByOrderBySeq();
-				int seq = 2;
+				int seq = 1;
 				int updateNoteId = notes.get(seq).getId();
 				int updateSeq = NUMBER_OF_NOTE;
 				NoteRequestDto noteRequestDto = new NoteRequestDto(updateSeq, null);
@@ -119,9 +118,9 @@ class NoteUpdateTest extends InitIntegrationTest {
 			void note_seq_update_to_same_seq(){
 				//given
 				List<Note> notes = noteRepository.findAllByOrderBySeq();
-				int seq = 2;
+				int seq = 1;
 				int updateNoteId = notes.get(seq).getId();
-				int updateSeq = 3;
+				int updateSeq = 2;
 				NoteRequestDto noteRequestDto = new NoteRequestDto(updateSeq, null);
 
 				//when
@@ -129,7 +128,7 @@ class NoteUpdateTest extends InitIntegrationTest {
 
 				//then
 				assertThat(noteResponseDto.getId()).isEqualTo(updateNoteId);
-				assertThat(noteResponseDto.getSeq()).isEqualTo((updateSeq+1) * DEFAULT_RANGE);
+				assertThat(noteResponseDto.getSeq()).isEqualTo(updateSeq * DEFAULT_RANGE);
 			}
 		}
 	}

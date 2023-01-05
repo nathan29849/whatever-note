@@ -18,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.whatevernote.be.common.BaseResponse;
 import dev.whatevernote.be.service.CardService;
@@ -204,6 +205,55 @@ class CardControllerTest {
 					fieldWithPath("data.pageNumber").type(JsonFieldType.NUMBER).description("현재 페이지의 넘버")
 				)
 			));
+	}
+
+	@Test
+	void 카드를_수정하면_수정된_카드를_반환한다() throws Exception {
+	    //given
+		CardRequestDto cardRequestDto = new CardRequestDto(0L, null);
+		CardResponseDto cardResponseDto = new CardResponseDto(CARD_ID, "변경될 제목", DEFAULT_RANGE, 1);
+		when(cardService.update(any(), any(), any())).thenReturn(cardResponseDto);
+		BaseResponse baseResponse = new BaseResponse("code", "message", cardResponseDto);
+
+		//when
+		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
+			.put("/api/note/{NOTE_ID}/card/{CARD_ID}", NOTE_ID, CARD_ID)
+			.content(objectMapper.writeValueAsString(cardRequestDto))
+			.contentType(MediaType.APPLICATION_JSON_VALUE));
+
+	    //then
+		resultActions.andExpect(status().isOk())
+			.andExpect(content().string(objectMapper.writeValueAsString(baseResponse)))
+			.andDo(document("update-card",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				pathParameters(
+					parameterWithName("NOTE_ID").description("note id"),
+					parameterWithName("CARD_ID").description("card id")
+				),
+				requestFields(
+					fieldWithPath("seq").type(JsonFieldType.NUMBER)
+						.description("수정할 카드의 위치(=옮길 위치 이전의 노트 개수)를 받습니다. +" + "\n"
+							+ "만약 생성위를 담지 않고, 요청을 보내면 순서는 변하지 않습니다.")
+						.optional(),
+					fieldWithPath("title").type(JsonFieldType.STRING)
+						.description("수정할 카드의 제목을 받습니다. +" + "\n"
+							+ "만약 카드 제목을 담지 않고, 요청을 보내면 제목은 변하지 않습니다.")
+						.optional()),
+				responseFields(
+					fieldWithPath("code").type(JsonFieldType.STRING).description("response code"),
+					fieldWithPath("message").type(JsonFieldType.STRING).description("response message"),
+					fieldWithPath("data.id").type(JsonFieldType.NUMBER)
+						.description("수정된 카드의 ID를 받습니다."),
+					fieldWithPath("data.seq").type(JsonFieldType.NUMBER)
+						.description("수정된 카드 위치를 받습니다."),
+					fieldWithPath("data.title").type(JsonFieldType.STRING)
+						.description("수정된 카드 제목을 받습니다."),
+					fieldWithPath("data.noteId").type(JsonFieldType.NUMBER)
+						.description("수정될 카드의 노트 아이디입니다.")
+					)
+				)
+			);
 	}
 
 }
