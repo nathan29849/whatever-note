@@ -106,7 +106,7 @@ public class DataBaseConfigurator implements InitializingBean {
 			for (int i = 1; i <= NUMBER_OF_CARD; i++) {
 				cardRepository.save(
 					Card.from(
-						new CardRequestDto((long) i, CARD_TITLE + i),
+						new CardRequestDto((long) i * DEFAULT_RANGE, CARD_TITLE + i),
 						noteRepository.findById(noteId)
 							.orElseThrow(() -> new IllegalArgumentException("해당 노트가 존재하지 않습니다."))
 					)
@@ -122,7 +122,7 @@ public class DataBaseConfigurator implements InitializingBean {
 					contentRepository.save(
 						Content.from(
 							new ContentRequestDto(
-								CONTENT_STRING_INFO, (long) i, Boolean.FALSE
+								CONTENT_STRING_INFO, (long) i * DEFAULT_RANGE, Boolean.FALSE
 							),
 							cardRepository.findById(cardId)
 								.orElseThrow(() -> new IllegalArgumentException("해당 카드가 존재하지 않습니다."))
@@ -130,12 +130,12 @@ public class DataBaseConfigurator implements InitializingBean {
 					);
 				}
 			}
-			for (long cardId = 1; cardId <= NUMBER_OF_CARD; cardId++) {
+			for (long cardId = NUMBER_OF_CARD+1; cardId <= 2*NUMBER_OF_CARD; cardId++) {
 				for (int i = 1; i <= NUMBER_OF_CONTENT; i++) {
 					contentRepository.save(
 						Content.from(
 							new ContentRequestDto(
-								CONTENT_IMAGE_INFO+i+CONTENT_IMAGE_EXTENSION, (long) i, Boolean.TRUE
+								CONTENT_IMAGE_INFO+i+CONTENT_IMAGE_EXTENSION, (long) i * DEFAULT_RANGE, Boolean.TRUE
 							),
 							cardRepository.findById(cardId)
 								.orElseThrow(() -> new IllegalArgumentException("해당 카드가 존재하지 않습니다."))
