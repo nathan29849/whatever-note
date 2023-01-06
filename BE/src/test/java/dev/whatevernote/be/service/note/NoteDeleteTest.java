@@ -22,7 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @DisplayName("통합 테스트 : Note 삭제")
 class NoteDeleteTest extends InitIntegrationTest {
 
-	private static final String NOT_FOUNT_NOTE_ID = "존재하지 않는 ID 입니다.";
+	private static final String NOT_FOUND_NOTE_ID = "존재하지 않는 ID 입니다.";
 
 	@Autowired
 	private NoteService noteService;
@@ -62,7 +62,7 @@ class NoteDeleteTest extends InitIntegrationTest {
 				assertThat(afterDelete).hasSize(numberOfNote-1);
 				assertThatThrownBy(() -> noteService.findById(deleteNoteId))
 					.isInstanceOf(Exception.class)
-					.hasMessageContaining(NOT_FOUNT_NOTE_ID);
+					.hasMessageContaining(NOT_FOUND_NOTE_ID);
 			}
 
 			@DisplayName("주어진 ID의 노트에 해당하는 카드, 컨텐트를 모두 삭제 상태로 바꾼다.")
@@ -90,7 +90,7 @@ class NoteDeleteTest extends InitIntegrationTest {
 				assertThat(notesAfterDelete).hasSize(numberOfNote-1);
 				assertThatThrownBy(() -> noteService.findById(deleteNoteId))
 					.isInstanceOf(Exception.class)
-					.hasMessageContaining(NOT_FOUNT_NOTE_ID);
+					.hasMessageContaining(NOT_FOUND_NOTE_ID);
 
 				// card
 				for (Card card:cards) {

@@ -11,6 +11,7 @@ import dev.whatevernote.be.service.dto.response.CardDetailResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDtos;
 import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -55,7 +56,7 @@ public class CardService {
 
 	private CardRequestDto editSeq(CardRequestDto cardRequestDto, Integer noteId) {
 		Long cardDtoSeq = cardRequestDto.getSeq();
-		if (cardDtoSeq == null || cardDtoSeq == 0) {
+		if (cardDtoSeq == null || cardDtoSeq == 0L) {
 			return getCardRequestDtoWithFirstSeq(cardRequestDto, noteId);
 		}
 		return getCardRequestDto(cardRequestDto, noteId);
@@ -115,4 +116,43 @@ public class CardService {
 		return contents;
 	}
 
+	@Transactional
+	public CardResponseDto update(Integer noteId, Long cardId, CardRequestDto cardRequestDto) {
+		Card card = findByCardId(cardId);
+		logger.info("[BEFORE CARD UPDATE] card id = {}, note id = {}, title = {}, seq = {}",
+			cardId, noteId, card.getTitle(), card.getSeq());
+		// TODO
+		// 해당 카드가 노트와 연관이 있는 것인지 검증
+
+		if (cardRequestDto.getTitle() != null) {
+			card.updateTitle(cardRequestDto.getTitle());
+		} else {
+			List<Card> cards = getCardsByNoteId(noteId);
+			int idx = cards.indexOf(card);
+			if (cardRequestDto.getSeq() == idx+1) {
+				return CardResponseDto.from(card, noteId);
+			}
+
+			card.updateSeq(editSeq(cardRequestDto, noteId).getSeq());
+		}
+
+		logger.info("[AFTER CARD UPDATE] card id = {}, note id = {}, title = {}, seq = {}",
+			cardId, noteId, card.getTitle(), card.getSeq());
+		return CardResponseDto.from(card, noteId);
+	}
+
+	private Card findByCardId(Long cardId) {
+		return cardRepository.findById(cardId)
+			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
+	}
+
+	@Transactional
+	public void delete(Long cardId) {
+		Card card = findByCardId(cardId);
+		contentRepository.deleteAll(cardId);
+		logger.debug("[CONTENT ALL DELETED] (CARD ID = {})'s contents delete", card.getId());
+
+		cardRepository.delete(card);
+		logger.debug("[CARD DELETED] CARD ID = {}", card.getId());
+	}
 }

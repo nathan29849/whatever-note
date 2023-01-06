@@ -57,4 +57,12 @@ public class Card extends BaseEntity {
 	public Note getNote() {
 		return note;
 	}
+
+	public void updateTitle(String title) {
+		this.title = title;
+	}
+
+	public void updateSeq(Long seq) {
+		this.seq = seq;
+	}
 }
