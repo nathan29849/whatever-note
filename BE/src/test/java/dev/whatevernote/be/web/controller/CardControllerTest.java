@@ -273,6 +273,7 @@ class CardControllerTest {
 			.andExpect(content().string(objectMapper.writeValueAsString(baseResponse)))
 			.andDo(document("delete-card",
 				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
 				pathParameters(
 					parameterWithName("NOTE_ID").description("note id"),
 					parameterWithName("CARD_ID").description("card id")
