@@ -178,6 +178,19 @@ include::{snippets}/update-card/response-fields.adoc[]
 
 ---
 
+=== 5. [DELETE] 단어 카드 삭제
+
+==== HTTP request
+include::{snippets}/delete-card/http-request.adoc[]
+
+==== HTTP response
+include::{snippets}/delete-card/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/delete-card/response-fields.adoc[]
+
+---
+
 == 카드 내용(Content)
 
 ---
