@@ -146,6 +146,7 @@ public class CardService {
 			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
 	}
 
+	@Transactional
 	public void delete(Long cardId) {
 		Card card = findByCardId(cardId);
 		contentRepository.deleteAll(cardId);
