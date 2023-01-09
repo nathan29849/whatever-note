@@ -77,8 +77,8 @@ class ContentControllerTest {
 		//given
 		List<ContentResponseDto> dtos = new ArrayList<>();
 		dtos.add(new ContentResponseDto(1L, DEFAULT_RANGE, "content-1", Boolean.FALSE, CARD_ID));
-		dtos.add(new ContentResponseDto(2L, DEFAULT_RANGE*2, "content-1", Boolean.FALSE, CARD_ID));
-		dtos.add(new ContentResponseDto(3L, DEFAULT_RANGE*3, "content-1", Boolean.FALSE, CARD_ID));
+		dtos.add(new ContentResponseDto(2L, DEFAULT_RANGE*2, "content-2", Boolean.FALSE, CARD_ID));
+		dtos.add(new ContentResponseDto(3L, DEFAULT_RANGE*3, "content-3", Boolean.FALSE, CARD_ID));
 
 		ContentResponseDtos contentResponseDtos = new ContentResponseDtos(dtos, false, 0);
 		when(contentService.findAll(any(), any())).thenReturn(contentResponseDtos);
