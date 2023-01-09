@@ -11,7 +11,6 @@ import dev.whatevernote.be.service.domain.Card;
 import dev.whatevernote.be.service.domain.Content;
 import java.util.List;
 import java.util.Optional;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @DisplayName("통합 테스트 : Card 삭제")
 class CardDeleteTest extends InitIntegrationTest {
 
-	private static final String NOT_FOUND_ID = "존재하지 않는 ID 입니다.";
+
 	private static final int NOTE_ID_1 = 1;
 
 	@Autowired
