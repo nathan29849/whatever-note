@@ -19,8 +19,6 @@ class CardUpdateTest extends InitIntegrationTest {
 	private static final int NOTE_ID_1 = 1;
 	private static final long CARD_ID_1 = 1;
 	private static final long CARD_ID_3 = 3;
-	private static final int NUMBER_OF_CARD = 3;
-	private static final int DEFAULT_RANGE = 1_000;
 
 	@Autowired
 	private CardService cardService;
@@ -38,7 +36,7 @@ class CardUpdateTest extends InitIntegrationTest {
 
 			@DisplayName("제목을 변경한 카드를 반환한다.")
 			@Test
-			void card_title_updtae() {
+			void card_title_update() {
 				//given
 				CardDetailResponseDto card = cardService.findById(NOTE_ID_1, CARD_ID_1);
 				CardRequestDto cardRequestDto = new CardRequestDto(null, "제목 바꾼 카드");
@@ -58,7 +56,7 @@ class CardUpdateTest extends InitIntegrationTest {
 		@DisplayName("정상적인 순서 수정 요청이라면")
 		class NormalSeqUpdateTest {
 
-			@DisplayName("맨 앞으로의 순서 변경 요청일 때, 순서가 첫 번째로 변경된 노트를 반환한다.")
+			@DisplayName("맨 앞으로의 순서 변경 요청일 때, 순서가 첫 번째로 변경된 카드를 반환한다.")
 			@Test
 			void card_seq_update_to_first() {
 				//given
@@ -109,7 +107,7 @@ class CardUpdateTest extends InitIntegrationTest {
 				assertThat(updatedCardResponse.getNoteId()).isEqualTo(NOTE_ID_1);
 			}
 
-			@DisplayName("같은 자리로의 순서 변경 요청일 때, 순서가 변경되지 않은 카드를 반환은다.")
+			@DisplayName("같은 자리로의 순서 변경 요청일 때, 순서가 변경되지 않은 카드를 반환한다.")
 			@Test
 			void card_seq_update_to_same_seq(){
 				//given

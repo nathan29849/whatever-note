@@ -43,9 +43,10 @@ public class ContentController {
 	}
 
 	@PutMapping("/{contentId}")
-	public BaseResponse<ContentResponseDto> update(@PathVariable final Long contentId,
+	public BaseResponse<ContentResponseDto> update(@PathVariable final Long cardId,
+		@PathVariable final Long contentId,
 		@RequestBody final ContentRequestDto contentRequestDto) {
-		ContentResponseDto contentResponseDto = contentService.update(contentId, contentRequestDto);
+		ContentResponseDto contentResponseDto = contentService.update(cardId, contentId, contentRequestDto);
 		return new BaseResponse("code", "message", contentResponseDto);
 	}
 

@@ -174,7 +174,7 @@ class ContentControllerTest {
 		ContentRequestDto contentRequestDto = new ContentRequestDto("수정된 컨텐츠", tmpSeq, Boolean.FALSE);
 		ContentResponseDto contentResponseDto = new ContentResponseDto(CONTENT_ID, DEFAULT_RANGE, "수정된 컨텐츠", Boolean.FALSE, CARD_ID);
 		BaseResponse<ContentResponseDto> baseResponse = new BaseResponse("code", "message", contentResponseDto);
-		when(contentService.update(any(), any())).thenReturn(contentResponseDto);
+		when(contentService.update(any(), any(), any())).thenReturn(contentResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(
