@@ -2,6 +2,7 @@ package dev.whatevernote.be.web.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
@@ -214,6 +215,37 @@ class ContentControllerTest {
 				)));
 
 
+	}
+
+	@Test
+	void 카드를_삭제하면_soft_delete_한다() throws Exception {
+		//given
+		doNothing().when(contentService).delete(any());
+		BaseResponse baseResponse = new BaseResponse("code", "message", null);
+
+		//when
+		ResultActions resultActions = this.mockMvc
+			.perform(RestDocumentationRequestBuilders
+				.delete("/api/note/{NOTE_ID}/card/{CARD_ID}/content/{CONTENT_ID}",
+					NOTE_ID, CARD_ID, CONTENT_ID));
+
+		//then
+		resultActions.andExpect(status().isOk())
+			.andExpect(content().string(objectMapper.writeValueAsString(baseResponse)))
+			.andDo(document("delete-content",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				pathParameters(
+					parameterWithName("NOTE_ID").description("note id"),
+					parameterWithName("CARD_ID").description("card id"),
+					parameterWithName("CONTENT_ID").description("content id")
+				),
+				responseFields(
+					fieldWithPath("code").type(JsonFieldType.STRING).description("response code"),
+					fieldWithPath("message").type(JsonFieldType.STRING).description("response message"),
+					fieldWithPath("data").type(JsonFieldType.NULL).description("null")
+				)
+			));
 	}
 
 

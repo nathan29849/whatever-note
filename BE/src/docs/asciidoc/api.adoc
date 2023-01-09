@@ -282,3 +282,22 @@ include::{snippets}/update-content/http-response.adoc[]
 include::{snippets}/update-content/response-fields.adoc[]
 
 ---
+
+=== 4. [DELETE] 내용 삭제
+
+==== HTTP request
+
+include::{snippets}/delete-content/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/delete-content/path-parameters.adoc[]
+
+==== HTTP response
+
+include::{snippets}/delete-content/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/delete-content/response-fields.adoc[]
+
+---
