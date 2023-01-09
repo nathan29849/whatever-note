@@ -4,13 +4,14 @@ import dev.whatevernote.be.repository.CardRepository;
 import dev.whatevernote.be.repository.ContentRepository;
 import dev.whatevernote.be.service.domain.Card;
 import dev.whatevernote.be.service.domain.Content;
-import dev.whatevernote.be.service.dto.request.CardRequestDto;
 import dev.whatevernote.be.service.dto.request.ContentRequestDto;
 import dev.whatevernote.be.service.dto.response.ContentResponseDto;
+import dev.whatevernote.be.service.dto.response.ContentResponseDtos;
 import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,5 +88,11 @@ public class ContentService {
 			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
 
 		return ContentResponseDto.from(content);
+	}
+
+	public ContentResponseDtos findAll(Pageable pageable, Long cardId) {
+
+		Slice<Content> contents = contentRepository.findAllByCardIdOrderBySeq(pageable, cardId);
+		return ContentResponseDtos.from(contents);
 	}
 }

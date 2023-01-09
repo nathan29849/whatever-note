@@ -1,5 +1,6 @@
 package dev.whatevernote.be.web.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -10,6 +11,9 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,7 +22,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.whatevernote.be.common.BaseResponse;
 import dev.whatevernote.be.service.ContentService;
 import dev.whatevernote.be.service.dto.request.ContentRequestDto;
+import dev.whatevernote.be.service.dto.response.CardResponseDtos;
 import dev.whatevernote.be.service.dto.response.ContentResponseDto;
+import dev.whatevernote.be.service.dto.response.ContentResponseDtos;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,10 +37,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -40,11 +48,12 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @AutoConfigureRestDocs
 @ExtendWith({RestDocumentationExtension.class})
 @WebMvcTest(ContentController.class)
-public class ContentControllerTest {
+class ContentControllerTest {
 
 	private static final long CONTENT_ID = 1;
 	private static final long CARD_ID = 1;
-	private static final long DEFAULT_RANGE = 1;
+	private static final int NOTE_ID = 1;
+	private static final long DEFAULT_RANGE = 1_000;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -64,6 +73,53 @@ public class ContentControllerTest {
 	}
 
 	@Test
+	void 컨텐트를_card_id에_따라_조회하면_해당_card가_가진_컨텐트를_모두_반환한다() throws Exception{
+		//given
+		List<ContentResponseDto> dtos = new ArrayList<>();
+		dtos.add(new ContentResponseDto(1L, DEFAULT_RANGE, "content-1", Boolean.FALSE, CARD_ID));
+		dtos.add(new ContentResponseDto(1L, DEFAULT_RANGE*2, "content-1", Boolean.FALSE, CARD_ID));
+		dtos.add(new ContentResponseDto(1L, DEFAULT_RANGE*3, "content-1", Boolean.FALSE, CARD_ID));
+
+		ContentResponseDtos contentResponseDtos = new ContentResponseDtos(dtos, false, 0);
+		when(contentService.findAll(any(), any())).thenReturn(contentResponseDtos);
+		BaseResponse<CardResponseDtos> baseResponse = new BaseResponse("code", "message", contentResponseDtos);
+
+
+		//when
+		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
+			.get("/api/note/{NOTE_ID}/card/{CARD_ID}/content?page=0&size=5", NOTE_ID, CARD_ID)
+			.accept(MediaType.APPLICATION_JSON_VALUE)
+			.contentType(MediaType.APPLICATION_JSON_VALUE));
+
+		//then
+		resultActions.andExpect(status().isOk())
+			.andExpect(content().string(objectMapper.writeValueAsString(baseResponse)))
+			.andDo(document("get-all-contents",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				pathParameters(
+					parameterWithName("NOTE_ID").description("note id"),
+					parameterWithName("CARD_ID").description("card id")
+				),
+				requestParameters(
+					parameterWithName("page").description("The page to retrieve"),
+					parameterWithName("size").description("Entries page size")
+				),
+				responseFields(
+					fieldWithPath("code").type(JsonFieldType.STRING).description("response code"),
+					fieldWithPath("message").type(JsonFieldType.STRING).description("response message"),
+					fieldWithPath("data.contents[].id").type(JsonFieldType.NUMBER).description("content id"),
+					fieldWithPath("data.contents[].seq").type(JsonFieldType.NUMBER).description("content seq"),
+					fieldWithPath("data.contents[].info").type(JsonFieldType.STRING).description("content info"),
+					fieldWithPath("data.contents[].isImage").type(JsonFieldType.BOOLEAN).description("is Image"),
+					fieldWithPath("data.contents[].cardId").type(JsonFieldType.NUMBER).description("card id"),
+					fieldWithPath("data.hasNext").type(JsonFieldType.BOOLEAN).description("has Next"),
+					fieldWithPath("data.pageNumber").type(JsonFieldType.NUMBER).description("현재 페이지의 넘버 (0부터 시작)")
+				)
+			));
+	}
+
+	@Test
 	void Content를_생성하면_생성된_Content를_반환한다() throws Exception {
 	    //given
 		long tmpSeq = 1;
@@ -74,7 +130,8 @@ public class ContentControllerTest {
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(
-			MockMvcRequestBuilders.post("/api/note/1/card/1/content")
+			RestDocumentationRequestBuilders
+				.post("/api/note/{NOTE_ID}/card/{CARD_ID}/content", NOTE_ID, CARD_ID)
 				.content(objectMapper.writeValueAsString(contentRequestDto))
 				.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -84,6 +141,10 @@ public class ContentControllerTest {
 			.andDo(document("create-content",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
+				pathParameters(
+					parameterWithName("NOTE_ID").description("note id"),
+					parameterWithName("CARD_ID").description("card id")
+				),
 				requestFields(
 					fieldWithPath("info").type(JsonFieldType.STRING)
 						.description("Content의 내용을 받습니다. +" + "\n"
