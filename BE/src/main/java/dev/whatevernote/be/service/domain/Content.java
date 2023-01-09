@@ -72,4 +72,15 @@ public class Content extends BaseEntity {
 		);
 	}
 
+	public void updateSeq(Long seq) {
+		this.seq = seq;
+	}
+
+	public void updateInfo(String info) {
+		this.info = info;
+	}
+
+	public void updateIsImage(Boolean isImage) {
+		this.isImage = isImage;
+	}
 }

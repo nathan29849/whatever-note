@@ -167,5 +167,54 @@ class ContentControllerTest {
 
 	}
 
+	@Test
+	void Content를_수정하면_수정된_Content를_반환한다() throws Exception {
+		//given
+		long tmpSeq = 1;
+		ContentRequestDto contentRequestDto = new ContentRequestDto("수정된 컨텐츠", tmpSeq, Boolean.FALSE);
+		ContentResponseDto contentResponseDto = new ContentResponseDto(CONTENT_ID, DEFAULT_RANGE, "수정된 컨텐츠", Boolean.FALSE, CARD_ID);
+		BaseResponse<ContentResponseDto> baseResponse = new BaseResponse("code", "message", contentResponseDto);
+		when(contentService.update(any(), any(), any())).thenReturn(contentResponseDto);
+
+		//when
+		ResultActions resultActions = this.mockMvc.perform(
+			RestDocumentationRequestBuilders
+				.put("/api/note/{NOTE_ID}/card/{CARD_ID}/content/{CONTENT_ID}", NOTE_ID, CARD_ID, CONTENT_ID)
+				.content(objectMapper.writeValueAsString(contentRequestDto))
+				.contentType(MediaType.APPLICATION_JSON_VALUE));
+
+		//then
+		resultActions.andExpect(status().isOk())
+			.andExpect(content().string(objectMapper.writeValueAsString(baseResponse)))
+			.andDo(document("update-content",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				pathParameters(
+					parameterWithName("NOTE_ID").description("note id"),
+					parameterWithName("CARD_ID").description("card id"),
+					parameterWithName("CONTENT_ID").description("content id")
+				),
+				requestFields(
+					fieldWithPath("info").type(JsonFieldType.STRING)
+						.description("수정된 Content의 내용을 받습니다. +" + "\n"
+							+ "만약 이미지라면, 이미지의 URL이 들어갑니다."),
+					fieldWithPath("seq").type(JsonFieldType.NUMBER)
+						.description("수정된 Content의 생성 위치를 받습니다. +" + "\n"
+							+ "만약 생성위치를 담지 않고, 요청을 보내면 가장 첫 번째 순서(=1000)로 카드가 생성됩니다."),
+					fieldWithPath("isImage").type(JsonFieldType.BOOLEAN)
+						.description("이미지인지 아닌지 여부를 표시합니다.")),
+				responseFields(
+					fieldWithPath("code").type(JsonFieldType.STRING).description("response code"),
+					fieldWithPath("message").type(JsonFieldType.STRING).description("response message"),
+					fieldWithPath("data.id").type(JsonFieldType.NUMBER).description("Content ID"),
+					fieldWithPath("data.info").type(JsonFieldType.STRING).description("Content 내용(텍스트 혹은 URL)"),
+					fieldWithPath("data.seq").type(JsonFieldType.NUMBER).description("Content 생성 위치"),
+					fieldWithPath("data.isImage").type(JsonFieldType.BOOLEAN).description("Content 제목"),
+					fieldWithPath("data.cardId").type(JsonFieldType.NUMBER).description("Card id")
+				)));
+
+
+	}
+
 
 }

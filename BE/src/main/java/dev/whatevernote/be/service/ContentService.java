@@ -100,4 +100,30 @@ public class ContentService {
 		Slice<Content> contents = contentRepository.findAllByCardIdOrderBySeq(pageable, cardId);
 		return ContentResponseDtos.from(contents);
 	}
+
+	public ContentResponseDto update(Long cardId, Long contentId, ContentRequestDto contentRequestDto) {
+
+		Content content = contentRepository.findById(contentId)
+			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
+
+		if (contentRequestDto.getSeq() != null) {
+			List<Content> contents = contentRepository.findAllByCardIdOrderBySeq(cardId);
+			if (contents.indexOf(content) + 1 == contentRequestDto.getSeq()) {
+				return ContentResponseDto.from(content);
+			}
+			contentRequestDto = editSeq(contentRequestDto, content.getCard().getId());
+			content.updateSeq(contentRequestDto.getSeq());
+			return ContentResponseDto.from(content);
+		}
+
+		if (contentRequestDto.getInfo() != null && !contentRequestDto.getInfo().isEmpty()) {
+			if (contentRequestDto.getIsImage() != null && contentRequestDto.getIsImage() == Boolean.TRUE) {
+				content.updateIsImage(contentRequestDto.getIsImage());
+			}
+			content.updateInfo(contentRequestDto.getInfo());
+			return ContentResponseDto.from(content);
+		}
+
+		return ContentResponseDto.from(content);
+	}
 }
