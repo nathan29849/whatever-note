@@ -21,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 @DisplayName("통합 테스트 : Card 생성")
 public class CardCreateTest extends InitIntegrationTest {
 
-	private static final int DEFAULT_RANGE = 1_000;
 	private static final int TEMP_NOTE_ID = 1;
 	private static final int NUMBER_OF_NOTE = 3;
 
@@ -53,7 +52,7 @@ public class CardCreateTest extends InitIntegrationTest {
 				CardResponseDto cardResponseDto = cardService.create(cardRequestDto, note.getId());
 
 				//then
-				Assertions.assertThat(cardResponseDto.getSeq()).isEqualTo(DEFAULT_RANGE);
+				assertThat(cardResponseDto.getSeq()).isEqualTo(DEFAULT_RANGE);
 			}
 
 			@Test

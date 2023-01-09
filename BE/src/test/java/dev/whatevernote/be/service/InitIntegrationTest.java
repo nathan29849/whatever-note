@@ -10,6 +10,8 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 public abstract class InitIntegrationTest {
 
+	protected static final int DEFAULT_RANGE = 1_000;
+
 	@Autowired
 	private DataBaseConfigurator testData;
 
