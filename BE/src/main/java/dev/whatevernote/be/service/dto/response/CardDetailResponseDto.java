@@ -43,7 +43,7 @@ public class CardDetailResponseDto {
 	}
 
 	public static CardDetailResponseDto from(Card card, Integer noteId, List<Content> contents) {
-		CardResponseDto cardDto = CardResponseDto.from(card, noteId);
+		CardResponseDto cardDto = CardResponseDto.from(card);
 		return new CardDetailResponseDto(
 			cardDto.getId(),
 			cardDto.getSeq(),

@@ -32,7 +32,7 @@ public class CardResponseDtos {
 	public static CardResponseDtos from(Slice<Card> cards, int noteId) {
 		return new CardResponseDtos(
 			cards.stream()
-				.map(c -> CardResponseDto.from(c, noteId))
+				.map(c -> CardResponseDto.from(c))
 				.collect(Collectors.toList()),
 			cards.hasNext(),
 			cards.getNumber());

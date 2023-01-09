@@ -91,7 +91,8 @@ class CardControllerTest {
 		BaseResponse<CardResponseDto> baseResponse = new BaseResponse("code", "message", cardResponseDto);
 
 		//when
-		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.post("/api/note/1/card")
+		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
+			.post("/api/note/{NOTE_ID}/card", NOTE_ID)
 			.content(objectMapper.writeValueAsString(cardRequestDto))
 			.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -101,6 +102,9 @@ class CardControllerTest {
 			.andDo(document("create-card",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
+				pathParameters(
+					parameterWithName("NOTE_ID").description("note id")
+				),
 				requestFields(
 					fieldWithPath("seq").type(JsonFieldType.NUMBER)
 						.description("카드 생성 위치를 받습니다. +" + "\n"
@@ -158,7 +162,7 @@ class CardControllerTest {
 					fieldWithPath("data.cardId").type(JsonFieldType.NULL).description("card id"),
 					fieldWithPath("data.cardSeq").type(JsonFieldType.NUMBER).description("card seq"),
 					fieldWithPath("data.cardTitle").type(JsonFieldType.STRING).description("card title"),
-					fieldWithPath("data.noteId").type(JsonFieldType.NUMBER).description("note id"),
+					fieldWithPath("data.noteId").type(JsonFieldType.NULL).description("note id"),
 					fieldWithPath("data.contents[].id").type(JsonFieldType.NULL).description("content id"),
 					fieldWithPath("data.contents[].seq").type(JsonFieldType.NUMBER).description("content seq"),
 					fieldWithPath("data.contents[].info").type(JsonFieldType.STRING).description("content info"),
@@ -181,7 +185,8 @@ class CardControllerTest {
 
 
 		//when
-		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/api/note/1/card?page=0&size=5")
+		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
+			.get("/api/note/{NOTE_ID}/card?page=0&size=5", NOTE_ID)
 			.accept(MediaType.APPLICATION_JSON_VALUE)
 			.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -191,6 +196,9 @@ class CardControllerTest {
 			.andDo(document("get-all-cards",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
+				pathParameters(
+					parameterWithName("NOTE_ID").description("note id")
+				),
 				requestParameters(
 					parameterWithName("page").description("The page to retrieve"),
 					parameterWithName("size").description("Entries page size")
