@@ -41,7 +41,7 @@ public class ContentService {
 		Content content = Content.from(contentRequestDto, card);
 		final Content savedContent = contentRepository.save(content);
 
-		logger.debug("[CREATE Content] ID = {}, SEQ = {}, INFO = {}, IS_IMAGE={}, CARD ID = {}",
+		logger.info("[CREATE Content] ID = {}, SEQ = {}, INFO = {}, IS_IMAGE={}, CARD ID = {}",
 			savedContent.getId(), savedContent.getSeq(), savedContent.getInfo(), savedContent.getIsImage(),
 			savedContent.getCard().getId());
 
@@ -50,17 +50,22 @@ public class ContentService {
 
 	private ContentRequestDto editSeq(ContentRequestDto contentRequestDto, Long cardId) {
 		Long contentDtoSeq = contentRequestDto.getSeq();
-		if (contentDtoSeq == null || contentDtoSeq == 0) {
-			return getContentRequestDtoWithFirstSeq(contentRequestDto);
+		if (contentDtoSeq == null || contentDtoSeq == 0L) {
+			return getContentRequestDtoWithFirstSeq(contentRequestDto, cardId);
 		}
 		return getContentRequestDto(contentRequestDto, cardId);
 	}
 
-	private ContentRequestDto getContentRequestDtoWithFirstSeq(ContentRequestDto contentRequestDto) {
-		return contentRepository.findFirstByOrderBySeq()
-			.map(c -> new ContentRequestDto(c.getInfo(), c.getSeq() / 2, c.getIsImage()))
-			.orElseGet(() -> new ContentRequestDto(contentRequestDto.getInfo(), DEFAULT_RANGE,
-				contentRequestDto.getIsImage()));
+	private ContentRequestDto getContentRequestDtoWithFirstSeq(ContentRequestDto contentRequestDto, Long cardId) {
+		List<Content> contents = contentRepository.findAllByCardId(cardId);
+		if (contents.isEmpty()) {
+			return new ContentRequestDto(contentRequestDto.getInfo(), DEFAULT_RANGE,
+				contentRequestDto.getIsImage());
+		}
+		contents.sort((o1, o2) -> Math.toIntExact(o1.getSeq() - o2.getSeq()));
+		Content content = contents.get(0);
+		return new ContentRequestDto(contentRequestDto.getInfo(), content.getSeq() / 2,
+			contentRequestDto.getIsImage());
 	}
 
 	private ContentRequestDto getContentRequestDto(ContentRequestDto contentRequestDto, Long cardId) {
