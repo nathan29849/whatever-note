@@ -261,7 +261,7 @@ include::{snippets}/create-content/response-fields.adoc[]
 
 ---
 
-2. [PUT] 내용 수정
+=== 3. [PUT] 내용 수정
 
 ==== HTTP request
 
