@@ -11,7 +11,6 @@ import dev.whatevernote.be.service.dto.response.CardDetailResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDtos;
 import java.util.List;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +45,7 @@ public class CardService {
 		);
 		logger.debug("[CREATE Card] ID = {}, SEQ = {}, TITLE = {}, Note ID = {}", savedCard.getId(),
 			savedCard.getSeq(), savedCard.getTitle(), note.getId());
-		return CardResponseDto.from(savedCard, noteId);
+		return CardResponseDto.from(savedCard);
 	}
 
 	private Note findNoteById(Integer noteId) {
@@ -130,7 +129,7 @@ public class CardService {
 			List<Card> cards = getCardsByNoteId(noteId);
 			int idx = cards.indexOf(card);
 			if (cardRequestDto.getSeq() == idx+1) {
-				return CardResponseDto.from(card, noteId);
+				return CardResponseDto.from(card);
 			}
 
 			card.updateSeq(editSeq(cardRequestDto, noteId).getSeq());
@@ -138,7 +137,7 @@ public class CardService {
 
 		logger.info("[AFTER CARD UPDATE] card id = {}, note id = {}, title = {}, seq = {}",
 			cardId, noteId, card.getTitle(), card.getSeq());
-		return CardResponseDto.from(card, noteId);
+		return CardResponseDto.from(card);
 	}
 
 	private Card findByCardId(Long cardId) {
