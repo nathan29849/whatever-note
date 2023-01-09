@@ -101,6 +101,7 @@ public class ContentService {
 		return ContentResponseDtos.from(contents);
 	}
 
+	@Transactional
 	public ContentResponseDto update(Long cardId, Long contentId, ContentRequestDto contentRequestDto) {
 
 		Content content = contentRepository.findById(contentId)
@@ -125,5 +126,12 @@ public class ContentService {
 		}
 
 		return ContentResponseDto.from(content);
+	}
+
+	@Transactional
+	public void delete(Long contentId) {
+
+		contentRepository.deleteById(contentId);
+		logger.debug("[CONTENT DELETED] content id = {}", contentId);
 	}
 }

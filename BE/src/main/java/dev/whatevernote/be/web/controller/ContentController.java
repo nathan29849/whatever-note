@@ -6,6 +6,7 @@ import dev.whatevernote.be.service.dto.request.ContentRequestDto;
 import dev.whatevernote.be.service.dto.response.ContentResponseDto;
 import dev.whatevernote.be.service.dto.response.ContentResponseDtos;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,6 +49,12 @@ public class ContentController {
 		@RequestBody final ContentRequestDto contentRequestDto) {
 		ContentResponseDto contentResponseDto = contentService.update(cardId, contentId, contentRequestDto);
 		return new BaseResponse("code", "message", contentResponseDto);
+	}
+
+	@DeleteMapping("{contentId}")
+	public BaseResponse<Void> delete(@PathVariable final Long contentId) {
+		contentService.delete(contentId);
+		return new BaseResponse("code", "message", null);
 	}
 
 }
