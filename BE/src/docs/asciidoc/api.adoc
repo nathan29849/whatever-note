@@ -260,3 +260,44 @@ include::{snippets}/create-content/http-response.adoc[]
 include::{snippets}/create-content/response-fields.adoc[]
 
 ---
+
+=== 3. [PUT] 내용 수정
+
+==== HTTP request
+
+include::{snippets}/update-content/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/update-content/path-parameters.adoc[]
+
+==== Request Fields
+include::{snippets}/update-content/request-fields.adoc[]
+
+==== HTTP response
+
+include::{snippets}/update-content/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/update-content/response-fields.adoc[]
+
+---
+
+=== 4. [DELETE] 내용 삭제
+
+==== HTTP request
+
+include::{snippets}/delete-content/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/delete-content/path-parameters.adoc[]
+
+==== HTTP response
+
+include::{snippets}/delete-content/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/delete-content/response-fields.adoc[]
+
+---

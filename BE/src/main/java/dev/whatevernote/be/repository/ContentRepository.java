@@ -16,6 +16,8 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
 
 	List<Content> findAllByCardId(Long cardId);
 
+	List<Content> findAllByCardIdOrderBySeq(Long cardId);
+
 	Slice<Content> findAllByCardIdOrderBySeq(Pageable pageable, Long cardId);
 
 	@Modifying(clearAutomatically = true)
