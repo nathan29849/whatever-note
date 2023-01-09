@@ -14,12 +14,12 @@
 
 include::{snippets}/get-one-note/http-request.adoc[]
 
+==== Path Parameters
+include::{snippets}/get-one-note/path-parameters.adoc[]
+
 ==== HTTP response
 
 include::{snippets}/get-one-note/http-response.adoc[]
-
-==== Path Parameter
-include::{snippets}/get-one-note/path-parameters.adoc[]
 
 ==== Fields
 include::{snippets}/get-one-note/response-fields.adoc[]
@@ -73,6 +73,10 @@ include::{snippets}/create-note/response-fields.adoc[]
 
 include::{snippets}/update-note/http-request.adoc[]
 
+==== Path Parameters
+
+include::{snippets}/update-note/path-parameters.adoc[]
+
 ==== HTTP response
 
 include::{snippets}/update-note/http-response.adoc[]
@@ -95,12 +99,13 @@ include::{snippets}/update-note/response-fields.adoc[]
 
 include::{snippets}/delete-note/http-request.adoc[]
 
+==== Path Parameters
+include::{snippets}/delete-note/path-parameters.adoc[]
+
 ==== HTTP response
 
 include::{snippets}/delete-note/http-response.adoc[]
 
-==== Path Parameter
-include::{snippets}/delete-note/path-parameters.adoc[]
 
 ---
 
@@ -114,6 +119,10 @@ include::{snippets}/delete-note/path-parameters.adoc[]
 ==== HTTP request
 
 include::{snippets}/get-one-card/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/get-one-card/path-parameters.adoc[]
 
 ==== HTTP response
 
@@ -130,6 +139,10 @@ include::{snippets}/get-one-card/response-fields.adoc[]
 ==== HTTP request
 
 include::{snippets}/get-all-cards/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/get-all-cards/path-parameters.adoc[]
 
 ==== Query Parameters
 include::{snippets}/get-all-cards/request-parameters.adoc[]
@@ -150,6 +163,10 @@ include::{snippets}/get-all-cards/response-fields.adoc[]
 
 include::{snippets}/create-card/http-request.adoc[]
 
+==== Path Parameters
+
+include::{snippets}/create-card/path-parameters.adoc[]
+
 ==== Request Fields
 include::{snippets}/create-card/request-fields.adoc[]
 
@@ -167,6 +184,9 @@ include::{snippets}/create-card/response-fields.adoc[]
 ==== HTTP request
 include::{snippets}/update-card/http-request.adoc[]
 
+==== Path Parameters
+include::{snippets}/update-card/path-parameters.adoc[]
+
 ==== Request Fields
 include::{snippets}/update-card/request-fields.adoc[]
 
@@ -183,6 +203,9 @@ include::{snippets}/update-card/response-fields.adoc[]
 ==== HTTP request
 include::{snippets}/delete-card/http-request.adoc[]
 
+===== Path Parameters
+include::{snippets}/delete-card/path-parameters.adoc[]
+
 ==== HTTP response
 include::{snippets}/delete-card/http-response.adoc[]
 
@@ -196,11 +219,35 @@ include::{snippets}/delete-card/response-fields.adoc[]
 ---
 
 [[resources-create-content]]
-=== 1. [POST] 내용 생성
+=== 1. [GET] 내용 전체 조회
+
+==== HTTP request
+
+include::{snippets}/get-all-contents/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/get-all-contents/path-parameters.adoc[]
+
+==== HTTP response
+
+include::{snippets}/get-all-contents/http-response.adoc[]
+
+==== Response Fields
+include::{snippets}/get-all-contents/response-fields.adoc[]
+
+
+---
+
+=== 2. [POST] 내용 생성
 
 ==== HTTP request
 
 include::{snippets}/create-content/http-request.adoc[]
+
+==== Path Parameters
+
+include::{snippets}/create-content/path-parameters.adoc[]
 
 ==== Request Fields
 include::{snippets}/create-content/request-fields.adoc[]

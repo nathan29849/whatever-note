@@ -16,8 +16,8 @@ public class CardResponseDto {
 		this.noteId = noteId;
 	}
 
-	public static CardResponseDto from(Card card, int noteId) {
-		return new CardResponseDto(card.getId(), card.getTitle(), card.getSeq(), noteId);
+	public static CardResponseDto from(Card card) {
+		return new CardResponseDto(card.getId(), card.getTitle(), card.getSeq(), card.getNote().getId());
 	}
 
 	public Long getId() {
