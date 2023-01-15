@@ -1,5 +1,10 @@
 package dev.whatevernote.be.web.controller;
 
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.NOTE_CREATE_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.NOTE_MODIFY_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.NOTE_REMOVE_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.NOTE_RETRIEVE_ALL_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.NOTE_RETRIEVE_DETAIL_SUCCESS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.doNothing;
@@ -77,7 +82,7 @@ class NoteControllerTest {
 	    //given
 		NoteResponseDto noteResponseDto = new NoteResponseDto(NOTE_ID, 1, "note-1");
 		when(noteService.findById(1)).thenReturn(noteResponseDto);
-		BaseResponse baseResponse = new BaseResponse("code", "message", noteResponseDto);
+		BaseResponse<NoteResponseDto> baseResponse = new BaseResponse<>(NOTE_RETRIEVE_DETAIL_SUCCESS, noteResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
@@ -113,7 +118,7 @@ class NoteControllerTest {
 		dtos.add(new NoteResponseDto(3, DEFAULT_RANGE*3, "note-3"));
 		NoteResponseDtos noteResponseDtos = new NoteResponseDtos(dtos, false, 0);
 		when(noteService.findAll(any())).thenReturn(noteResponseDtos);
-		BaseResponse baseResponse = new BaseResponse("code", "message", noteResponseDtos);
+		BaseResponse<NoteResponseDtos> baseResponse = new BaseResponse<>(NOTE_RETRIEVE_ALL_SUCCESS, noteResponseDtos);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/api/note?page=0&size=5")
@@ -148,7 +153,7 @@ class NoteControllerTest {
 		NoteRequestDto noteRequestDto = new NoteRequestDto(1, "첫번째 노트");
 		NoteResponseDto noteResponseDto = new NoteResponseDto(NOTE_ID, 1, "첫번째 노트");
 		when(noteService.create(refEq(noteRequestDto))).thenReturn(noteResponseDto);
-		BaseResponse baseResponse = new BaseResponse("code", "message", noteResponseDto);
+		BaseResponse<NoteResponseDto> baseResponse = new BaseResponse<>(NOTE_CREATE_SUCCESS, noteResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.post("/api/note")
@@ -181,7 +186,7 @@ class NoteControllerTest {
 		NoteRequestDto noteRequestDto = new NoteRequestDto(0, null);
 		NoteResponseDto noteResponseDto = new NoteResponseDto(NOTE_ID, DEFAULT_RANGE, "단어장 제목 제목");
 		when(noteService.update(any(), any())).thenReturn(noteResponseDto);
-		BaseResponse baseResponse = new BaseResponse("code", "message", noteResponseDto);
+		BaseResponse<NoteResponseDto> baseResponse = new BaseResponse<>(NOTE_MODIFY_SUCCESS, noteResponseDto);
 
 
 		//when
@@ -226,7 +231,7 @@ class NoteControllerTest {
 	void 단어장을_삭제하면_soft_delete_한다() throws Exception {
 	    //given
 		doNothing().when(noteService).delete(any());
-		BaseResponse baseResponse = new BaseResponse("code", "message", null);
+		BaseResponse<Void> baseResponse = new BaseResponse<>(NOTE_REMOVE_SUCCESS, null);
 
 	    //when
 		ResultActions resultActions = this.mockMvc
