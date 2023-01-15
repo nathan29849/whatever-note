@@ -11,8 +11,6 @@ import org.springframework.test.context.ActiveProfiles;
 public abstract class InitIntegrationTest {
 
 	protected static final int DEFAULT_RANGE = 1_000;
-	protected static final String NOT_FOUND_ID = "존재하지 않는 ID 입니다.";
-
 	@Autowired
 	private DataBaseConfigurator testData;
 

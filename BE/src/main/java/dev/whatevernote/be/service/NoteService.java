@@ -1,10 +1,10 @@
 package dev.whatevernote.be.service;
 
+import dev.whatevernote.be.exception.not_found.NotFoundNoteException;
 import dev.whatevernote.be.repository.CardRepository;
 import dev.whatevernote.be.repository.ContentRepository;
 import dev.whatevernote.be.repository.NoteRepository;
 import dev.whatevernote.be.service.domain.Card;
-import dev.whatevernote.be.service.domain.Content;
 import dev.whatevernote.be.service.domain.Note;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
@@ -24,8 +24,6 @@ public class NoteService {
 
 	private static final Logger logger = LoggerFactory.getLogger(NoteService.class);
 	private static final int DEFAULT_RANGE = 1_000;
-	private static final String NOT_FOUNT_NOTE_ID = "존재하지 않는 ID 입니다.";
-
 	private final NoteRepository noteRepository;
 	private final CardRepository cardRepository;
 	private final ContentRepository contentRepository;
@@ -45,8 +43,9 @@ public class NoteService {
 
 	private Note findNoteById(Integer noteId) {
 		return noteRepository.findById(noteId)
-			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_NOTE_ID));
+			.orElseThrow(NotFoundNoteException::new);
 	}
+
 
 	@Transactional
 	public NoteResponseDto create(NoteRequestDto noteRequestDto) {

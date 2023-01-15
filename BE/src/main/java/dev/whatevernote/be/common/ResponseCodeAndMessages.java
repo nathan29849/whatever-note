@@ -1,6 +1,7 @@
 package dev.whatevernote.be.common;
 
-public enum ResponseCodeAndMessage {
+public enum ResponseCodeAndMessages {
+
 
 	// NOTE
 	NOTE_CREATE_SUCCESS("S-N001", "노트 생성을 성공했습니다."),
@@ -21,12 +22,13 @@ public enum ResponseCodeAndMessage {
 	CONTENT_MODIFY_SUCCESS("S-C002", "컨텐트 수정을 성공했습니다."),
 	CONTENT_REMOVE_SUCCESS("S-C003", "컨텐트 삭제를 성공했습니다."),
 	CONTENT_RETRIEVE_DETAIL_SUCCESS("S-C004", "컨텐트 개별 상세 조회를 성공했습니다."),
-	CONTENT_RETRIEVE_ALL_SUCCESS("S-C005", "컨텐트 전체 조회를 성공했습니다.");
+	CONTENT_RETRIEVE_ALL_SUCCESS("S-C005", "컨텐트 전체 조회를 성공했습니다."),
+	;
 
 	private final String code;
 	private final String message;
 
-	ResponseCodeAndMessage(String code, String message) {
+	ResponseCodeAndMessages(String code, String message) {
 		this.code = code;
 		this.message = message;
 	}

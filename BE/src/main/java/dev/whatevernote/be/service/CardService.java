@@ -1,5 +1,7 @@
 package dev.whatevernote.be.service;
 
+import dev.whatevernote.be.exception.not_found.NotFoundCardException;
+import dev.whatevernote.be.exception.not_found.NotFoundNoteException;
 import dev.whatevernote.be.repository.CardRepository;
 import dev.whatevernote.be.repository.ContentRepository;
 import dev.whatevernote.be.repository.NoteRepository;
@@ -24,8 +26,6 @@ public class CardService {
 
 	private static final Logger logger = LoggerFactory.getLogger(CardService.class);
 	private static final long DEFAULT_RANGE = 1_000L;
-	private static final String NOT_FOUNT_ID = "존재하지 않는 ID 입니다.";
-
 	private final CardRepository cardRepository;
 	private final NoteRepository noteRepository;
 	private final ContentRepository contentRepository;
@@ -50,7 +50,7 @@ public class CardService {
 
 	private Note findNoteById(Integer noteId) {
 		return noteRepository.findById(noteId)
-			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
+			.orElseThrow(NotFoundNoteException::new);
 	}
 
 	private CardRequestDto editSeq(CardRequestDto cardRequestDto, Integer noteId) {
@@ -104,7 +104,7 @@ public class CardService {
 
 	public CardDetailResponseDto findById(Integer noteId, Long cardId) {
 		Card card = cardRepository.findById(cardId)
-			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
+			.orElseThrow(NotFoundCardException::new);
 		List<Content> contents = findContentsById(cardId);
 		return CardDetailResponseDto.from(card, noteId, contents);
 	}
@@ -142,7 +142,7 @@ public class CardService {
 
 	private Card findByCardId(Long cardId) {
 		return cardRepository.findById(cardId)
-			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
+			.orElseThrow(NotFoundCardException::new);
 	}
 
 	@Transactional

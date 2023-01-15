@@ -1,10 +1,10 @@
 package dev.whatevernote.be.web.controller;
 
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.NOTE_CREATE_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.NOTE_MODIFY_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.NOTE_REMOVE_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.NOTE_RETRIEVE_ALL_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.NOTE_RETRIEVE_DETAIL_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessages.NOTE_CREATE_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessages.NOTE_MODIFY_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessages.NOTE_REMOVE_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessages.NOTE_RETRIEVE_ALL_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessages.NOTE_RETRIEVE_DETAIL_SUCCESS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.doNothing;

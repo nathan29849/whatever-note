@@ -1,10 +1,10 @@
 package dev.whatevernote.be.web.controller;
 
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_CREATE_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_MODIFY_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_REMOVE_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_RETRIEVE_ALL_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_RETRIEVE_DETAIL_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessages.CARD_CREATE_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessages.CARD_MODIFY_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessages.CARD_REMOVE_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessages.CARD_RETRIEVE_ALL_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessages.CARD_RETRIEVE_DETAIL_SUCCESS;
 
 import dev.whatevernote.be.common.BaseResponse;
 import dev.whatevernote.be.service.CardService;
