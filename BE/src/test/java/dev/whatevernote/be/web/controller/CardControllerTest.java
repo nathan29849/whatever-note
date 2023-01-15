@@ -1,5 +1,10 @@
 package dev.whatevernote.be.web.controller;
 
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_CREATE_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_MODIFY_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_REMOVE_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_RETRIEVE_ALL_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_RETRIEVE_DETAIL_SUCCESS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.doNothing;
@@ -19,7 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.whatevernote.be.common.BaseResponse;
 import dev.whatevernote.be.service.CardService;
@@ -48,7 +52,6 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -88,7 +91,7 @@ class CardControllerTest {
 
 		CardResponseDto cardResponseDto = new CardResponseDto(expectedCardId, "첫번째 카드", DEFAULT_RANGE, NOTE_ID);
 		when(cardService.create(refEq(cardRequestDto), refEq(NOTE_ID))).thenReturn(cardResponseDto);
-		BaseResponse<CardResponseDto> baseResponse = new BaseResponse("code", "message", cardResponseDto);
+		BaseResponse<CardResponseDto> baseResponse = new BaseResponse<>(CARD_CREATE_SUCCESS, cardResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
@@ -137,7 +140,7 @@ class CardControllerTest {
 
 		CardDetailResponseDto cardDetailResponseDto = CardDetailResponseDto.from(card, NOTE_ID, contents);
 		when(cardService.findById(NOTE_ID, CARD_ID)).thenReturn(cardDetailResponseDto);
-		BaseResponse<CardDetailResponseDto> baseResponse = new BaseResponse("code", "message", cardDetailResponseDto);
+		BaseResponse<CardDetailResponseDto> baseResponse = new BaseResponse<>(CARD_RETRIEVE_DETAIL_SUCCESS, cardDetailResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
@@ -181,7 +184,7 @@ class CardControllerTest {
 
 		CardResponseDtos cardResponseDtos = new CardResponseDtos(dtos, false, 0);
 		when(cardService.findAll(any(), any())).thenReturn(cardResponseDtos);
-		BaseResponse<CardResponseDtos> baseResponse = new BaseResponse("code", "message", cardResponseDtos);
+		BaseResponse<CardResponseDtos> baseResponse = new BaseResponse<>(CARD_RETRIEVE_ALL_SUCCESS, cardResponseDtos);
 
 
 		//when
@@ -222,7 +225,7 @@ class CardControllerTest {
 		CardRequestDto cardRequestDto = new CardRequestDto(0L, null);
 		CardResponseDto cardResponseDto = new CardResponseDto(CARD_ID, "변경될 제목", DEFAULT_RANGE, 1);
 		when(cardService.update(any(), any(), any())).thenReturn(cardResponseDto);
-		BaseResponse baseResponse = new BaseResponse("code", "message", cardResponseDto);
+		BaseResponse<CardResponseDto> baseResponse = new BaseResponse<>(CARD_MODIFY_SUCCESS, cardResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
@@ -269,7 +272,7 @@ class CardControllerTest {
 	void 카드를_삭제하면_soft_delete_한다() throws Exception {
 	    //given
 		doNothing().when(cardService).delete(any());
-		BaseResponse baseResponse = new BaseResponse("code", "message", null);
+		BaseResponse<Void> baseResponse = new BaseResponse<>(CARD_REMOVE_SUCCESS, null);
 
 		//when
 		ResultActions resultActions = this.mockMvc

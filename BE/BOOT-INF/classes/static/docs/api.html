@@ -468,6 +468,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#resources-create-content">1. [GET] 내용 전체 조회</a></li>
 <li><a href="#_2_post_내용_생성">2. [POST] 내용 생성</a></li>
 <li><a href="#_3_put_내용_수정">3. [PUT] 내용 수정</a></li>
+<li><a href="#_4_delete_내용_삭제">4. [DELETE] 내용 삭제</a></li>
 </ul>
 </li>
 </ul>
@@ -522,11 +523,11 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 116
+Content-Length: 161
 
 {
-  "code" : "code",
-  "message" : "message",
+  "code" : "S-N004",
+  "message" : "노트 개별 상세 조회를 성공했습니다.",
   "data" : {
     "id" : 1,
     "seq" : 1,
@@ -604,11 +605,11 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 336
+Content-Length: 374
 
 {
-  "code" : "code",
-  "message" : "message",
+  "code" : "S-N005",
+  "message" : "노트 전체 조회를 성공했습니다.",
   "data" : {
     "notes" : [ {
       "id" : 1,
@@ -738,11 +739,11 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 126
+Content-Length: 157
 
 {
-  "code" : "code",
-  "message" : "message",
+  "code" : "S-N001",
+  "message" : "노트 생성을 성공했습니다.",
   "data" : {
     "id" : 1,
     "seq" : 1,
@@ -862,11 +863,11 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 136
+Content-Length: 167
 
 {
-  "code" : "code",
-  "message" : "message",
+  "code" : "S-N002",
+  "message" : "노트 수정을 성공했습니다.",
   "data" : {
     "id" : 1,
     "seq" : 1000,
@@ -1017,9 +1018,9 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json;charset=UTF-8
-Content-Length: 47
+Content-Length: 78
 
-{"code":"code","message":"message","data":null}</code></pre>
+{"code":"S-N003","message":"노트 삭제를 성공했습니다.","data":null}</code></pre>
 </div>
 </div>
 <hr>
@@ -2210,13 +2211,109 @@ Content-Length: 172
 <hr>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_4_delete_내용_삭제"><a class="link" href="#_4_delete_내용_삭제">4. [DELETE] 내용 삭제</a></h3>
+<div class="sect3">
+<h4 id="_http_request_14"><a class="link" href="#_http_request_14">HTTP request</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">DELETE /api/note/1/card/1/content/1 HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_path_parameters_12"><a class="link" href="#_path_parameters_12">Path Parameters</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 13. /api/note/{NOTE_ID}/card/{CARD_ID}/content/{CONTENT_ID}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NOTE_ID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">note id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CARD_ID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">card id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CONTENT_ID</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">content id</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_http_response_14"><a class="link" href="#_http_response_14">HTTP response</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json;charset=UTF-8
+Content-Length: 63
+
+{
+  "code" : "code",
+  "message" : "message",
+  "data" : null
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_response_fields_10"><a class="link" href="#_response_fields_10">Response Fields</a></h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">response code</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">response message</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-01-09 23:47:50 +0900
+Last updated 2023-01-10 00:38:13 +0900
 </div>
 </div>
 </body>
