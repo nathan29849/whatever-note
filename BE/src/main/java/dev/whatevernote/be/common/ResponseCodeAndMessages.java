@@ -1,6 +1,6 @@
 package dev.whatevernote.be.common;
 
-public enum ResponseCodeAndMessage {
+public enum ResponseCodeAndMessages {
 
 	// NOTE
 	NOTE_CREATE_SUCCESS("S-N001", "노트 생성을 성공했습니다."),
@@ -26,7 +26,7 @@ public enum ResponseCodeAndMessage {
 	private final String code;
 	private final String message;
 
-	ResponseCodeAndMessage(String code, String message) {
+	ResponseCodeAndMessages(String code, String message) {
 		this.code = code;
 		this.message = message;
 	}
