@@ -1,18 +1,18 @@
 package dev.whatevernote.be.exception;
 
-import org.springframework.http.HttpStatus;
+public enum ErrorCodeAndMessages {
 
-public enum ExceptionCodeAndMessages {
-	INTERNAL_SERVER_ERROR("E-G001", "서버 에러입니다. 관리자에게 문의하세요", ),;
+	// 404 Not Found (존재하지 않는 리소스)
+	E404_NOT_FOUND_NOTE("E-NF001", "노트의 아이디를 찾을 수 없습니다."),
+	E404_NOT_FOUND_CARD("E-NF002", "카드의 아이디를 찾을 수 없습니다."),
+	E404_NOT_FOUND_CONTENT("E-NF003", "컨텐트의 아이디를 찾을 수 없습니다.");
 
 	private final String code;
 	private final String message;
-	private final Class<? extends Exception> type;
 
-	ExceptionCodeAndMessages(String code, String message, Class<? extends Exception> type) {
+	ErrorCodeAndMessages(String code, String message) {
 		this.code = code;
 		this.message = message;
-		this.type = type;
 	}
 
 	public String getCode() {
