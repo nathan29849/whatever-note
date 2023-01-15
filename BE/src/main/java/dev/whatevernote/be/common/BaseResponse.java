@@ -12,6 +12,12 @@ public class BaseResponse<T> {
 		this.data = data;
 	}
 
+	public BaseResponse(ResponseCodeAndMessage codeAndMessage, T data) {
+		this.code = codeAndMessage.getCode();
+		this.message = codeAndMessage.getMessage();
+		this.data = data;
+	}
+
 	public String getCode() {
 		return code;
 	}
