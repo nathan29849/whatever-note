@@ -1,5 +1,11 @@
 package dev.whatevernote.be.web.controller;
 
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.NOTE_CREATE_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.NOTE_MODIFY_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.NOTE_REMOVE_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.NOTE_RETRIEVE_ALL_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.NOTE_RETRIEVE_DETAIL_SUCCESS;
+
 import dev.whatevernote.be.common.BaseResponse;
 import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
@@ -27,29 +33,29 @@ public class NoteController {
 
 	@GetMapping("/{noteId}")
 	public BaseResponse<NoteResponseDto> findById(@PathVariable final Integer noteId) {
-		return new BaseResponse("code", "message", noteService.findById(noteId));
+		return new BaseResponse<>(NOTE_RETRIEVE_DETAIL_SUCCESS, noteService.findById(noteId));
 	}
 
 	@GetMapping
 	public BaseResponse<NoteResponseDtos> findAll(final Pageable pageable) {
-		return new BaseResponse("code", "message", noteService.findAll(pageable));
+		return new BaseResponse<>(NOTE_RETRIEVE_ALL_SUCCESS, noteService.findAll(pageable));
 	}
 
 	@PostMapping
 	public BaseResponse<NoteResponseDto> create(@RequestBody final NoteRequestDto noteRequestDto) {
-		return new BaseResponse("code", "message", noteService.create(noteRequestDto));
+		return new BaseResponse<>(NOTE_CREATE_SUCCESS, noteService.create(noteRequestDto));
 	}
 
 	@PutMapping("/{noteId}")
 	public BaseResponse<NoteResponseDto> update(@PathVariable final Integer noteId,
 		@RequestBody final NoteRequestDto noteRequestDto) {
-		return new BaseResponse("code", "message", noteService.update(noteId, noteRequestDto));
+		return new BaseResponse<>(NOTE_MODIFY_SUCCESS, noteService.update(noteId, noteRequestDto));
 	}
 
 	@DeleteMapping("/{noteId}")
 	public BaseResponse<Void> delete(@PathVariable final Integer noteId) {
 		noteService.delete(noteId);
-		return new BaseResponse("code", "message", null);
+		return new BaseResponse<>(NOTE_REMOVE_SUCCESS, null);
 	}
 
 }
