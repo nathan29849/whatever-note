@@ -1,5 +1,11 @@
 package dev.whatevernote.be.web.controller;
 
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.CONTENT_CREATE_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.CONTENT_MODIFY_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.CONTENT_REMOVE_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.CONTENT_RETRIEVE_ALL_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.CONTENT_RETRIEVE_DETAIL_SUCCESS;
+
 import dev.whatevernote.be.common.BaseResponse;
 import dev.whatevernote.be.service.ContentService;
 import dev.whatevernote.be.service.dto.request.ContentRequestDto;
@@ -28,19 +34,19 @@ public class ContentController {
 	@PostMapping
 	public BaseResponse<ContentResponseDto> create(@RequestBody final ContentRequestDto contentRequestDto, @PathVariable final Long cardId) {
 		ContentResponseDto contentResponseDto = contentService.create(contentRequestDto, cardId);
-		return new BaseResponse("code", "message", contentResponseDto);
+		return new BaseResponse<>(CONTENT_CREATE_SUCCESS, contentResponseDto);
 	}
 
 	@GetMapping
-	public BaseResponse<ContentResponseDto> findAll(final Pageable pageable, @PathVariable final Long cardId) {
+	public BaseResponse<ContentResponseDtos> findAll(final Pageable pageable, @PathVariable final Long cardId) {
 		ContentResponseDtos contentResponseDtos = contentService.findAll(pageable, cardId);
-		return new BaseResponse("code", "message", contentResponseDtos);
+		return new BaseResponse<>(CONTENT_RETRIEVE_ALL_SUCCESS, contentResponseDtos);
 	}
 
 	@GetMapping("/{contentId}")
 	public BaseResponse<ContentResponseDto> findById(@PathVariable final Long contentId) {
 		ContentResponseDto contentResponseDto = contentService.findById(contentId);
-		return new BaseResponse("code", "message", contentResponseDto);
+		return new BaseResponse<>(CONTENT_RETRIEVE_DETAIL_SUCCESS, contentResponseDto);
 	}
 
 	@PutMapping("/{contentId}")
@@ -48,13 +54,13 @@ public class ContentController {
 		@PathVariable final Long contentId,
 		@RequestBody final ContentRequestDto contentRequestDto) {
 		ContentResponseDto contentResponseDto = contentService.update(cardId, contentId, contentRequestDto);
-		return new BaseResponse("code", "message", contentResponseDto);
+		return new BaseResponse<>(CONTENT_MODIFY_SUCCESS, contentResponseDto);
 	}
 
 	@DeleteMapping("{contentId}")
 	public BaseResponse<Void> delete(@PathVariable final Long contentId) {
 		contentService.delete(contentId);
-		return new BaseResponse("code", "message", null);
+		return new BaseResponse<>(CONTENT_REMOVE_SUCCESS, null);
 	}
 
 }

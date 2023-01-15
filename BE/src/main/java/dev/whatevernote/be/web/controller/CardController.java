@@ -1,6 +1,7 @@
 package dev.whatevernote.be.web.controller;
 
 import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_CREATE_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_MODIFY_SUCCESS;
 import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_REMOVE_SUCCESS;
 import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_RETRIEVE_ALL_SUCCESS;
 import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_RETRIEVE_DETAIL_SUCCESS;
@@ -52,7 +53,7 @@ public class CardController {
 	@PutMapping("/{cardId}")
 	public BaseResponse<CardResponseDto> update(@PathVariable final Integer noteId,
 		@PathVariable final Long cardId, @RequestBody final CardRequestDto cardRequestDto) {
-		return new BaseResponse<>(CARD_CREATE_SUCCESS, cardService.update(noteId, cardId, cardRequestDto));
+		return new BaseResponse<>(CARD_MODIFY_SUCCESS, cardService.update(noteId, cardId, cardRequestDto));
 	}
 
 	@DeleteMapping("/{cardId}")
