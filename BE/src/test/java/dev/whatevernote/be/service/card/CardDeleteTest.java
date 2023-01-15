@@ -3,6 +3,8 @@ package dev.whatevernote.be.service.card;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
+import dev.whatevernote.be.exception.ErrorCodeAndMessages;
+import dev.whatevernote.be.exception.not_found.NotFoundCardException;
 import dev.whatevernote.be.repository.CardRepository;
 import dev.whatevernote.be.repository.ContentRepository;
 import dev.whatevernote.be.service.CardService;
@@ -18,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @DisplayName("통합 테스트 : Card 삭제")
 class CardDeleteTest extends InitIntegrationTest {
-
 
 	private static final int NOTE_ID_1 = 1;
 
@@ -56,8 +57,8 @@ class CardDeleteTest extends InitIntegrationTest {
 				assertThat(card).isEmpty();
 				assertThat(afterDelete).hasSize(numberOfCard-1);
 				assertThatThrownBy(() -> cardService.findById(NOTE_ID_1, deleteCardId))
-					.isInstanceOf(Exception.class)
-					.hasMessageContaining(NOT_FOUND_ID);
+					.isInstanceOf(NotFoundCardException.class)
+					.hasMessageContaining(ErrorCodeAndMessages.E404_NOT_FOUND_CARD.getMessage());
 
 			}
 
@@ -81,8 +82,8 @@ class CardDeleteTest extends InitIntegrationTest {
 				assertThat(card).isEmpty();
 				assertThat(afterDelete).hasSize(numberOfCard-1);
 				assertThatThrownBy(() -> cardService.findById(NOTE_ID_1, deleteCardId))
-					.isInstanceOf(Exception.class)
-					.hasMessageContaining(NOT_FOUND_ID);
+					.isInstanceOf(NotFoundCardException.class)
+					.hasMessageContaining(ErrorCodeAndMessages.E404_NOT_FOUND_CARD.getMessage());
 
 				// content
 				assertThat(afterDeleteContents).isEmpty();

@@ -3,6 +3,8 @@ package dev.whatevernote.be.service.content;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import dev.whatevernote.be.exception.ErrorCodeAndMessages;
+import dev.whatevernote.be.exception.not_found.NotFoundContentException;
 import dev.whatevernote.be.repository.ContentRepository;
 import dev.whatevernote.be.service.ContentService;
 import dev.whatevernote.be.service.InitIntegrationTest;
@@ -50,8 +52,8 @@ class ContentDeleteTest extends InitIntegrationTest {
 				assertThat(content).isEmpty();
 				assertThat(afterDelete).hasSize(numberOfContent - 1);
 				assertThatThrownBy(() -> contentService.findById(CONTENT_ID))
-					.isInstanceOf(Exception.class)
-					.hasMessageContaining(NOT_FOUND_ID);
+					.isInstanceOf(NotFoundContentException.class)
+					.hasMessageContaining(ErrorCodeAndMessages.E404_NOT_FOUND_CONTENT.getMessage());
 			}
 		}
 	}

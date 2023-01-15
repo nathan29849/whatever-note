@@ -1,10 +1,10 @@
 package dev.whatevernote.be.web.controller;
 
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CONTENT_CREATE_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CONTENT_MODIFY_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CONTENT_REMOVE_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CONTENT_RETRIEVE_ALL_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CONTENT_RETRIEVE_DETAIL_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessages.CONTENT_CREATE_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessages.CONTENT_MODIFY_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessages.CONTENT_REMOVE_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessages.CONTENT_RETRIEVE_ALL_SUCCESS;
+import static dev.whatevernote.be.common.ResponseCodeAndMessages.CONTENT_RETRIEVE_DETAIL_SUCCESS;
 
 import dev.whatevernote.be.common.BaseResponse;
 import dev.whatevernote.be.service.ContentService;

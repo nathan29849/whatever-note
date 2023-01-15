@@ -1,5 +1,7 @@
 package dev.whatevernote.be.service;
 
+import dev.whatevernote.be.exception.not_found.NotFoundCardException;
+import dev.whatevernote.be.exception.not_found.NotFoundContentException;
 import dev.whatevernote.be.repository.CardRepository;
 import dev.whatevernote.be.repository.ContentRepository;
 import dev.whatevernote.be.service.domain.Card;
@@ -21,8 +23,6 @@ public class ContentService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ContentService.class);
 	private static final long DEFAULT_RANGE = 1_000L;
-	private static final String NOT_FOUNT_ID = "존재하지 않는 ID 입니다.";
-
 	private final CardRepository cardRepository;
 	private final ContentRepository contentRepository;
 
@@ -36,7 +36,7 @@ public class ContentService {
 	public ContentResponseDto create(ContentRequestDto contentRequestDto, Long cardId) {
 		contentRequestDto = editSeq(contentRequestDto, cardId);
 		Card card = cardRepository.findById(cardId)
-			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
+			.orElseThrow(NotFoundCardException::new);
 
 		Content content = Content.from(contentRequestDto, card);
 		final Content savedContent = contentRepository.save(content);
@@ -90,7 +90,7 @@ public class ContentService {
 	public ContentResponseDto findById(Long contentId) {
 
 		Content content = contentRepository.findById(contentId)
-			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
+			.orElseThrow(NotFoundContentException::new);
 
 		return ContentResponseDto.from(content);
 	}
@@ -105,7 +105,7 @@ public class ContentService {
 	public ContentResponseDto update(Long cardId, Long contentId, ContentRequestDto contentRequestDto) {
 
 		Content content = contentRepository.findById(contentId)
-			.orElseThrow(() -> new IllegalArgumentException(NOT_FOUNT_ID));
+			.orElseThrow(NotFoundContentException::new);
 
 		if (contentRequestDto.getSeq() != null) {
 			List<Content> contents = contentRepository.findAllByCardIdOrderBySeq(cardId);
