@@ -1,8 +1,6 @@
 package dev.whatevernote.be.exception;
 
-import dev.whatevernote.be.response.CodeAndMessages;
-
-public enum ExceptionCodeAndMessages implements CodeAndMessages {
+public enum ExceptionCodeAndMessages {
 	;
 
 	private final String code;
@@ -16,12 +14,10 @@ public enum ExceptionCodeAndMessages implements CodeAndMessages {
 	}
 
 
-	@Override
 	public String getCode() {
 		return this.code;
 	}
 
-	@Override
 	public String getMessage() {
 		return this.message;
 	}
