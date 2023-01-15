@@ -1,9 +1,5 @@
 package dev.whatevernote.be.web.controller;
 
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CONTENT_CREATE_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CONTENT_MODIFY_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CONTENT_REMOVE_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CONTENT_RETRIEVE_ALL_SUCCESS;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.doNothing;
@@ -27,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.whatevernote.be.common.BaseResponse;
 import dev.whatevernote.be.service.ContentService;
 import dev.whatevernote.be.service.dto.request.ContentRequestDto;
+import dev.whatevernote.be.service.dto.response.CardResponseDtos;
 import dev.whatevernote.be.service.dto.response.ContentResponseDto;
 import dev.whatevernote.be.service.dto.response.ContentResponseDtos;
 import java.util.ArrayList;
@@ -86,7 +83,7 @@ class ContentControllerTest {
 
 		ContentResponseDtos contentResponseDtos = new ContentResponseDtos(dtos, false, 0);
 		when(contentService.findAll(any(), any())).thenReturn(contentResponseDtos);
-		BaseResponse<ContentResponseDtos> baseResponse = new BaseResponse<>(CONTENT_RETRIEVE_ALL_SUCCESS, contentResponseDtos);
+		BaseResponse<CardResponseDtos> baseResponse = new BaseResponse("code", "message", contentResponseDtos);
 
 
 		//when
@@ -129,7 +126,7 @@ class ContentControllerTest {
 		long tmpSeq = 1;
 		ContentRequestDto contentRequestDto = new ContentRequestDto("첫 번째 컨텐츠", tmpSeq, Boolean.FALSE);
 		ContentResponseDto contentResponseDto = new ContentResponseDto(CONTENT_ID, DEFAULT_RANGE, "첫 번째 컨텐츠", Boolean.FALSE, CARD_ID);
-		BaseResponse<ContentResponseDto> baseResponse = new BaseResponse<>(CONTENT_CREATE_SUCCESS, contentResponseDto);
+		BaseResponse<ContentResponseDto> baseResponse = new BaseResponse("code", "message", contentResponseDto);
 		when(contentService.create(refEq(contentRequestDto), refEq(CARD_ID))).thenReturn(contentResponseDto);
 
 		//when
@@ -177,7 +174,7 @@ class ContentControllerTest {
 		long tmpSeq = 1;
 		ContentRequestDto contentRequestDto = new ContentRequestDto("수정된 컨텐츠", tmpSeq, Boolean.FALSE);
 		ContentResponseDto contentResponseDto = new ContentResponseDto(CONTENT_ID, DEFAULT_RANGE, "수정된 컨텐츠", Boolean.FALSE, CARD_ID);
-		BaseResponse<ContentResponseDto> baseResponse = new BaseResponse<>(CONTENT_MODIFY_SUCCESS, contentResponseDto);
+		BaseResponse<ContentResponseDto> baseResponse = new BaseResponse("code", "message", contentResponseDto);
 		when(contentService.update(any(), any(), any())).thenReturn(contentResponseDto);
 
 		//when
@@ -224,7 +221,7 @@ class ContentControllerTest {
 	void 카드를_삭제하면_soft_delete_한다() throws Exception {
 		//given
 		doNothing().when(contentService).delete(any());
-		BaseResponse<Void> baseResponse = new BaseResponse<>(CONTENT_REMOVE_SUCCESS, null);
+		BaseResponse baseResponse = new BaseResponse("code", "message", null);
 
 		//when
 		ResultActions resultActions = this.mockMvc

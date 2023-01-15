@@ -1,11 +1,5 @@
 package dev.whatevernote.be.web.controller;
 
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_CREATE_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_MODIFY_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_REMOVE_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_RETRIEVE_ALL_SUCCESS;
-import static dev.whatevernote.be.common.ResponseCodeAndMessage.CARD_RETRIEVE_DETAIL_SUCCESS;
-
 import dev.whatevernote.be.common.BaseResponse;
 import dev.whatevernote.be.service.CardService;
 import dev.whatevernote.be.service.dto.request.CardRequestDto;
@@ -35,31 +29,32 @@ public class CardController {
 	@PostMapping
 	public BaseResponse<CardResponseDto> create(@RequestBody final CardRequestDto cardRequestDto, @PathVariable final Integer noteId) {
 		CardResponseDto cardResponseDto = cardService.create(cardRequestDto, noteId);
-		return new BaseResponse<>(CARD_CREATE_SUCCESS, cardResponseDto);
+		return new BaseResponse("code", "message", cardResponseDto);
 	}
 
 	@GetMapping("/{cardId}")
 	public BaseResponse<CardDetailResponseDto> findById(@PathVariable final Integer noteId, @PathVariable final Long cardId) {
 		CardDetailResponseDto cardDetailResponseDto = cardService.findById(noteId, cardId);
-		return new BaseResponse<>(CARD_RETRIEVE_DETAIL_SUCCESS, cardDetailResponseDto);
+		return new BaseResponse("code", "message", cardDetailResponseDto);
 	}
 
 	@GetMapping
 	public BaseResponse<CardResponseDtos> findAll(final Pageable pageable, @PathVariable final Integer noteId) {
 		CardResponseDtos cardResponseDtos = cardService.findAll(pageable, noteId);
-		return new BaseResponse<>(CARD_RETRIEVE_ALL_SUCCESS, cardResponseDtos);
+		return new BaseResponse("code", "message", cardResponseDtos);
 	}
 
 	@PutMapping("/{cardId}")
 	public BaseResponse<CardResponseDto> update(@PathVariable final Integer noteId,
 		@PathVariable final Long cardId, @RequestBody final CardRequestDto cardRequestDto) {
-		return new BaseResponse<>(CARD_MODIFY_SUCCESS, cardService.update(noteId, cardId, cardRequestDto));
+		return new BaseResponse("code", "message",
+			cardService.update(noteId, cardId, cardRequestDto));
 	}
 
 	@DeleteMapping("/{cardId}")
 	public BaseResponse<Void> delete(@PathVariable final Long cardId) {
 		cardService.delete(cardId);
-		return new BaseResponse<>(CARD_REMOVE_SUCCESS, null);
+		return new BaseResponse("code", "message", null);
 	}
 
 }
