@@ -1,3 +1,8 @@
+import { useState } from "react";
+import { app } from "../util/realm";
+
 export default function UserInfo() {
-  return <div>userinfo</div>;
+  const [user, setUser] = useState(app.currentUser);
+
+  return <div>userinfo : user id is.. {user.id}</div>;
 }

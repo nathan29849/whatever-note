@@ -4,7 +4,8 @@ import NoteInsider from "./component/noteInsider";
 import ErrorPage from "./component/errorPage";
 import ThemeList from "./component/themeList";
 import NoteList from "./component/noteList";
-import LoginEmailConfirm from "./component/loginEmailConfirm";
+import UserInfo from "./component/userInfo";
+import { LoginEmail } from "./component/loginEmail";
 
 function App() {
   const router = createBrowserRouter([
@@ -13,10 +14,6 @@ function App() {
       element: <Home />,
       errorElement: <ErrorPage />,
       children: [
-        {
-          path: "userInfo",
-          element: <LoginEmailConfirm />,
-        },
         {
           path: "notes",
           element: <NoteList />,
@@ -30,8 +27,8 @@ function App() {
           element: <ThemeList />,
         },
         {
-          path: "loginemailconfirm",
-          element: <LoginEmailConfirm />,
+          path: "userInfo",
+          element: <LoginEmail />,
         },
       ],
     },

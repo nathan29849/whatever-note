@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Outlet, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { NoteProvider } from "../editor/noteContext";
 import LabelList from "./labelList";
 import { HomeContainer } from "../styled-component/homeStyle";
@@ -28,7 +28,14 @@ function UserDetail({ user }) {
 
 function HomeInsider() {
   const theme = useThemeState();
+  const navigate = useNavigate();
   const [user, setUser] = useState(app.currentUser);
+
+  useEffect(() => {
+    if (user) {
+      navigate("/notes");
+    }
+  }, [user]);
 
   return (
     <>
@@ -36,9 +43,7 @@ function HomeInsider() {
       <HomeContainer theme={theme}>
         <GlobalStyle theme={theme} />
         <LabelList />
-        {user ? <Outlet /> : <LoginEmail />}
-
-        {/* <Notice /> */}
+        {user.id ? <Outlet /> : <LoginEmail />}
       </HomeContainer>
     </>
   );
