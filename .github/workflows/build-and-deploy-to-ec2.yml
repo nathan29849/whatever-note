@@ -67,6 +67,5 @@ jobs:
           script: | 
             sudo docker pull gkstjr5731/whatevernote:latest
             sudo docker stop whatevernote-spring-server && sudo docker rm whatevernote-spring-server
-            sudo docker run -d --name whatevernote-spring-server -e MYSQL_HOST=${{ secrets.MYSQL_HOST }} -e MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }} -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} -p 8080:8080 gkstjr5731/whatevernote:latest
             sleep 60
             sudo docker inspect -f {{.State.Pid}} whatevernote-spring-server | grep -v '^0'
