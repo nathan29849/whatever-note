@@ -65,6 +65,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: | 
+            sudo docker system prune -f
             sudo docker pull gkstjr5731/whatevernote:latest
             sudo docker stop whatevernote-spring-server && sudo docker rm whatevernote-spring-server
             sudo docker run -d —-name whatevernote-spring-server -p 8080:8080 gkstjr5731/whatevernote:latest
