@@ -4,7 +4,7 @@ public class BaseException extends RuntimeException {
 
 	private final String code;
 
-	protected BaseException(ErrorCodeAndMessages errorCodeAndMessages) {
+	public BaseException(ErrorCodeAndMessages errorCodeAndMessages) {
 		super(errorCodeAndMessages.getMessage());
 		this.code = errorCodeAndMessages.getCode();
 	}
