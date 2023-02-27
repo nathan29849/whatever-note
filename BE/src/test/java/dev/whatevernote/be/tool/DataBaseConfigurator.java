@@ -27,6 +27,8 @@ public class DataBaseConfigurator implements InitializingBean {
 
 	private static final String SET_FOREIGN_KEY_CHECKS = "SET FOREIGN_KEY_CHECKS = ";
 	private static final String TRUNCATE_TABLE = "TRUNCATE TABLE ";
+
+	private static final int NUMBER_OF_MEMBER = 2;
 	private static final int NUMBER_OF_NOTE = 3;
 	private static final int NUMBER_OF_CARD = 3;
 	private static final int NUMBER_OF_CONTENT = 5;
@@ -89,6 +91,12 @@ public class DataBaseConfigurator implements InitializingBean {
 		initNoteData();
 		initCardData();
 		initContentData();
+	}
+
+	private void initMember() {
+		for (int i = 1; i <= NUMBER_OF_MEMBER; i++) {
+
+		}
 	}
 
 	private void initNoteData() {

@@ -30,6 +30,8 @@ import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDtos;
+import dev.whatevernote.be.tool.TestWebConfig;
+import dev.whatevernote.be.login.service.provider.JwtProvider;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -51,15 +54,20 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+@Import(TestWebConfig.class)
 @AutoConfigureRestDocs
 @ExtendWith({RestDocumentationExtension.class})
 @WebMvcTest(NoteController.class)
 class NoteControllerTest {
 
+	private static final long MEMBER_ID = 1;
 	private static final int DEFAULT_RANGE = 1_000;
 
 	@Autowired
 	private MockMvc mockMvc;
+
+	@Autowired
+	private JwtProvider jwtProvider;
 
 	@MockBean
 	private NoteService noteService;
@@ -87,6 +95,7 @@ class NoteControllerTest {
 		//when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
 				.get("/api/note/{NOTE_ID}", NOTE_ID)
+			.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
 				.accept(MediaType.APPLICATION_JSON_VALUE)
 				.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -122,6 +131,7 @@ class NoteControllerTest {
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/api/note?page=0&size=5")
+			.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
 			.accept(MediaType.APPLICATION_JSON_VALUE)
 			.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -157,6 +167,7 @@ class NoteControllerTest {
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.post("/api/note")
+			.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
 			.content(objectMapper.writeValueAsString(noteRequestDto))
 			.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -192,6 +203,7 @@ class NoteControllerTest {
 		//when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
 			.put("/api/note/{NOTE_ID}", NOTE_ID)
+			.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
 			.content(objectMapper.writeValueAsString(noteRequestDto))
 			.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -236,7 +248,9 @@ class NoteControllerTest {
 	    //when
 		ResultActions resultActions = this.mockMvc
 			.perform(RestDocumentationRequestBuilders
-				.delete("/api/note/{NOTE_ID}", NOTE_ID));
+				.delete("/api/note/{NOTE_ID}", NOTE_ID)
+				.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
+			);
 
 	    //then
 		resultActions.andExpect(status().isOk())

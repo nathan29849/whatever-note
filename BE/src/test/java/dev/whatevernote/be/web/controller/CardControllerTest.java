@@ -36,6 +36,8 @@ import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.CardDetailResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDtos;
+import dev.whatevernote.be.tool.TestWebConfig;
+import dev.whatevernote.be.login.service.provider.JwtProvider;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,6 +47,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -56,12 +59,14 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+@Import(TestWebConfig.class)
 @AutoConfigureRestDocs
 @ExtendWith({RestDocumentationExtension.class})
 @WebMvcTest(CardController.class)
 class CardControllerTest {
 
 	private static final long DEFAULT_RANGE = 1_000L;
+	private static final long MEMBER_ID = 1;
 	private static final int NOTE_ID = 1;
 	private static final long CARD_ID = 1;
 	private static final String TEMP_IMAGE_URL = "https://en.wikipedia.org/wiki/Image#/media/File:Image_created_with_a_mobile_phone.png";
@@ -69,8 +74,12 @@ class CardControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 
+	@Autowired
+	private JwtProvider jwtProvider;
+
 	@MockBean
 	private CardService cardService;
+
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -96,6 +105,7 @@ class CardControllerTest {
 		//when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
 			.post("/api/note/{NOTE_ID}/card", NOTE_ID)
+			.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
 			.content(objectMapper.writeValueAsString(cardRequestDto))
 			.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -145,6 +155,7 @@ class CardControllerTest {
 		//when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
 			.get("/api/note/{NOTE_ID}/card/{CARD_ID}", NOTE_ID, CARD_ID)
+			.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
 			.accept(MediaType.APPLICATION_JSON_VALUE)
 			.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -190,6 +201,7 @@ class CardControllerTest {
 		//when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
 			.get("/api/note/{NOTE_ID}/card?page=0&size=5", NOTE_ID)
+			.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
 			.accept(MediaType.APPLICATION_JSON_VALUE)
 			.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -230,6 +242,7 @@ class CardControllerTest {
 		//when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
 			.put("/api/note/{NOTE_ID}/card/{CARD_ID}", NOTE_ID, CARD_ID)
+			.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
 			.content(objectMapper.writeValueAsString(cardRequestDto))
 			.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -277,7 +290,9 @@ class CardControllerTest {
 		//when
 		ResultActions resultActions = this.mockMvc
 			.perform(RestDocumentationRequestBuilders
-				.delete("/api/note/{NOTE_ID}/card/{CARD_ID}", NOTE_ID, CARD_ID));
+				.delete("/api/note/{NOTE_ID}/card/{CARD_ID}", NOTE_ID, CARD_ID)
+				.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
+			);
 
 	    //then
 		resultActions.andExpect(status().isOk())
