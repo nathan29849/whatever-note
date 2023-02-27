@@ -18,3 +18,23 @@ logging:
     org.hibernate.SQL: debug
     dev.whatevernote:
       be: debug
+
+oauth:
+  kakao:
+    response-type: code
+    client-id: whatever-note
+    redirect-uri: redirectURI
+    token-type: Bearer
+    content-type: application/x-www-form-urlencoded;charset=utf-8
+    grant-type: authorization_code
+    token-url: tokenURL
+    resource-url: ResourceURL
+
+jwt:
+  secret-key: project-test*project-test*project-test
+  access-expire-time: 10000
+  access-token-subject: project-test-access-token
+  refresh-expire-time: 10000000000
+  refresh-token-subject: project-test-refresh-token
+  issuer: whatever-note-server
+  token-type: Bearer
