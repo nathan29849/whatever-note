@@ -8,10 +8,8 @@ import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.dto.request.CardRequestDto;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
-import dev.whatevernote.be.service.dto.response.CardResponseDtos;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
 import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 @DisplayName("통합 테스트 : Card 생성")
 public class CardCreateTest extends InitIntegrationTest {
 
+	private static final long NEW_MEMBER_ID = 1L;
 	private static final int TEMP_NOTE_ID = 1;
 	private static final int NUMBER_OF_NOTE = 3;
 
@@ -43,13 +42,14 @@ public class CardCreateTest extends InitIntegrationTest {
 			void not_existing_card_with_request_seq_is_zero() {
 				//given
 				noteService.create(
-					new NoteRequestDto(null, "새로 생성한 노트")
+					new NoteRequestDto(null, "새로 생성한 노트"), MEMBER_ID
 				);
-				NoteResponseDto note = noteService.findById(NUMBER_OF_NOTE + 1);
+				NoteResponseDto note = noteService.findById(NUMBER_OF_NOTE + 1, NEW_MEMBER_ID);
 				CardRequestDto cardRequestDto = new CardRequestDto(0L, "나만의 카드");
 
 				//when
-				CardResponseDto cardResponseDto = cardService.create(cardRequestDto, note.getId());
+				CardResponseDto cardResponseDto = cardService.create(cardRequestDto, note.getId(),
+					MEMBER_ID);
 
 				//then
 				assertThat(cardResponseDto.getSeq()).isEqualTo(DEFAULT_RANGE);
@@ -60,13 +60,14 @@ public class CardCreateTest extends InitIntegrationTest {
 			void not_existing_card_with_request_seq_is_not_zero() {
 				//given
 				noteService.create(
-					new NoteRequestDto(null, "새로 생성한 노트")
+					new NoteRequestDto(null, "새로 생성한 노트"), MEMBER_ID
 				);
-				NoteResponseDto note = noteService.findById(NUMBER_OF_NOTE + 1);
+				NoteResponseDto note = noteService.findById(NUMBER_OF_NOTE + 1, NEW_MEMBER_ID);
 				CardRequestDto cardRequestDto = new CardRequestDto(10L, "나만의 카드");
 
 				//when
-				CardResponseDto cardResponseDto = cardService.create(cardRequestDto, note.getId());
+				CardResponseDto cardResponseDto = cardService.create(cardRequestDto, note.getId(),
+					MEMBER_ID);
 
 				//then
 				assertThat(cardResponseDto.getSeq()).isEqualTo(DEFAULT_RANGE);
@@ -77,17 +78,18 @@ public class CardCreateTest extends InitIntegrationTest {
 			void existing_card_with_over_request_seq() {
 				//given
 				noteService.create(
-					new NoteRequestDto(null, "새로 생성한 노트")
+					new NoteRequestDto(null, "새로 생성한 노트"), NEW_MEMBER_ID
 				);
-				NoteResponseDto note = noteService.findById(NUMBER_OF_NOTE + 1);
-				cardService.create(new CardRequestDto(0L, "나만의 카드1"), note.getId());
-				cardService.create(new CardRequestDto(1L, "나만의 카드2"), note.getId());
-				cardService.create(new CardRequestDto(2L, "나만의 카드3"), note.getId());
+				NoteResponseDto note = noteService.findById(NUMBER_OF_NOTE + 1, NEW_MEMBER_ID);
+				cardService.create(new CardRequestDto(0L, "나만의 카드1"), note.getId(), NEW_MEMBER_ID);
+				cardService.create(new CardRequestDto(1L, "나만의 카드2"), note.getId(), NEW_MEMBER_ID);
+				cardService.create(new CardRequestDto(2L, "나만의 카드3"), note.getId(), NEW_MEMBER_ID);
 				CardRequestDto cardRequestDto = new CardRequestDto(10L, "나만의 카드");
 				int numberOfNotes = 4;
 
 				//when
-				CardResponseDto cardResponseDto = cardService.create(cardRequestDto, note.getId());
+				CardResponseDto cardResponseDto = cardService.create(cardRequestDto, note.getId(),
+					MEMBER_ID);
 
 				//then
 				assertThat(cardResponseDto.getSeq()).isEqualTo(DEFAULT_RANGE*numberOfNotes);
@@ -106,10 +108,12 @@ public class CardCreateTest extends InitIntegrationTest {
 			void seq_null_and_existing_card(){
 				//given
 				CardRequestDto cardRequestDto = new CardRequestDto(null, "나만의 단어장");
-				List<CardResponseDto> cards = cardService.findAll(Pageable.unpaged(), TEMP_NOTE_ID).getCards();
+				List<CardResponseDto> cards = cardService.findAll(Pageable.unpaged(), TEMP_NOTE_ID,
+					MEMBER_ID).getCards();
 
 				//when
-				CardResponseDto cardResponseDto = cardService.create(cardRequestDto, TEMP_NOTE_ID);
+				CardResponseDto cardResponseDto = cardService.create(cardRequestDto, TEMP_NOTE_ID,
+					MEMBER_ID);
 
 				//then
 				assertThat(cardResponseDto.getSeq()).isEqualTo(cards.get(0).getSeq()/2);
@@ -121,13 +125,14 @@ public class CardCreateTest extends InitIntegrationTest {
 			void seq_null_and_not_existing_card(){
 				//given
 				noteService.create(
-					new NoteRequestDto(null, "새로 생성한 노트")
+					new NoteRequestDto(null, "새로 생성한 노트"), NEW_MEMBER_ID
 				);
-				NoteResponseDto note = noteService.findById(NUMBER_OF_NOTE + 1);
+				NoteResponseDto note = noteService.findById(NUMBER_OF_NOTE + 1, NEW_MEMBER_ID);
 				CardRequestDto cardRequestDto = new CardRequestDto(null, "나만의 단어장");
 
 				//when
-				CardResponseDto cardResponseDto = cardService.create(cardRequestDto,  note.getId());
+				CardResponseDto cardResponseDto = cardService.create(cardRequestDto,  note.getId(),
+					NEW_MEMBER_ID);
 
 				//then
 				assertThat(cardResponseDto.getSeq()).isEqualTo(DEFAULT_RANGE);
@@ -147,7 +152,8 @@ public class CardCreateTest extends InitIntegrationTest {
 				CardRequestDto cardRequestDto = new CardRequestDto(null, null);
 
 				//when
-				CardResponseDto cardResponseDto = cardService.create(cardRequestDto, TEMP_NOTE_ID);
+				CardResponseDto cardResponseDto = cardService.create(cardRequestDto, TEMP_NOTE_ID,
+					MEMBER_ID);
 
 				//then
 				assertThat(cardResponseDto.getTitle()).isNull();

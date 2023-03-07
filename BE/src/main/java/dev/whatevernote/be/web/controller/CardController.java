@@ -7,6 +7,7 @@ import static dev.whatevernote.be.common.ResponseCodeAndMessages.CARD_RETRIEVE_A
 import static dev.whatevernote.be.common.ResponseCodeAndMessages.CARD_RETRIEVE_DETAIL_SUCCESS;
 
 import dev.whatevernote.be.common.BaseResponse;
+import dev.whatevernote.be.login.Login;
 import dev.whatevernote.be.service.CardService;
 import dev.whatevernote.be.service.dto.request.CardRequestDto;
 import dev.whatevernote.be.service.dto.response.CardDetailResponseDto;
@@ -33,32 +34,35 @@ public class CardController {
 	}
 
 	@PostMapping
-	public BaseResponse<CardResponseDto> create(@RequestBody final CardRequestDto cardRequestDto, @PathVariable final Integer noteId) {
-		CardResponseDto cardResponseDto = cardService.create(cardRequestDto, noteId);
+	public BaseResponse<CardResponseDto> create(@RequestBody final CardRequestDto cardRequestDto, @PathVariable final Integer noteId,
+		@Login final Long memberId) {
+		CardResponseDto cardResponseDto = cardService.create(cardRequestDto, noteId, memberId);
 		return new BaseResponse<>(CARD_CREATE_SUCCESS, cardResponseDto);
 	}
 
 	@GetMapping("/{cardId}")
-	public BaseResponse<CardDetailResponseDto> findById(@PathVariable final Integer noteId, @PathVariable final Long cardId) {
-		CardDetailResponseDto cardDetailResponseDto = cardService.findById(noteId, cardId);
+	public BaseResponse<CardDetailResponseDto> findById(@PathVariable final Integer noteId, @PathVariable final Long cardId,
+		@Login final Long memberId) {
+		CardDetailResponseDto cardDetailResponseDto = cardService.findById(noteId, cardId, memberId);
 		return new BaseResponse<>(CARD_RETRIEVE_DETAIL_SUCCESS, cardDetailResponseDto);
 	}
 
 	@GetMapping
-	public BaseResponse<CardResponseDtos> findAll(final Pageable pageable, @PathVariable final Integer noteId) {
-		CardResponseDtos cardResponseDtos = cardService.findAll(pageable, noteId);
+	public BaseResponse<CardResponseDtos> findAll(final Pageable pageable, @PathVariable final Integer noteId, @Login final Long memberId) {
+		CardResponseDtos cardResponseDtos = cardService.findAll(pageable, noteId, memberId);
 		return new BaseResponse<>(CARD_RETRIEVE_ALL_SUCCESS, cardResponseDtos);
 	}
 
 	@PutMapping("/{cardId}")
 	public BaseResponse<CardResponseDto> update(@PathVariable final Integer noteId,
-		@PathVariable final Long cardId, @RequestBody final CardRequestDto cardRequestDto) {
-		return new BaseResponse<>(CARD_MODIFY_SUCCESS, cardService.update(noteId, cardId, cardRequestDto));
+		@PathVariable final Long cardId, @RequestBody final CardRequestDto cardRequestDto, @Login final Long memberId) {
+		return new BaseResponse<>(CARD_MODIFY_SUCCESS, cardService.update(noteId, cardId, cardRequestDto, memberId));
 	}
 
 	@DeleteMapping("/{cardId}")
-	public BaseResponse<Void> delete(@PathVariable final Long cardId) {
-		cardService.delete(cardId);
+	public BaseResponse<Void> delete(@PathVariable final Integer noteId, @PathVariable final Long cardId,
+		@Login final Long memberId) {
+		cardService.delete(noteId, cardId, memberId);
 		return new BaseResponse<>(CARD_REMOVE_SUCCESS, null);
 	}
 

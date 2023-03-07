@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.whatevernote.be.common.BaseResponse;
+import dev.whatevernote.be.login.service.domain.Member;
 import dev.whatevernote.be.service.CardService;
 import dev.whatevernote.be.service.domain.Card;
 import dev.whatevernote.be.service.domain.Content;
@@ -99,7 +100,7 @@ class CardControllerTest {
 		CardRequestDto cardRequestDto = new CardRequestDto(expectedCardId, "첫번째 카드");
 
 		CardResponseDto cardResponseDto = new CardResponseDto(expectedCardId, "첫번째 카드", DEFAULT_RANGE, NOTE_ID);
-		when(cardService.create(refEq(cardRequestDto), refEq(NOTE_ID))).thenReturn(cardResponseDto);
+		when(cardService.create(refEq(cardRequestDto), refEq(NOTE_ID), refEq(MEMBER_ID))).thenReturn(cardResponseDto);
 		BaseResponse<CardResponseDto> baseResponse = new BaseResponse<>(CARD_CREATE_SUCCESS, cardResponseDto);
 
 		//when
@@ -139,7 +140,9 @@ class CardControllerTest {
 	void 단어장id와_카드id를_조회하면_해당_카드를_반환한다() throws Exception {
 		//given
 		NoteRequestDto noteRequestDto = new NoteRequestDto(NOTE_ID, "첫번째 노트");
-		Note note = Note.from(noteRequestDto);
+
+		Note note = Note.from(noteRequestDto,
+			new Member("1234", "홍길동", "hgd1234@naver.com", "https://dummy-img.co.kr"));
 		CardRequestDto cardRequestDto = new CardRequestDto(CARD_ID, "첫번째 카드");
 		Card card = Card.from(cardRequestDto, note);
 		ContentRequestDto contentRequestDto1 = new ContentRequestDto("첫 번째 컨텐트", DEFAULT_RANGE, Boolean.FALSE);
@@ -149,7 +152,7 @@ class CardControllerTest {
 		contents.add(Content.from(contentRequestDto2, card));
 
 		CardDetailResponseDto cardDetailResponseDto = CardDetailResponseDto.from(card, NOTE_ID, contents);
-		when(cardService.findById(NOTE_ID, CARD_ID)).thenReturn(cardDetailResponseDto);
+		when(cardService.findById(NOTE_ID, CARD_ID, MEMBER_ID)).thenReturn(cardDetailResponseDto);
 		BaseResponse<CardDetailResponseDto> baseResponse = new BaseResponse<>(CARD_RETRIEVE_DETAIL_SUCCESS, cardDetailResponseDto);
 
 		//when
@@ -194,7 +197,7 @@ class CardControllerTest {
 		dtos.add(new CardResponseDto(3L, "card-3", DEFAULT_RANGE*3, NOTE_ID));
 
 		CardResponseDtos cardResponseDtos = new CardResponseDtos(dtos, false, 0);
-		when(cardService.findAll(any(), any())).thenReturn(cardResponseDtos);
+		when(cardService.findAll(any(), any(), any())).thenReturn(cardResponseDtos);
 		BaseResponse<CardResponseDtos> baseResponse = new BaseResponse<>(CARD_RETRIEVE_ALL_SUCCESS, cardResponseDtos);
 
 
@@ -236,7 +239,7 @@ class CardControllerTest {
 	    //given
 		CardRequestDto cardRequestDto = new CardRequestDto(0L, null);
 		CardResponseDto cardResponseDto = new CardResponseDto(CARD_ID, "변경될 제목", DEFAULT_RANGE, 1);
-		when(cardService.update(any(), any(), any())).thenReturn(cardResponseDto);
+		when(cardService.update(any(), any(), any(), any())).thenReturn(cardResponseDto);
 		BaseResponse<CardResponseDto> baseResponse = new BaseResponse<>(CARD_MODIFY_SUCCESS, cardResponseDto);
 
 		//when
@@ -284,7 +287,7 @@ class CardControllerTest {
 	@Test
 	void 카드를_삭제하면_soft_delete_한다() throws Exception {
 	    //given
-		doNothing().when(cardService).delete(any());
+		doNothing().when(cardService).delete(any(), any(), any());
 		BaseResponse<Void> baseResponse = new BaseResponse<>(CARD_REMOVE_SUCCESS, null);
 
 		//when

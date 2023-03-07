@@ -38,11 +38,12 @@ class CardUpdateTest extends InitIntegrationTest {
 			@Test
 			void card_title_update() {
 				//given
-				CardDetailResponseDto card = cardService.findById(NOTE_ID_1, CARD_ID_1);
+				CardDetailResponseDto card = cardService.findById(NOTE_ID_1, CARD_ID_1, MEMBER_ID);
 				CardRequestDto cardRequestDto = new CardRequestDto(null, "제목 바꾼 카드");
 
 				//when
-				CardResponseDto updatedCardResponse = cardService.update(NOTE_ID_1, CARD_ID_1, cardRequestDto);
+				CardResponseDto updatedCardResponse = cardService.update(NOTE_ID_1, CARD_ID_1, cardRequestDto,
+					MEMBER_ID);
 
 				//then
 				assertThat(updatedCardResponse.getTitle()).isEqualTo("제목 바꾼 카드");
@@ -60,11 +61,12 @@ class CardUpdateTest extends InitIntegrationTest {
 			@Test
 			void card_seq_update_to_first() {
 				//given
-				CardDetailResponseDto card = cardService.findById(NOTE_ID_1, CARD_ID_3);
+				CardDetailResponseDto card = cardService.findById(NOTE_ID_1, CARD_ID_3, MEMBER_ID);
 				CardRequestDto cardRequestDto = new CardRequestDto(0L, null);
 				
 				//when
-				CardResponseDto updatedCardResponse = cardService.update(NOTE_ID_1, CARD_ID_3, cardRequestDto);
+				CardResponseDto updatedCardResponse = cardService.update(NOTE_ID_1, CARD_ID_3, cardRequestDto,
+					MEMBER_ID);
 
 				//then
 				assertThat(updatedCardResponse.getTitle()).isEqualTo(card.getCardTitle());
@@ -77,11 +79,12 @@ class CardUpdateTest extends InitIntegrationTest {
 			@Test
 			void card_seq_update(){
 				//given
-				CardDetailResponseDto card = cardService.findById(NOTE_ID_1, CARD_ID_3);
+				CardDetailResponseDto card = cardService.findById(NOTE_ID_1, CARD_ID_3, MEMBER_ID);
 				CardRequestDto cardRequestDto = new CardRequestDto(1L, null);
 
 				//when
-				CardResponseDto updatedCardResponse = cardService.update(NOTE_ID_1, CARD_ID_3, cardRequestDto);
+				CardResponseDto updatedCardResponse = cardService.update(NOTE_ID_1, CARD_ID_3, cardRequestDto,
+					MEMBER_ID);
 
 				//then
 				assertThat(updatedCardResponse.getTitle()).isEqualTo(card.getCardTitle());
@@ -94,11 +97,12 @@ class CardUpdateTest extends InitIntegrationTest {
 			@Test
 			void card_seq_update_to_last(){
 				//given
-				CardDetailResponseDto card = cardService.findById(NOTE_ID_1, CARD_ID_1);
+				CardDetailResponseDto card = cardService.findById(NOTE_ID_1, CARD_ID_1, MEMBER_ID);
 				CardRequestDto cardRequestDto = new CardRequestDto(100L, null);
 
 				//when
-				CardResponseDto updatedCardResponse = cardService.update(NOTE_ID_1, CARD_ID_1, cardRequestDto);
+				CardResponseDto updatedCardResponse = cardService.update(NOTE_ID_1, CARD_ID_1, cardRequestDto,
+					MEMBER_ID);
 
 				//then
 				assertThat(updatedCardResponse.getTitle()).isEqualTo(card.getCardTitle());
@@ -111,11 +115,12 @@ class CardUpdateTest extends InitIntegrationTest {
 			@Test
 			void card_seq_update_to_same_seq(){
 				//given
-				CardDetailResponseDto card = cardService.findById(NOTE_ID_1, CARD_ID_1);
+				CardDetailResponseDto card = cardService.findById(NOTE_ID_1, CARD_ID_1, MEMBER_ID);
 				CardRequestDto cardRequestDto = new CardRequestDto(1L, null);
 
 				//when
-				CardResponseDto updatedCardResponse = cardService.update(NOTE_ID_1, CARD_ID_1, cardRequestDto);
+				CardResponseDto updatedCardResponse = cardService.update(NOTE_ID_1, CARD_ID_1, cardRequestDto,
+					MEMBER_ID);
 
 				//then
 				assertThat(updatedCardResponse.getTitle()).isEqualTo(card.getCardTitle());

@@ -1,10 +1,7 @@
 package dev.whatevernote.be.repository;
 
 import dev.whatevernote.be.service.domain.Card;
-import dev.whatevernote.be.service.domain.Note;
-import dev.whatevernote.be.service.dto.request.CardRequestDto;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,11 +13,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CardRepository extends JpaRepository<Card, Long> {
 
-	List<Card> findAllByOrderBySeq();
+	List<Card> findAllByNoteIdOrderBySeqAsc(Integer noteId);
 
-	Slice<Card> findAllByNoteOrderBySeq(Pageable pageable, Note note);
+	Slice<Card> findAllByNoteIdOrderBySeqAsc(Pageable pageable, Integer noteId);
 
-	List<Card> findAllByNoteId(Integer noteId);
+	List<Card> findAllByNoteIdOrderBySeq(Integer noteId);
 
 	@Modifying(clearAutomatically = true)
 	@Query("update Card c SET c.deleted = TRUE WHERE c.note.id = :note_id")
