@@ -57,7 +57,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 @ExtendWith({RestDocumentationExtension.class})
 @WebMvcTest(ContentController.class)
 class ContentControllerTest {
-
 	private static final long MEMBER_ID = 1;
 	private static final long CONTENT_ID = 1;
 	private static final long CARD_ID = 1;
@@ -93,7 +92,7 @@ class ContentControllerTest {
 		dtos.add(new ContentResponseDto(3L, DEFAULT_RANGE*3, "content-3", Boolean.FALSE, CARD_ID));
 
 		ContentResponseDtos contentResponseDtos = new ContentResponseDtos(dtos, false, 0);
-		when(contentService.findAll(any(), any())).thenReturn(contentResponseDtos);
+		when(contentService.findAll(any(), any(), any(), any())).thenReturn(contentResponseDtos);
 		BaseResponse<ContentResponseDtos> baseResponse = new BaseResponse<>(CONTENT_RETRIEVE_ALL_SUCCESS, contentResponseDtos);
 
 
@@ -139,7 +138,7 @@ class ContentControllerTest {
 		ContentRequestDto contentRequestDto = new ContentRequestDto("첫 번째 컨텐츠", tmpSeq, Boolean.FALSE);
 		ContentResponseDto contentResponseDto = new ContentResponseDto(CONTENT_ID, DEFAULT_RANGE, "첫 번째 컨텐츠", Boolean.FALSE, CARD_ID);
 		BaseResponse<ContentResponseDto> baseResponse = new BaseResponse<>(CONTENT_CREATE_SUCCESS, contentResponseDto);
-		when(contentService.create(refEq(contentRequestDto), refEq(CARD_ID))).thenReturn(contentResponseDto);
+		when(contentService.create(refEq(contentRequestDto), refEq(NOTE_ID), refEq(CARD_ID), refEq(MEMBER_ID))).thenReturn(contentResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(
@@ -188,7 +187,7 @@ class ContentControllerTest {
 		ContentRequestDto contentRequestDto = new ContentRequestDto("수정된 컨텐츠", tmpSeq, Boolean.FALSE);
 		ContentResponseDto contentResponseDto = new ContentResponseDto(CONTENT_ID, DEFAULT_RANGE, "수정된 컨텐츠", Boolean.FALSE, CARD_ID);
 		BaseResponse<ContentResponseDto> baseResponse = new BaseResponse<>(CONTENT_MODIFY_SUCCESS, contentResponseDto);
-		when(contentService.update(any(), any(), any())).thenReturn(contentResponseDto);
+		when(contentService.update(any(), any(), any(), any(), any())).thenReturn(contentResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(
@@ -234,7 +233,7 @@ class ContentControllerTest {
 	@Test
 	void 카드를_삭제하면_soft_delete_한다() throws Exception {
 		//given
-		doNothing().when(contentService).delete(any());
+		doNothing().when(contentService).delete(any(), any(), any());
 		BaseResponse<Void> baseResponse = new BaseResponse<>(CONTENT_REMOVE_SUCCESS, null);
 
 		//when

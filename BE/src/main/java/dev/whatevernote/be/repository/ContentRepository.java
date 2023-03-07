@@ -14,7 +14,7 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
 
 	Optional<Content> findFirstByOrderBySeq();
 
-	List<Content> findAllByCardId(Long cardId);
+	List<Content> findAllByCardIdOrderBySeqAsc(Long cardId);
 
 	List<Content> findAllByCardIdOrderBySeq(Long cardId);
 

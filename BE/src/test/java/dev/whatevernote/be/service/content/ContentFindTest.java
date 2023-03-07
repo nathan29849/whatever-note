@@ -42,7 +42,9 @@ class ContentFindTest extends InitIntegrationTest {
 			    //given
 				// [CARD ID = 1] CONTENTS 개수: 10개
 				PageRequest defaultPageRequest = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
-				ContentResponseDtos contentResponseDtos = contentService.findAll(defaultPageRequest, CARD_ID);
+				ContentResponseDtos contentResponseDtos = contentService.findAll(defaultPageRequest,
+					FIRST_NOTE_ID, CARD_ID,
+					MEMBER_ID);
 
 				//when
 				long preSeq = 0L;

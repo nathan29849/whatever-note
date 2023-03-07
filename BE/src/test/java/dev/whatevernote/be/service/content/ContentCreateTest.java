@@ -17,8 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @DisplayName("통합 테스트 : Content 생성")
 class ContentCreateTest extends InitIntegrationTest {
 
-	private static final int NOTE_ID = 1;
-
 	@Autowired
 	private CardService cardService;
 	@Autowired
@@ -37,13 +35,14 @@ class ContentCreateTest extends InitIntegrationTest {
 			void not_existing_content_with_request_seq_is_zero(){
 			    //given
 				CardResponseDto cardResponse = cardService.create(
-					new CardRequestDto(null, "컨텐트 생성 테스트를 위한 카드"), NOTE_ID);
+					new CardRequestDto(null, "컨텐트 생성 테스트를 위한 카드"), FIRST_NOTE_ID, MEMBER_ID);
 				Long newCardId = cardResponse.getId();
 
 				//when
 				ContentResponseDto contentResponse = contentService.create(
 					new ContentRequestDto("새로운 컨텐트", 0L, Boolean.FALSE),
-					newCardId
+					FIRST_NOTE_ID, newCardId,
+					MEMBER_ID
 				);
 
 				//then
@@ -58,13 +57,14 @@ class ContentCreateTest extends InitIntegrationTest {
 			void not_existing_content_with_request_seq_is_not_zero(){
 				//given
 				CardResponseDto cardResponse = cardService.create(
-					new CardRequestDto(null, "컨텐트 생성 테스트를 위한 카드"), NOTE_ID);
+					new CardRequestDto(null, "컨텐트 생성 테스트를 위한 카드"), FIRST_NOTE_ID, MEMBER_ID);
 				Long newCardId = cardResponse.getId();
 
 				//when
 				ContentResponseDto contentResponse = contentService.create(
 					new ContentRequestDto("새로운 컨텐트", 10L, Boolean.FALSE),
-					newCardId
+					FIRST_NOTE_ID, newCardId,
+					MEMBER_ID
 				);
 
 				//then
@@ -79,18 +79,20 @@ class ContentCreateTest extends InitIntegrationTest {
 			void existing_content_with_over_request_seq(){
 				//given
 				CardResponseDto cardResponse = cardService.create(
-					new CardRequestDto(null, "컨텐트 생성 테스트를 위한 카드"), NOTE_ID);
+					new CardRequestDto(null, "컨텐트 생성 테스트를 위한 카드"), FIRST_NOTE_ID, MEMBER_ID);
 				Long newCardId = cardResponse.getId();
 
 				//when
 				ContentResponseDto contentResponse = contentService.create(
 					new ContentRequestDto("새로운 컨텐트", 0L, Boolean.FALSE),
-					newCardId
+					FIRST_NOTE_ID, newCardId,
+					MEMBER_ID
 				);
 
 				ContentResponseDto contentResponse2 = contentService.create(
 					new ContentRequestDto("새로운 컨텐트2", 10L, Boolean.FALSE),
-					newCardId
+					FIRST_NOTE_ID, newCardId,
+					MEMBER_ID
 				);
 
 				//then
@@ -110,18 +112,20 @@ class ContentCreateTest extends InitIntegrationTest {
 			void seq_null_and_existing_content(){
 				//given
 				CardResponseDto cardResponse = cardService.create(
-					new CardRequestDto(null, "컨텐트 생성 테스트를 위한 카드"), NOTE_ID);
+					new CardRequestDto(null, "컨텐트 생성 테스트를 위한 카드"), FIRST_NOTE_ID, MEMBER_ID);
 				Long newCardId = cardResponse.getId();
 
 				//when
 				ContentResponseDto contentResponse = contentService.create(
 					new ContentRequestDto("새로운 컨텐트", 0L, Boolean.FALSE),
-					newCardId
+					FIRST_NOTE_ID, newCardId,
+					MEMBER_ID
 				);
 
 				ContentResponseDto contentResponse2 = contentService.create(
 					new ContentRequestDto("새로운 컨텐트2", null, Boolean.FALSE),
-					newCardId
+					FIRST_NOTE_ID, newCardId,
+					MEMBER_ID
 				);
 
 				//then
@@ -136,13 +140,14 @@ class ContentCreateTest extends InitIntegrationTest {
 			void seq_null_and_not_existing_content(){
 				//given
 				CardResponseDto cardResponse = cardService.create(
-					new CardRequestDto(null, "컨텐트 생성 테스트를 위한 카드"), NOTE_ID);
+					new CardRequestDto(null, "컨텐트 생성 테스트를 위한 카드"), FIRST_NOTE_ID, MEMBER_ID);
 				Long newCardId = cardResponse.getId();
 
 				//when
 				ContentResponseDto contentResponse = contentService.create(
 					new ContentRequestDto("새로운 컨텐트", null, Boolean.FALSE),
-					newCardId
+					FIRST_NOTE_ID, newCardId,
+					MEMBER_ID
 				);
 
 				//then
