@@ -13,6 +13,7 @@ public enum ErrorCodeAndMessages implements CodeAndMessages {
 	// 400 Bad Request
 	E400_INVALID_JWT_TOKEN("E-BR001", "유효하지 않은 JWT Token 입니다."),
 	E400_NOT_LOGGED_IN_LOGIN_MEMBER("E-BR002", "로그인 되지 않은 멤버입니다."),
+	E400_NOT_MATCH_LOGIN_MEMBER("E-BR003", "로그인 멤버가 가진 노트가 아닙니다."),
 	;
 
 	private final String code;
