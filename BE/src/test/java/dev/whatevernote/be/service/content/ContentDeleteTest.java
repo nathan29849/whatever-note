@@ -40,18 +40,18 @@ class ContentDeleteTest extends InitIntegrationTest {
 			@Test
 			void soft_delete_content() {
 				//given
-				List<Content> contents = contentRepository.findAllByCardId(CARD_ID);
+				List<Content> contents = contentRepository.findAllByCardIdOrderBySeqAsc(CARD_ID);
 				int numberOfContent = contents.size();
 
 				//when
-				contentService.delete(CONTENT_ID);
+				contentService.delete(FIRST_NOTE_ID, CONTENT_ID, MEMBER_ID);
 				Optional<Content> content = contentRepository.findById(CONTENT_ID);
-				List<Content> afterDelete = contentRepository.findAllByCardId(CARD_ID);
+				List<Content> afterDelete = contentRepository.findAllByCardIdOrderBySeqAsc(CARD_ID);
 
 				//then
 				assertThat(content).isEmpty();
 				assertThat(afterDelete).hasSize(numberOfContent - 1);
-				assertThatThrownBy(() -> contentService.findById(CONTENT_ID))
+				assertThatThrownBy(() -> contentService.findById(FIRST_NOTE_ID, CONTENT_ID, MEMBER_ID))
 					.isInstanceOf(NotFoundContentException.class)
 					.hasMessageContaining(ErrorCodeAndMessages.E404_NOT_FOUND_CONTENT.getMessage());
 			}

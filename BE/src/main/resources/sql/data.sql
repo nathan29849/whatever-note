@@ -1,14 +1,19 @@
 SET AUTOCOMMIT = 0;
 
+-- MEMBER
+INSERT INTO member(email, nickname, profile_image, unique_id)
+VALUES ('hgd1234@naver.com', '홍길동', 'https://dummy-image.co.kr', '12-324-523-122-11');
+
+
 -- NOTE
-INSERT INTO note(created_at, deleted, updated_at, note_order, title)
-VALUES ('2022-06-04 00:00:01', false, '2022-06-04 00:00:01', 1000, '첫번째 노트');
+INSERT INTO note(created_at, deleted, updated_at, note_order, title, member_id)
+VALUES ('2022-06-04 00:00:01', false, '2022-06-04 00:00:01', 1000, '첫번째 노트', 1);
 
-INSERT INTO note(created_at, deleted, updated_at, note_order, title)
-VALUES ('2022-06-05 00:00:01', false, '2022-06-05 00:00:01', 2000, '두번째 노트');
+INSERT INTO note(created_at, deleted, updated_at, note_order, title, member_id)
+VALUES ('2022-06-05 00:00:01', false, '2022-06-05 00:00:01', 2000, '두번째 노트', 1);
 
-INSERT INTO note(created_at, deleted, updated_at, note_order, title)
-VALUES ('2022-06-06 00:00:01', false, '2022-06-06 00:00:01', 3000, '세번째 노트');
+INSERT INTO note(created_at, deleted, updated_at, note_order, title, member_id)
+VALUES ('2022-06-06 00:00:01', false, '2022-06-06 00:00:01', 3000, '세번째 노트', 1);
 
 -- CARD
 INSERT INTO card(created_at, deleted, updated_at, card_order, title, note_id)

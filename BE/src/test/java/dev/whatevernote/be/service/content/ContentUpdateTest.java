@@ -31,11 +31,12 @@ class ContentUpdateTest extends InitIntegrationTest {
 			@Test
 			void content_info_update(){
 			    //given
-				ContentResponseDto content = contentService.findById(CONTENT_ID);
+				ContentResponseDto content = contentService.findById(FIRST_NOTE_ID, CONTENT_ID, MEMBER_ID);
 				ContentRequestDto contentRequestDto = new ContentRequestDto("수정할 내용", null, null);
 
 				//when
-				ContentResponseDto updatedContentResponse = contentService.update(CARD_ID, CONTENT_ID, contentRequestDto);
+				ContentResponseDto updatedContentResponse = contentService
+					.update(FIRST_NOTE_ID, CARD_ID, CONTENT_ID, contentRequestDto, MEMBER_ID);
 
 				//then
 				assertThat(updatedContentResponse.getInfo()).isEqualTo("수정할 내용");
@@ -53,11 +54,12 @@ class ContentUpdateTest extends InitIntegrationTest {
 			@Test
 			void content_seq_update_to_first(){
 			    //given
-				ContentResponseDto content = contentService.findById(CONTENT_ID);
+				ContentResponseDto content = contentService.findById(FIRST_NOTE_ID, CONTENT_ID, MEMBER_ID);
 				ContentRequestDto contentRequestDto = new ContentRequestDto(null, 0L, null);
 
 				//when
-				ContentResponseDto updatedContentResponse = contentService.update(CARD_ID, CONTENT_ID, contentRequestDto);
+				ContentResponseDto updatedContentResponse = contentService
+					.update(FIRST_NOTE_ID, CARD_ID, CONTENT_ID, contentRequestDto, MEMBER_ID);
 
 				//then
 				assertThat(updatedContentResponse.getInfo()).isEqualTo(content.getInfo());
@@ -70,11 +72,12 @@ class ContentUpdateTest extends InitIntegrationTest {
 			@Test
 			void content_seq_update(){
 				//given
-				ContentResponseDto content = contentService.findById(CONTENT_ID);
+				ContentResponseDto content = contentService.findById(FIRST_NOTE_ID, CONTENT_ID, MEMBER_ID);
 				ContentRequestDto contentRequestDto = new ContentRequestDto(null, 3L, null);
 
 				//when
-				ContentResponseDto updatedContentResponse = contentService.update(CARD_ID, CONTENT_ID, contentRequestDto);
+				ContentResponseDto updatedContentResponse = contentService
+					.update(FIRST_NOTE_ID, CARD_ID, CONTENT_ID, contentRequestDto, MEMBER_ID);
 
 				//then
 				assertThat(updatedContentResponse.getInfo()).isEqualTo(content.getInfo());
@@ -87,11 +90,12 @@ class ContentUpdateTest extends InitIntegrationTest {
 			@Test
 			void content_seq_update_to_last(){
 				//given
-				ContentResponseDto content = contentService.findById(CONTENT_ID);
+				ContentResponseDto content = contentService.findById(FIRST_NOTE_ID, CONTENT_ID, MEMBER_ID);
 				ContentRequestDto contentRequestDto = new ContentRequestDto(null, 100L, null);
 
 				//when
-				ContentResponseDto updatedContentResponse = contentService.update(CARD_ID, CONTENT_ID, contentRequestDto);
+				ContentResponseDto updatedContentResponse = contentService
+					.update(FIRST_NOTE_ID, CARD_ID, CONTENT_ID, contentRequestDto, MEMBER_ID);
 
 				//then
 				assertThat(updatedContentResponse.getInfo()).isEqualTo(content.getInfo());
@@ -104,11 +108,12 @@ class ContentUpdateTest extends InitIntegrationTest {
 			@Test
 			void content_seq_update_to_same_seq(){
 				//given
-				ContentResponseDto content = contentService.findById(CONTENT_ID);
+				ContentResponseDto content = contentService.findById(FIRST_NOTE_ID, CONTENT_ID, MEMBER_ID);
 				ContentRequestDto contentRequestDto = new ContentRequestDto(null, 1L, null);
 
 				//when
-				ContentResponseDto updatedContentResponse = contentService.update(CARD_ID, CONTENT_ID, contentRequestDto);
+				ContentResponseDto updatedContentResponse = contentService
+					.update(FIRST_NOTE_ID, CARD_ID, CONTENT_ID, contentRequestDto, MEMBER_ID);
 
 				//then
 				assertThat(updatedContentResponse.getInfo()).isEqualTo(content.getInfo());
@@ -126,11 +131,12 @@ class ContentUpdateTest extends InitIntegrationTest {
 			@Test
 			void content_isImage_update(){
 				//given
-				ContentResponseDto content = contentService.findById(CONTENT_ID);
+				ContentResponseDto content = contentService.findById(FIRST_NOTE_ID, CONTENT_ID, MEMBER_ID);
 				ContentRequestDto contentRequestDto = new ContentRequestDto("update_image.png", null, Boolean.TRUE);
 
 				//when
-				ContentResponseDto updatedContentResponse = contentService.update(CARD_ID, CONTENT_ID, contentRequestDto);
+				ContentResponseDto updatedContentResponse = contentService
+					.update(FIRST_NOTE_ID, CARD_ID, CONTENT_ID, contentRequestDto, MEMBER_ID);
 
 				//then
 				assertThat(updatedContentResponse.getInfo()).isEqualTo("update_image.png");

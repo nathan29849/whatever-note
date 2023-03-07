@@ -29,6 +29,8 @@ import dev.whatevernote.be.service.ContentService;
 import dev.whatevernote.be.service.dto.request.ContentRequestDto;
 import dev.whatevernote.be.service.dto.response.ContentResponseDto;
 import dev.whatevernote.be.service.dto.response.ContentResponseDtos;
+import dev.whatevernote.be.tool.TestWebConfig;
+import dev.whatevernote.be.login.service.provider.JwtProvider;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -49,11 +52,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+@Import(TestWebConfig.class)
 @AutoConfigureRestDocs
 @ExtendWith({RestDocumentationExtension.class})
 @WebMvcTest(ContentController.class)
 class ContentControllerTest {
-
+	private static final long MEMBER_ID = 1;
 	private static final long CONTENT_ID = 1;
 	private static final long CARD_ID = 1;
 	private static final int NOTE_ID = 1;
@@ -61,6 +65,9 @@ class ContentControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
+
+	@Autowired
+	private JwtProvider jwtProvider;
 
 	@MockBean
 	private ContentService contentService;
@@ -85,13 +92,14 @@ class ContentControllerTest {
 		dtos.add(new ContentResponseDto(3L, DEFAULT_RANGE*3, "content-3", Boolean.FALSE, CARD_ID));
 
 		ContentResponseDtos contentResponseDtos = new ContentResponseDtos(dtos, false, 0);
-		when(contentService.findAll(any(), any())).thenReturn(contentResponseDtos);
+		when(contentService.findAll(any(), any(), any(), any())).thenReturn(contentResponseDtos);
 		BaseResponse<ContentResponseDtos> baseResponse = new BaseResponse<>(CONTENT_RETRIEVE_ALL_SUCCESS, contentResponseDtos);
 
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
 			.get("/api/note/{NOTE_ID}/card/{CARD_ID}/content?page=0&size=5", NOTE_ID, CARD_ID)
+			.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
 			.accept(MediaType.APPLICATION_JSON_VALUE)
 			.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -130,12 +138,13 @@ class ContentControllerTest {
 		ContentRequestDto contentRequestDto = new ContentRequestDto("첫 번째 컨텐츠", tmpSeq, Boolean.FALSE);
 		ContentResponseDto contentResponseDto = new ContentResponseDto(CONTENT_ID, DEFAULT_RANGE, "첫 번째 컨텐츠", Boolean.FALSE, CARD_ID);
 		BaseResponse<ContentResponseDto> baseResponse = new BaseResponse<>(CONTENT_CREATE_SUCCESS, contentResponseDto);
-		when(contentService.create(refEq(contentRequestDto), refEq(CARD_ID))).thenReturn(contentResponseDto);
+		when(contentService.create(refEq(contentRequestDto), refEq(NOTE_ID), refEq(CARD_ID), refEq(MEMBER_ID))).thenReturn(contentResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(
 			RestDocumentationRequestBuilders
 				.post("/api/note/{NOTE_ID}/card/{CARD_ID}/content", NOTE_ID, CARD_ID)
+				.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
 				.content(objectMapper.writeValueAsString(contentRequestDto))
 				.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -178,12 +187,13 @@ class ContentControllerTest {
 		ContentRequestDto contentRequestDto = new ContentRequestDto("수정된 컨텐츠", tmpSeq, Boolean.FALSE);
 		ContentResponseDto contentResponseDto = new ContentResponseDto(CONTENT_ID, DEFAULT_RANGE, "수정된 컨텐츠", Boolean.FALSE, CARD_ID);
 		BaseResponse<ContentResponseDto> baseResponse = new BaseResponse<>(CONTENT_MODIFY_SUCCESS, contentResponseDto);
-		when(contentService.update(any(), any(), any())).thenReturn(contentResponseDto);
+		when(contentService.update(any(), any(), any(), any(), any())).thenReturn(contentResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(
 			RestDocumentationRequestBuilders
 				.put("/api/note/{NOTE_ID}/card/{CARD_ID}/content/{CONTENT_ID}", NOTE_ID, CARD_ID, CONTENT_ID)
+				.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
 				.content(objectMapper.writeValueAsString(contentRequestDto))
 				.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -223,14 +233,16 @@ class ContentControllerTest {
 	@Test
 	void 카드를_삭제하면_soft_delete_한다() throws Exception {
 		//given
-		doNothing().when(contentService).delete(any());
+		doNothing().when(contentService).delete(any(), any(), any());
 		BaseResponse<Void> baseResponse = new BaseResponse<>(CONTENT_REMOVE_SUCCESS, null);
 
 		//when
 		ResultActions resultActions = this.mockMvc
 			.perform(RestDocumentationRequestBuilders
 				.delete("/api/note/{NOTE_ID}/card/{CARD_ID}/content/{CONTENT_ID}",
-					NOTE_ID, CARD_ID, CONTENT_ID));
+					NOTE_ID, CARD_ID, CONTENT_ID)
+				.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
+			);
 
 		//then
 		resultActions.andExpect(status().isOk())

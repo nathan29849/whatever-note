@@ -38,14 +38,14 @@ class NoteUpdateTest extends InitIntegrationTest {
 			@Test
 			void note_title_update(){
 			    //given
-				List<Note> notes = noteRepository.findAllByOrderBySeq();
+				List<Note> notes = noteRepository.findAllByMemberIdOrderBySeq(MEMBER_ID);
 				int seq = 2;
 				int updateNoteId = notes.get(seq).getId();
 				String updateTitle = "제목 바꾼 노트";
 				NoteRequestDto noteRequestDto = new NoteRequestDto(null, updateTitle);
 
 				//when
-				NoteResponseDto noteResponseDto = noteService.update(updateNoteId, noteRequestDto);
+				NoteResponseDto noteResponseDto = noteService.update(updateNoteId, noteRequestDto, MEMBER_ID);
 
 			    //then
 				assertThat(noteResponseDto.getId()).isEqualTo(updateNoteId);
@@ -62,13 +62,13 @@ class NoteUpdateTest extends InitIntegrationTest {
 			@Test
 			void note_seq_update_to_first(){
 				//given
-				List<Note> notes = noteRepository.findAllByOrderBySeq();
+				List<Note> notes = noteRepository.findAllByMemberIdOrderBySeq(MEMBER_ID);
 				int updateNoteId = 1;
 				int updateSeq = 0;
 				NoteRequestDto noteRequestDto = new NoteRequestDto(updateSeq, null);
 
 				//when
-				NoteResponseDto noteResponseDto = noteService.update(updateNoteId, noteRequestDto);
+				NoteResponseDto noteResponseDto = noteService.update(updateNoteId, noteRequestDto, MEMBER_ID);
 
 				//then
 				assertThat(noteResponseDto.getId()).isEqualTo(updateNoteId);
@@ -79,7 +79,7 @@ class NoteUpdateTest extends InitIntegrationTest {
 			@Test
 			void note_seq_update(){
 				//given
-				List<Note> notes = noteRepository.findAllByOrderBySeq();
+				List<Note> notes = noteRepository.findAllByMemberIdOrderBySeq(MEMBER_ID);
 				int seq = 2;
 				int updateNoteId = notes.get(seq).getId();
 				int updateSeq = 1;
@@ -88,7 +88,7 @@ class NoteUpdateTest extends InitIntegrationTest {
 				NoteRequestDto noteRequestDto = new NoteRequestDto(updateSeq, null);
 
 				//when
-				NoteResponseDto noteResponseDto = noteService.update(updateNoteId, noteRequestDto);
+				NoteResponseDto noteResponseDto = noteService.update(updateNoteId, noteRequestDto, MEMBER_ID);
 
 				//then
 				assertThat(noteResponseDto.getId()).isEqualTo(updateNoteId);
@@ -99,14 +99,14 @@ class NoteUpdateTest extends InitIntegrationTest {
 			@Test
 			void note_seq_update_to_last(){
 				//given
-				List<Note> notes = noteRepository.findAllByOrderBySeq();
+				List<Note> notes = noteRepository.findAllByMemberIdOrderBySeq(MEMBER_ID);
 				int seq = 1;
 				int updateNoteId = notes.get(seq).getId();
 				int updateSeq = NUMBER_OF_NOTE;
 				NoteRequestDto noteRequestDto = new NoteRequestDto(updateSeq, null);
 
 				//when
-				NoteResponseDto noteResponseDto = noteService.update(updateNoteId, noteRequestDto);
+				NoteResponseDto noteResponseDto = noteService.update(updateNoteId, noteRequestDto, MEMBER_ID);
 
 				//then
 				assertThat(noteResponseDto.getId()).isEqualTo(updateNoteId);
@@ -117,14 +117,14 @@ class NoteUpdateTest extends InitIntegrationTest {
 			@Test
 			void note_seq_update_to_same_seq(){
 				//given
-				List<Note> notes = noteRepository.findAllByOrderBySeq();
+				List<Note> notes = noteRepository.findAllByMemberIdOrderBySeq(MEMBER_ID);
 				int seq = 1;
 				int updateNoteId = notes.get(seq).getId();
 				int updateSeq = 2;
 				NoteRequestDto noteRequestDto = new NoteRequestDto(updateSeq, null);
 
 				//when
-				NoteResponseDto noteResponseDto = noteService.update(updateNoteId, noteRequestDto);
+				NoteResponseDto noteResponseDto = noteService.update(updateNoteId, noteRequestDto, MEMBER_ID);
 
 				//then
 				assertThat(noteResponseDto.getId()).isEqualTo(updateNoteId);

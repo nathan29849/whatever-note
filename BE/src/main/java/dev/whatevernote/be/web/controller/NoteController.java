@@ -7,6 +7,7 @@ import static dev.whatevernote.be.common.ResponseCodeAndMessages.NOTE_RETRIEVE_A
 import static dev.whatevernote.be.common.ResponseCodeAndMessages.NOTE_RETRIEVE_DETAIL_SUCCESS;
 
 import dev.whatevernote.be.common.BaseResponse;
+import dev.whatevernote.be.login.Login;
 import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
@@ -32,29 +33,29 @@ public class NoteController {
 	}
 
 	@GetMapping("/{noteId}")
-	public BaseResponse<NoteResponseDto> findById(@PathVariable final Integer noteId) {
-		return new BaseResponse<>(NOTE_RETRIEVE_DETAIL_SUCCESS, noteService.findById(noteId));
+	public BaseResponse<NoteResponseDto> findById(@PathVariable final Integer noteId, @Login final Long memberId) {
+		return new BaseResponse<>(NOTE_RETRIEVE_DETAIL_SUCCESS, noteService.findById(noteId, memberId));
 	}
 
 	@GetMapping
-	public BaseResponse<NoteResponseDtos> findAll(final Pageable pageable) {
-		return new BaseResponse<>(NOTE_RETRIEVE_ALL_SUCCESS, noteService.findAll(pageable));
+	public BaseResponse<NoteResponseDtos> findAll(@Login final Long memberId, final Pageable pageable) {
+		return new BaseResponse<>(NOTE_RETRIEVE_ALL_SUCCESS, noteService.findAll(memberId, pageable));
 	}
 
 	@PostMapping
-	public BaseResponse<NoteResponseDto> create(@RequestBody final NoteRequestDto noteRequestDto) {
-		return new BaseResponse<>(NOTE_CREATE_SUCCESS, noteService.create(noteRequestDto));
+	public BaseResponse<NoteResponseDto> create(@RequestBody final NoteRequestDto noteRequestDto, @Login final Long memberId) {
+		return new BaseResponse<>(NOTE_CREATE_SUCCESS, noteService.create(noteRequestDto, memberId));
 	}
 
 	@PutMapping("/{noteId}")
 	public BaseResponse<NoteResponseDto> update(@PathVariable final Integer noteId,
-		@RequestBody final NoteRequestDto noteRequestDto) {
-		return new BaseResponse<>(NOTE_MODIFY_SUCCESS, noteService.update(noteId, noteRequestDto));
+		@RequestBody final NoteRequestDto noteRequestDto, @Login final Long memberId) {
+		return new BaseResponse<>(NOTE_MODIFY_SUCCESS, noteService.update(noteId, noteRequestDto, memberId));
 	}
 
 	@DeleteMapping("/{noteId}")
-	public BaseResponse<Void> delete(@PathVariable final Integer noteId) {
-		noteService.delete(noteId);
+	public BaseResponse<Void> delete(@PathVariable final Integer noteId, @Login final Long memberId) {
+		noteService.delete(noteId, memberId);
 		return new BaseResponse<>(NOTE_REMOVE_SUCCESS, null);
 	}
 

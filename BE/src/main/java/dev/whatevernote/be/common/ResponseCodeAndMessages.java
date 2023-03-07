@@ -1,6 +1,6 @@
 package dev.whatevernote.be.common;
 
-public enum ResponseCodeAndMessages {
+public enum ResponseCodeAndMessages implements CodeAndMessages{
 
 
 	// NOTE
@@ -23,6 +23,10 @@ public enum ResponseCodeAndMessages {
 	CONTENT_REMOVE_SUCCESS("S-C003", "컨텐트 삭제를 성공했습니다."),
 	CONTENT_RETRIEVE_DETAIL_SUCCESS("S-C004", "컨텐트 개별 상세 조회를 성공했습니다."),
 	CONTENT_RETRIEVE_ALL_SUCCESS("S-C005", "컨텐트 전체 조회를 성공했습니다."),
+
+	// OAUTH LOGIN
+	OAUTH_LOGIN_SUCCESS("S-L001", "소셜 로그인에 성공했습니다."),
+	REISSUE_ACCESS_TOKEN_SUCCESS("S-L002", "ACCESS TOKEN 재발급에 성공했습니다."),
 	;
 
 	private final String code;

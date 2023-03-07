@@ -48,19 +48,19 @@ class NoteDeleteTest extends InitIntegrationTest {
 			@Test
 			void soft_delete_note(){
 			    //given
-				List<Note> notes = noteRepository.findAllByOrderBySeq();
+				List<Note> notes = noteRepository.findAllByMemberIdOrderBySeq(MEMBER_ID);
 				int deleteNoteId = notes.get(notes.size()-1).getId();
 				int numberOfNote = notes.size();
 
 				//when
-				noteService.delete(deleteNoteId);
+				noteService.delete(deleteNoteId, MEMBER_ID);
 				Optional<Note> note = noteRepository.findById(deleteNoteId);
-				List<Note> afterDelete = noteRepository.findAllByOrderBySeq();
+				List<Note> afterDelete = noteRepository.findAllByMemberIdOrderBySeq(MEMBER_ID);
 
 				//then
 				assertThat(note).isEmpty();
 				assertThat(afterDelete).hasSize(numberOfNote-1);
-				assertThatThrownBy(() -> noteService.findById(deleteNoteId))
+				assertThatThrownBy(() -> noteService.findById(deleteNoteId, MEMBER_ID))
 					.isInstanceOf(NotFoundNoteException.class)
 					.hasMessageContaining(ErrorCodeAndMessages.E404_NOT_FOUND_NOTE.getMessage());
 			}
@@ -69,26 +69,26 @@ class NoteDeleteTest extends InitIntegrationTest {
 			@Test
 			void soft_delete_note_and_card_and_content(){
 				//given
-				List<Note> notes = noteRepository.findAllByOrderBySeq();
+				List<Note> notes = noteRepository.findAllByMemberIdOrderBySeq(MEMBER_ID);
 				int deleteNoteId = notes.get(0).getId();
-				List<Card> cards = cardRepository.findAllByNoteId(deleteNoteId);
+				List<Card> cards = cardRepository.findAllByNoteIdOrderBySeq(deleteNoteId);
 				List<Content> contents = new ArrayList<>();
 				for (Card card : cards) {
-					contents.addAll(contentRepository.findAllByCardId(card.getId()));
+					contents.addAll(contentRepository.findAllByCardIdOrderBySeqAsc(card.getId()));
 				}
 
 				int numberOfNote = notes.size();
 
 				//when
-				noteService.delete(deleteNoteId);
+				noteService.delete(deleteNoteId, MEMBER_ID);
 				Optional<Note> note = noteRepository.findById(deleteNoteId);
-				List<Note> notesAfterDelete = noteRepository.findAllByOrderBySeq();
+				List<Note> notesAfterDelete = noteRepository.findAllByMemberIdOrderBySeq(MEMBER_ID);
 
 				//then
 				// note
 				assertThat(note).isEmpty();
 				assertThat(notesAfterDelete).hasSize(numberOfNote-1);
-				assertThatThrownBy(() -> noteService.findById(deleteNoteId))
+				assertThatThrownBy(() -> noteService.findById(deleteNoteId, MEMBER_ID))
 					.isInstanceOf(NotFoundNoteException.class)
 					.hasMessageContaining(ErrorCodeAndMessages.E404_NOT_FOUND_NOTE.getMessage());
 

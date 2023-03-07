@@ -113,7 +113,7 @@ include::{snippets}/delete-note/http-response.adoc[]
 
 ---
 
-[[resources-create-card]]
+[[resources-get-one-card]]
 === 1. [GET] 단어 단일 조회
 
 ==== HTTP request
@@ -133,7 +133,7 @@ include::{snippets}/get-one-card/response-fields.adoc[]
 
 ---
 
-[[resources-create-card]]
+[[resources-get-all-cards]]
 === 2. [GET] 단어 모두 조회
 
 ==== HTTP request
@@ -179,6 +179,7 @@ include::{snippets}/create-card/response-fields.adoc[]
 
 ---
 
+[[resources-update-card]]
 === 4. [PUT] 단어 카드 수정
 
 ==== HTTP request
@@ -198,6 +199,7 @@ include::{snippets}/update-card/response-fields.adoc[]
 
 ---
 
+[[resources-delete-card]]
 === 5. [DELETE] 단어 카드 삭제
 
 ==== HTTP request
@@ -218,7 +220,7 @@ include::{snippets}/delete-card/response-fields.adoc[]
 
 ---
 
-[[resources-create-content]]
+[[resources-get-all-contents]]
 === 1. [GET] 내용 전체 조회
 
 ==== HTTP request
@@ -239,6 +241,7 @@ include::{snippets}/get-all-contents/response-fields.adoc[]
 
 ---
 
+[[resources-create-content]]
 === 2. [POST] 내용 생성
 
 ==== HTTP request
@@ -261,6 +264,7 @@ include::{snippets}/create-content/response-fields.adoc[]
 
 ---
 
+[[resources-update-content]]
 === 3. [PUT] 내용 수정
 
 ==== HTTP request
@@ -283,6 +287,7 @@ include::{snippets}/update-content/response-fields.adoc[]
 
 ---
 
+[[resources-delete-content]]
 === 4. [DELETE] 내용 삭제
 
 ==== HTTP request

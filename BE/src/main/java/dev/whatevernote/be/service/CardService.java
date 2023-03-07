@@ -1,5 +1,6 @@
 package dev.whatevernote.be.service;
 
+import dev.whatevernote.be.exception.bad_request.NotMatchLoginMember;
 import dev.whatevernote.be.exception.not_found.NotFoundCardException;
 import dev.whatevernote.be.exception.not_found.NotFoundNoteException;
 import dev.whatevernote.be.repository.CardRepository;
@@ -13,6 +14,7 @@ import dev.whatevernote.be.service.dto.response.CardDetailResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDto;
 import dev.whatevernote.be.service.dto.response.CardResponseDtos;
 import java.util.List;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -36,10 +38,17 @@ public class CardService {
 		this.contentRepository = contentRepository;
 	}
 
+	private static void checkValidMember(Long memberId, Note note) {
+		if (!Objects.equals(note.getMember().getId(), memberId)) {
+			throw new NotMatchLoginMember();
+		}
+	}
+
 	@Transactional
-	public CardResponseDto create(CardRequestDto cardRequestDto, Integer noteId) {
+	public CardResponseDto create(CardRequestDto cardRequestDto, Integer noteId, Long memberId) {
 		cardRequestDto = editSeq(cardRequestDto, noteId);
 		Note note = findNoteById(noteId);
+		checkValidMember(memberId, note);
 		final Card savedCard = cardRepository.save(
 			Card.from(cardRequestDto, note)
 		);
@@ -88,21 +97,21 @@ public class CardService {
 	}
 
 	private List<Card> getCardsByNoteId(Integer noteId) {
-		List<Card> cards = cardRepository.findAllByNoteId(noteId);
-		cards.sort(
-			(o1, o2) -> (int) (o1.getSeq() - o2.getSeq())
-		);
-		return cards;
+		return cardRepository.findAllByNoteIdOrderBySeq(noteId);
 	}
 
-	public CardResponseDtos findAll(final Pageable pageable, Integer noteId) {
+	public CardResponseDtos findAll(final Pageable pageable, Integer noteId, Long memberId) {
 		Note note = findNoteById(noteId);
-		Slice<Card> cards = cardRepository.findAllByNoteOrderBySeq(pageable, note);
+		checkValidMember(memberId, note);
+		Slice<Card> cards = cardRepository.findAllByNoteIdOrderBySeqAsc(pageable, noteId);
 		logger.debug("Now Page Number = {}, has Next = {}", cards.getNumber(), cards.hasNext());
 		return CardResponseDtos.from(cards, noteId);
 	}
 
-	public CardDetailResponseDto findById(Integer noteId, Long cardId) {
+	public CardDetailResponseDto findById(Integer noteId, Long cardId, Long memberId) {
+		Note note = findNoteById(noteId);
+		checkValidMember(memberId, note);
+
 		Card card = cardRepository.findById(cardId)
 			.orElseThrow(NotFoundCardException::new);
 		List<Content> contents = findContentsById(cardId);
@@ -110,13 +119,14 @@ public class CardService {
 	}
 
 	private List<Content> findContentsById(Long cardId) {
-		List<Content> contents = contentRepository.findAllByCardId(cardId);
-		contents.sort((o1, o2) -> (int) (o1.getSeq() - o2.getSeq()));
-		return contents;
+		return contentRepository.findAllByCardIdOrderBySeqAsc(cardId);
 	}
 
 	@Transactional
-	public CardResponseDto update(Integer noteId, Long cardId, CardRequestDto cardRequestDto) {
+	public CardResponseDto update(Integer noteId, Long cardId, CardRequestDto cardRequestDto,
+		Long memberId) {
+		Note note = findNoteById(noteId);
+		checkValidMember(memberId, note);
 		Card card = findByCardId(cardId);
 		logger.info("[BEFORE CARD UPDATE] card id = {}, note id = {}, title = {}, seq = {}",
 			cardId, noteId, card.getTitle(), card.getSeq());
@@ -146,7 +156,9 @@ public class CardService {
 	}
 
 	@Transactional
-	public void delete(Long cardId) {
+	public void delete(Integer noteId, Long cardId, Long memberId) {
+		Note note = findNoteById(noteId);
+		checkValidMember(memberId, note);
 		Card card = findByCardId(cardId);
 		contentRepository.deleteAll(cardId);
 		logger.debug("[CONTENT ALL DELETED] (CARD ID = {})'s contents delete", card.getId());

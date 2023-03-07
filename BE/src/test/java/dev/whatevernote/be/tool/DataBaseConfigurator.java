@@ -1,5 +1,7 @@
 package dev.whatevernote.be.tool;
 
+import dev.whatevernote.be.login.repository.MemberRepository;
+import dev.whatevernote.be.login.service.domain.Member;
 import dev.whatevernote.be.repository.CardRepository;
 import dev.whatevernote.be.repository.ContentRepository;
 import dev.whatevernote.be.repository.NoteRepository;
@@ -27,6 +29,8 @@ public class DataBaseConfigurator implements InitializingBean {
 
 	private static final String SET_FOREIGN_KEY_CHECKS = "SET FOREIGN_KEY_CHECKS = ";
 	private static final String TRUNCATE_TABLE = "TRUNCATE TABLE ";
+
+	private static final int NUMBER_OF_MEMBER = 2;
 	private static final int NUMBER_OF_NOTE = 3;
 	private static final int NUMBER_OF_CARD = 3;
 	private static final int NUMBER_OF_CONTENT = 5;
@@ -36,6 +40,9 @@ public class DataBaseConfigurator implements InitializingBean {
 	private static final String CONTENT_IMAGE_INFO = "testimage-whatevernote-";
 	private static final String CONTENT_IMAGE_EXTENSION = ".png";
 	private static final int DEFAULT_RANGE = 1_000;
+
+	@Autowired
+	private MemberRepository memberRepository;
 
 	@Autowired
 	private NoteRepository noteRepository;
@@ -86,18 +93,32 @@ public class DataBaseConfigurator implements InitializingBean {
 	}
 
 	public void initDataSource() {
+		initMember();
 		initNoteData();
 		initCardData();
 		initContentData();
 	}
 
+	private void initMember() {
+		for (int i = 1; i <= NUMBER_OF_MEMBER; i++) {
+			memberRepository.save(
+				new Member("uniqueId" + i, "nickname" + i,
+					"abcd1234" + i + "@naver.com",
+					"https://dummydata.com")
+			);}
+	}
+
 	private void initNoteData() {
+		Member member = memberRepository.findById(1L)
+			.orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다."));
 		for (int i = 1; i <= NUMBER_OF_NOTE; i++) {
 			noteRepository.save(
 				Note.from(
-					new NoteRequestDto(i * DEFAULT_RANGE, NOTE_TITLE + i)
+					new NoteRequestDto(i * DEFAULT_RANGE, NOTE_TITLE + i),
+					member
 				)
 			);
+
 		}
 	}
 
@@ -122,7 +143,7 @@ public class DataBaseConfigurator implements InitializingBean {
 				contentRepository.save(
 					Content.from(
 						new ContentRequestDto(
-							CONTENT_STRING_INFO, cnt++ * DEFAULT_RANGE, Boolean.FALSE
+							CONTENT_STRING_INFO+(i-1), cnt++ * DEFAULT_RANGE, Boolean.FALSE
 						),
 						cardRepository.findById(cardId)
 							.orElseThrow(() -> new IllegalArgumentException("해당 카드가 존재하지 않습니다."))

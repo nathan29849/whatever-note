@@ -44,19 +44,19 @@ class CardDeleteTest extends InitIntegrationTest {
 			@Test
 			void soft_delete_card(){
 			    //given
-				List<Card> cards = cardRepository.findAllByNoteId(NOTE_ID_1);
+				List<Card> cards = cardRepository.findAllByNoteIdOrderBySeq(NOTE_ID_1);
 				int numberOfCard = cards.size();
 				long deleteCardId = 2;
 
 			    //when
-				cardService.delete(deleteCardId);
+				cardService.delete(NOTE_ID_1, deleteCardId, MEMBER_ID);
 				Optional<Card> card = cardRepository.findById(deleteCardId);
-				List<Card> afterDelete = cardRepository.findAllByNoteId(NOTE_ID_1);
+				List<Card> afterDelete = cardRepository.findAllByNoteIdOrderBySeq(NOTE_ID_1);
 
 				//then
 				assertThat(card).isEmpty();
 				assertThat(afterDelete).hasSize(numberOfCard-1);
-				assertThatThrownBy(() -> cardService.findById(NOTE_ID_1, deleteCardId))
+				assertThatThrownBy(() -> cardService.findById(NOTE_ID_1, deleteCardId, MEMBER_ID))
 					.isInstanceOf(NotFoundCardException.class)
 					.hasMessageContaining(ErrorCodeAndMessages.E404_NOT_FOUND_CARD.getMessage());
 
@@ -67,21 +67,21 @@ class CardDeleteTest extends InitIntegrationTest {
 			void soft_delete_card_and_content(){
 				//given
 				long deleteCardId = 2;
-				List<Card> cards = cardRepository.findAllByNoteId(NOTE_ID_1);
+				List<Card> cards = cardRepository.findAllByNoteIdOrderBySeq(NOTE_ID_1);
 				int numberOfCard = cards.size();
 
 				//when
-				cardService.delete(deleteCardId);
+				cardService.delete(NOTE_ID_1, deleteCardId, MEMBER_ID);
 				Optional<Card> card = cardRepository.findById(deleteCardId);
-				List<Card> afterDelete = cardRepository.findAllByNoteId(NOTE_ID_1);
-				List<Content> afterDeleteContents = contentRepository.findAllByCardId(deleteCardId);
+				List<Card> afterDelete = cardRepository.findAllByNoteIdOrderBySeq(NOTE_ID_1);
+				List<Content> afterDeleteContents = contentRepository.findAllByCardIdOrderBySeqAsc(deleteCardId);
 
 				//then
 
 				// card
 				assertThat(card).isEmpty();
 				assertThat(afterDelete).hasSize(numberOfCard-1);
-				assertThatThrownBy(() -> cardService.findById(NOTE_ID_1, deleteCardId))
+				assertThatThrownBy(() -> cardService.findById(NOTE_ID_1, deleteCardId, MEMBER_ID))
 					.isInstanceOf(NotFoundCardException.class)
 					.hasMessageContaining(ErrorCodeAndMessages.E404_NOT_FOUND_CARD.getMessage());
 

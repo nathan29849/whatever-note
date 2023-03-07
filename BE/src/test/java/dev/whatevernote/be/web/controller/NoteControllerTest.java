@@ -30,6 +30,8 @@ import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDtos;
+import dev.whatevernote.be.tool.TestWebConfig;
+import dev.whatevernote.be.login.service.provider.JwtProvider;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +41,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
@@ -51,22 +54,26 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+@Import(TestWebConfig.class)
 @AutoConfigureRestDocs
 @ExtendWith({RestDocumentationExtension.class})
 @WebMvcTest(NoteController.class)
 class NoteControllerTest {
 
+	private static final long MEMBER_ID = 1;
 	private static final int DEFAULT_RANGE = 1_000;
 
 	@Autowired
 	private MockMvc mockMvc;
+
+	@Autowired
+	private JwtProvider jwtProvider;
 
 	@MockBean
 	private NoteService noteService;
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
 	private final Integer NOTE_ID = 1;
-
 	@BeforeEach
 	public void init(WebApplicationContext wc, RestDocumentationContextProvider provider) {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(wc)
@@ -81,12 +88,13 @@ class NoteControllerTest {
 	void 단어장을_id에_따라_조회하면_해당_단어장을_반환한다() throws Exception {
 	    //given
 		NoteResponseDto noteResponseDto = new NoteResponseDto(NOTE_ID, 1, "note-1");
-		when(noteService.findById(1)).thenReturn(noteResponseDto);
+		when(noteService.findById(1, MEMBER_ID)).thenReturn(noteResponseDto);
 		BaseResponse<NoteResponseDto> baseResponse = new BaseResponse<>(NOTE_RETRIEVE_DETAIL_SUCCESS, noteResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
 				.get("/api/note/{NOTE_ID}", NOTE_ID)
+			.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
 				.accept(MediaType.APPLICATION_JSON_VALUE)
 				.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -117,11 +125,12 @@ class NoteControllerTest {
 		dtos.add(new NoteResponseDto(2, DEFAULT_RANGE*2, "note-2"));
 		dtos.add(new NoteResponseDto(3, DEFAULT_RANGE*3, "note-3"));
 		NoteResponseDtos noteResponseDtos = new NoteResponseDtos(dtos, false, 0);
-		when(noteService.findAll(any())).thenReturn(noteResponseDtos);
+		when(noteService.findAll(any(), any())).thenReturn(noteResponseDtos);
 		BaseResponse<NoteResponseDtos> baseResponse = new BaseResponse<>(NOTE_RETRIEVE_ALL_SUCCESS, noteResponseDtos);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.get("/api/note?page=0&size=5")
+			.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
 			.accept(MediaType.APPLICATION_JSON_VALUE)
 			.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -152,11 +161,12 @@ class NoteControllerTest {
 	    //given
 		NoteRequestDto noteRequestDto = new NoteRequestDto(1, "첫번째 노트");
 		NoteResponseDto noteResponseDto = new NoteResponseDto(NOTE_ID, 1, "첫번째 노트");
-		when(noteService.create(refEq(noteRequestDto))).thenReturn(noteResponseDto);
+		when(noteService.create(refEq(noteRequestDto), refEq(MEMBER_ID))).thenReturn(noteResponseDto);
 		BaseResponse<NoteResponseDto> baseResponse = new BaseResponse<>(NOTE_CREATE_SUCCESS, noteResponseDto);
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(MockMvcRequestBuilders.post("/api/note")
+			.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
 			.content(objectMapper.writeValueAsString(noteRequestDto))
 			.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -185,13 +195,14 @@ class NoteControllerTest {
 	    //given
 		NoteRequestDto noteRequestDto = new NoteRequestDto(0, null);
 		NoteResponseDto noteResponseDto = new NoteResponseDto(NOTE_ID, DEFAULT_RANGE, "단어장 제목 제목");
-		when(noteService.update(any(), any())).thenReturn(noteResponseDto);
+		when(noteService.update(any(), any(), any())).thenReturn(noteResponseDto);
 		BaseResponse<NoteResponseDto> baseResponse = new BaseResponse<>(NOTE_MODIFY_SUCCESS, noteResponseDto);
 
 
 		//when
 		ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders
 			.put("/api/note/{NOTE_ID}", NOTE_ID)
+			.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
 			.content(objectMapper.writeValueAsString(noteRequestDto))
 			.contentType(MediaType.APPLICATION_JSON_VALUE));
 
@@ -230,13 +241,15 @@ class NoteControllerTest {
 	@Test
 	void 단어장을_삭제하면_soft_delete_한다() throws Exception {
 	    //given
-		doNothing().when(noteService).delete(any());
+		doNothing().when(noteService).delete(any(), any());
 		BaseResponse<Void> baseResponse = new BaseResponse<>(NOTE_REMOVE_SUCCESS, null);
 
 	    //when
 		ResultActions resultActions = this.mockMvc
 			.perform(RestDocumentationRequestBuilders
-				.delete("/api/note/{NOTE_ID}", NOTE_ID));
+				.delete("/api/note/{NOTE_ID}", NOTE_ID)
+				.header("Authorization", "Bearer "+jwtProvider.generateAccessToken(MEMBER_ID))
+			);
 
 	    //then
 		resultActions.andExpect(status().isOk())

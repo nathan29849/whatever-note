@@ -1,15 +1,20 @@
 package dev.whatevernote.be.service;
 
+import dev.whatevernote.be.exception.bad_request.NotMatchLoginMember;
 import dev.whatevernote.be.exception.not_found.NotFoundCardException;
 import dev.whatevernote.be.exception.not_found.NotFoundContentException;
+import dev.whatevernote.be.exception.not_found.NotFoundNoteException;
 import dev.whatevernote.be.repository.CardRepository;
 import dev.whatevernote.be.repository.ContentRepository;
+import dev.whatevernote.be.repository.NoteRepository;
 import dev.whatevernote.be.service.domain.Card;
 import dev.whatevernote.be.service.domain.Content;
+import dev.whatevernote.be.service.domain.Note;
 import dev.whatevernote.be.service.dto.request.ContentRequestDto;
 import dev.whatevernote.be.service.dto.response.ContentResponseDto;
 import dev.whatevernote.be.service.dto.response.ContentResponseDtos;
 import java.util.List;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
@@ -23,21 +28,21 @@ public class ContentService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ContentService.class);
 	private static final long DEFAULT_RANGE = 1_000L;
+	private final NoteRepository noteRepository;
 	private final CardRepository cardRepository;
 	private final ContentRepository contentRepository;
 
-	public ContentService(CardRepository cardRepository, ContentRepository contentRepository) {
-
+	public ContentService(NoteRepository noteRepository, CardRepository cardRepository, ContentRepository contentRepository) {
+		this.noteRepository = noteRepository;
 		this.cardRepository = cardRepository;
 		this.contentRepository = contentRepository;
 	}
 
 	@Transactional
-	public ContentResponseDto create(ContentRequestDto contentRequestDto, Long cardId) {
+	public ContentResponseDto create(ContentRequestDto contentRequestDto, Integer noteId, final Long cardId, final Long memberId) {
+		checkValidMember(memberId, noteId);
 		contentRequestDto = editSeq(contentRequestDto, cardId);
-		Card card = cardRepository.findById(cardId)
-			.orElseThrow(NotFoundCardException::new);
-
+		Card card = findCardById(cardId);
 		Content content = Content.from(contentRequestDto, card);
 		final Content savedContent = contentRepository.save(content);
 
@@ -57,20 +62,18 @@ public class ContentService {
 	}
 
 	private ContentRequestDto getContentRequestDtoWithFirstSeq(ContentRequestDto contentRequestDto, Long cardId) {
-		List<Content> contents = contentRepository.findAllByCardId(cardId);
+		List<Content> contents = contentRepository.findAllByCardIdOrderBySeqAsc(cardId);
 		if (contents.isEmpty()) {
 			return new ContentRequestDto(contentRequestDto.getInfo(), DEFAULT_RANGE,
 				contentRequestDto.getIsImage());
 		}
-		contents.sort((o1, o2) -> Math.toIntExact(o1.getSeq() - o2.getSeq()));
 		Content content = contents.get(0);
 		return new ContentRequestDto(contentRequestDto.getInfo(), content.getSeq() / 2,
 			contentRequestDto.getIsImage());
 	}
 
 	private ContentRequestDto getContentRequestDto(ContentRequestDto contentRequestDto, Long cardId) {
-		List<Content> contents = contentRepository.findAllByCardId(cardId);
-		contents.sort((o1, o2) -> (int) (o1.getSeq() - o2.getSeq()));
+		List<Content> contents = contentRepository.findAllByCardIdOrderBySeqAsc(cardId);
 
 		if (contents.isEmpty()) {
 			return new ContentRequestDto(contentRequestDto.getInfo(), DEFAULT_RANGE, contentRequestDto.getIsImage());
@@ -87,25 +90,23 @@ public class ContentService {
 			(contents.size() + 1) * DEFAULT_RANGE, contentRequestDto.getIsImage());
 	}
 
-	public ContentResponseDto findById(Long contentId) {
-
-		Content content = contentRepository.findById(contentId)
-			.orElseThrow(NotFoundContentException::new);
-
+	public ContentResponseDto findById(Integer noteId, Long contentId, Long memberId) {
+		checkValidMember(memberId, noteId);
+		Content content = findContentById(contentId);
 		return ContentResponseDto.from(content);
 	}
 
-	public ContentResponseDtos findAll(Pageable pageable, Long cardId) {
-
+	public ContentResponseDtos findAll(Pageable pageable, Integer noteId, Long cardId, Long memberId) {
+		checkValidMember(memberId, noteId);
 		Slice<Content> contents = contentRepository.findAllByCardIdOrderBySeq(pageable, cardId);
 		return ContentResponseDtos.from(contents);
 	}
 
 	@Transactional
-	public ContentResponseDto update(Long cardId, Long contentId, ContentRequestDto contentRequestDto) {
-
-		Content content = contentRepository.findById(contentId)
-			.orElseThrow(NotFoundContentException::new);
+	public ContentResponseDto update(Integer noteId, Long cardId, Long contentId,
+		ContentRequestDto contentRequestDto, Long memberId) {
+		checkValidMember(memberId, noteId);
+		Content content = findContentById(contentId);
 
 		if (contentRequestDto.getSeq() != null) {
 			List<Content> contents = contentRepository.findAllByCardIdOrderBySeq(cardId);
@@ -129,9 +130,31 @@ public class ContentService {
 	}
 
 	@Transactional
-	public void delete(Long contentId) {
-
+	public void delete(Integer noteId, Long contentId, Long memberId) {
+		checkValidMember(memberId, noteId);
 		contentRepository.deleteById(contentId);
 		logger.debug("[CONTENT DELETED] content id = {}", contentId);
+	}
+
+	private void checkValidMember(Long memberId, Integer noteId) {
+		Note note = findNoteById(noteId);
+		if (!Objects.equals(note.getMember().getId(), memberId)) {
+			throw new NotMatchLoginMember();
+		}
+	}
+
+	private Note findNoteById(Integer noteId) {
+		return noteRepository.findById(noteId)
+			.orElseThrow(NotFoundNoteException::new);
+	}
+
+	private Card findCardById(Long cardId) {
+		return cardRepository.findById(cardId)
+			.orElseThrow(NotFoundCardException::new);
+	}
+
+	private Content findContentById(Long contentId) {
+		return contentRepository.findById(contentId)
+			.orElseThrow(NotFoundContentException::new);
 	}
 }
