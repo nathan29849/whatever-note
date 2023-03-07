@@ -3,22 +3,19 @@ package dev.whatevernote.be.service.note;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.whatevernote.be.repository.NoteRepository;
+import dev.whatevernote.be.service.InitIntegrationTest;
 import dev.whatevernote.be.service.NoteService;
 import dev.whatevernote.be.service.dto.request.NoteRequestDto;
 import dev.whatevernote.be.service.dto.response.NoteResponseDto;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
 
 @DisplayName("통합 테스트 : Note 생성")
-@Sql("/truncate.sql")
-@SpringBootTest
-class NoteCreateTest {
+class NoteCreateTest extends InitIntegrationTest {
 
+	private static final long NEW_MEMBER_ID = 2L;
 	private static final int DEFAULT_RANGE = 1_000;
 
 	@Autowired
@@ -42,7 +39,7 @@ class NoteCreateTest {
 				NoteRequestDto noteRequestDto = new NoteRequestDto(0, "나만의 단어장");
 
 				//when
-				NoteResponseDto noteResponseDto = noteService.create(noteRequestDto);
+				NoteResponseDto noteResponseDto = noteService.create(noteRequestDto, NEW_MEMBER_ID);
 
 				//then
 				assertThat(noteResponseDto.getSeq()).isEqualTo(DEFAULT_RANGE);
@@ -55,7 +52,7 @@ class NoteCreateTest {
 				NoteRequestDto noteRequestDto = new NoteRequestDto(10, "나만의 단어장");
 
 				//when
-				NoteResponseDto noteResponseDto = noteService.create(noteRequestDto);
+				NoteResponseDto noteResponseDto = noteService.create(noteRequestDto, NEW_MEMBER_ID);
 
 				//then
 				assertThat(noteResponseDto.getSeq()).isEqualTo(DEFAULT_RANGE);
@@ -65,13 +62,13 @@ class NoteCreateTest {
 			@DisplayName("기존에 노트가 하나라도 존재하면, 요청된 노트 순서의 다음 순서로 노트가 생성된다.")
 			void existing_note() {
 				//given
-				noteService.create(new NoteRequestDto(0, "나만의 단어장1"));
-				noteService.create(new NoteRequestDto(1, "나만의 단어장2"));
-				noteService.create(new NoteRequestDto(2, "나만의 단어장3"));
+				noteService.create(new NoteRequestDto(0, "나만의 단어장1"), NEW_MEMBER_ID);
+				noteService.create(new NoteRequestDto(1, "나만의 단어장2"), NEW_MEMBER_ID);
+				noteService.create(new NoteRequestDto(2, "나만의 단어장3"), NEW_MEMBER_ID);
 				NoteRequestDto noteRequestDto = new NoteRequestDto(2, "나만의 단어장");
 
 				//when
-				NoteResponseDto noteResponseDto = noteService.create(noteRequestDto);
+				NoteResponseDto noteResponseDto = noteService.create(noteRequestDto, MEMBER_ID);
 
 				//then
 				assertThat(noteResponseDto.getSeq()).isEqualTo(2500);
@@ -82,14 +79,14 @@ class NoteCreateTest {
 			@DisplayName("기존에 노트 개수가 요청된 노트 순서보다 클 때, 맨 마지막 순서로 노트가 생성된다.")
 			void existing_note_with_over_request_seq() {
 				//given
-				noteService.create(new NoteRequestDto(0, "나만의 단어장1"));
-				noteService.create(new NoteRequestDto(1, "나만의 단어장2"));
-				noteService.create(new NoteRequestDto(2, "나만의 단어장3"));
+				noteService.create(new NoteRequestDto(0, "나만의 단어장1"), NEW_MEMBER_ID);
+				noteService.create(new NoteRequestDto(1, "나만의 단어장2"), NEW_MEMBER_ID);
+				noteService.create(new NoteRequestDto(2, "나만의 단어장3"), NEW_MEMBER_ID);
 				NoteRequestDto noteRequestDto = new NoteRequestDto(10, "나만의 단어장");
 				int numberOfNotes = 4;
 
 				//when
-				NoteResponseDto noteResponseDto = noteService.create(noteRequestDto);
+				NoteResponseDto noteResponseDto = noteService.create(noteRequestDto, MEMBER_ID);
 
 				//then
 				assertThat(noteResponseDto.getSeq()).isEqualTo(DEFAULT_RANGE*numberOfNotes);
@@ -107,13 +104,13 @@ class NoteCreateTest {
 			@DisplayName("기존에 노트가 하나라도 존재할 때, 가장 빠른 번호의 절반으로 노트 번호가 할당하여 생성한다.")
 			void seq_null_and_existing_note(){
 				//given
-				noteService.create(new NoteRequestDto(0, "나만의 단어장1"));
-				noteService.create(new NoteRequestDto(1, "나만의 단어장2"));
-				noteService.create(new NoteRequestDto(2, "나만의 단어장3"));
+				noteService.create(new NoteRequestDto(0, "나만의 단어장1"), NEW_MEMBER_ID);
+				noteService.create(new NoteRequestDto(1, "나만의 단어장2"), NEW_MEMBER_ID);
+				noteService.create(new NoteRequestDto(2, "나만의 단어장3"), NEW_MEMBER_ID);
 				NoteRequestDto noteRequestDto = new NoteRequestDto(null, "나만의 단어장");
 
 				//when
-				NoteResponseDto noteResponseDto = noteService.create(noteRequestDto);
+				NoteResponseDto noteResponseDto = noteService.create(noteRequestDto, MEMBER_ID);
 
 				//then
 				assertThat(noteResponseDto.getSeq()).isEqualTo(500);
@@ -126,7 +123,7 @@ class NoteCreateTest {
 				NoteRequestDto noteRequestDto = new NoteRequestDto(null, "나만의 단어장");
 
 				//when
-				NoteResponseDto noteResponseDto = noteService.create(noteRequestDto);
+				NoteResponseDto noteResponseDto = noteService.create(noteRequestDto, NEW_MEMBER_ID);
 
 				//then
 				assertThat(noteResponseDto.getSeq()).isEqualTo(DEFAULT_RANGE);
@@ -146,7 +143,7 @@ class NoteCreateTest {
 				NoteRequestDto noteRequestDto = new NoteRequestDto(null, null);
 
 				//when
-				NoteResponseDto noteResponseDto = noteService.create(noteRequestDto);
+				NoteResponseDto noteResponseDto = noteService.create(noteRequestDto, MEMBER_ID);
 
 				//then
 				assertThat(noteResponseDto.getTitle()).isNull();

@@ -39,13 +39,13 @@ class NoteFindTest extends InitIntegrationTest {
 			@Test
 			void normal_find_one() {
 				//given
-				List<Note> notes = noteRepository.findAllByOrderBySeq();
+				List<Note> notes = noteRepository.findAllByMemberIdOrderBySeq(MEMBER_ID);
 				int seq = 2;
 				int tmpNoteId = notes.get(2).getId();
 
 
 				//when
-				NoteResponseDto noteResponseDto = noteService.findById(tmpNoteId);
+				NoteResponseDto noteResponseDto = noteService.findById(tmpNoteId, MEMBER_ID);
 
 				//then
 				assertThat(noteResponseDto.getId()).isEqualTo(tmpNoteId);
@@ -68,7 +68,7 @@ class NoteFindTest extends InitIntegrationTest {
 			void normal_find_all() {
 				//given
 				PageRequest defaultPageRequest = PageRequest.of(PAGE_NUMBER, PAGE_SIZE);
-				NoteResponseDtos noteRequestDtos = noteService.findAll(defaultPageRequest);
+				NoteResponseDtos noteRequestDtos = noteService.findAll(MEMBER_ID, defaultPageRequest);
 
 				//when
 				List<NoteResponseDto> notes = noteRequestDtos.getNotes();
