@@ -175,4 +175,5 @@ gradle-app.setting
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,gradle,intellij+all
 
-*.DS_Store.DS_Store
+*.DS_Store
+.DS_Store
