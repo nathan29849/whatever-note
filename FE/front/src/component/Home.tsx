@@ -2,12 +2,12 @@ type HomeProps = {
   name: string;
 };
 
-function Home({ name }: HomeProps) {
-  return <div>Hello, {name}</div>;
-}
-
 Home.defaultProps = {
   name: "",
 };
+
+function Home({ name }: HomeProps) {
+  return <main>Hello, {name}</main>;
+}
 
 export default Home;

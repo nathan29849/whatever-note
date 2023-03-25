@@ -1,12 +1,14 @@
 import "./App.css";
+import "./styles/style.css";
+import Header from "./component/Header";
 import Home from "./component/Home";
 
 function App() {
   return (
-    <div className="App">
-      <p>app</p>
+    <>
+      <Header />
       <Home />
-    </div>
+    </>
   );
 }
 
