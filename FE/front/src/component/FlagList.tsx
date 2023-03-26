@@ -34,10 +34,12 @@ export default function FlagList({ name }: FlagListProps) {
   }, []);
 
   return (
-    <ul>
-      <li onClick={goHome}>Home</li>
-      <li onClick={goNotes}>Notes</li>
-      <li>Theme</li>
-    </ul>
+    <nav>
+      <ul>
+        <li onClick={goHome}>Home</li>
+        <li onClick={goNotes}>Notes</li>
+        <li>Theme</li>
+      </ul>
+    </nav>
   );
 }
