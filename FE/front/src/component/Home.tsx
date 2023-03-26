@@ -7,7 +7,7 @@ Home.defaultProps = {
 };
 
 function Home({ name }: HomeProps) {
-  return <main>Hello, {name}</main>;
+  return <main>Hello,{name}</main>;
 }
 
 export default Home;

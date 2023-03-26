@@ -1,18 +1,9 @@
-import Flags from "./Flags";
+import FlagList from "./FlagList";
 
-type HeaderProps = {
-  name: string;
-};
-
-Header.defaultProps = {
-  name: "",
-};
-
-function Header({ name }: HeaderProps) {
+function Header() {
   return (
     <header>
-      header
-      <Flags />
+      <FlagList />
     </header>
   );
 }
