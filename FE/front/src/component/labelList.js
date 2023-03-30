@@ -22,7 +22,7 @@ export default function LabelList() {
   };
 
   const goUserInfo = () => {
-    navigate("/userInfo");
+    navigate("/login");
   };
 
   return (
@@ -34,7 +34,7 @@ export default function LabelList() {
         Notes
       </LabelContainer>
       <LabelContainer theme={theme} onClick={goUserInfo}>
-        userInfo
+        login
       </LabelContainer>
       {/* <LabelContainer theme={theme} onClick={goTheme}>
         Theme

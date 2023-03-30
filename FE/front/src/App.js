@@ -27,7 +27,7 @@ function App() {
           element: <ThemeList />,
         },
         {
-          path: "userInfo",
+          path: "login",
           element: <LoginEmail />,
         },
       ],

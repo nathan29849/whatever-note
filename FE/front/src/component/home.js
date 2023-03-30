@@ -32,10 +32,10 @@ function HomeInsider() {
   const [user, setUser] = useState(app.currentUser);
 
   useEffect(() => {
-    if (user) {
-      navigate("/notes");
-    }
-  }, [user]);
+    // if (user) {
+    navigate("/login");
+    // }
+  }, []);
 
   return (
     <>
