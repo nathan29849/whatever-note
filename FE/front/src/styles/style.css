@@ -1,3 +1,12 @@
+.login-kakao button {
+  width: 200px;
+  height: 600px;
+  border: none;
+  margin: 10px;
+}
 
+body {
+  width: 100%;
+}
 
 /*# sourceMappingURL=style.css.map */

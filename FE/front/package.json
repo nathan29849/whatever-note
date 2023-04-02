@@ -1,5 +1,6 @@
 {
   "name": "sample",
+  "type": "module",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -16,12 +17,14 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "nextstart": "next start",
-    "nextdev": "next dev",
-    "start": "vite start",
-    "build": "vite build",
-    "test": "vite test",
-    "eject": "vite eject",
+    "dev": "next dev -p 3002",
+    "build": "next build",
+    "start": "next start -p 3002",
+    "lint": "next lint",
+    "vitestart": "vite start",
+    "vitebuild": "vite build",
+    "vitetest": "vite test",
+    "viteeject": "vite eject",
     "style": "sass --watch ./src/styles/style.scss ./src/styles/style.css"
   },
   "eslintConfig": {

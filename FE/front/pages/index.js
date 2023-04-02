@@ -1,14 +1,16 @@
 import React from "react";
-import LabelList from "../src/component/labelList";
-import KakaoLogin from "../src/component/logInKakao";
+
+// import "../src/styles/style.css";
+// import LabelList from "../src/component/labelList";
+// import KakaoLogin from "../src/component/logInKakao";
 
 const HomePage = () => {
   return (
     <div>
-      <h1>Hello, World!</h1>
-      <LabelList />
+      <h1>카카오 로그인 테스트</h1>
+
       <div>
-        <KakaoLogin />
+        <img src="/images/kakao_login_medium_narrow.png" alt="Kakao Login" />
       </div>
     </div>
   );

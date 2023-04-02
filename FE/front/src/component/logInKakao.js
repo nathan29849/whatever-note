@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { KakaoLoginContainer } from "../styled-component/loginStyle";
 
 export default function KakaoLogin() {
   const [emailLogin, setEmailLogin] = useState(false);
@@ -8,9 +9,9 @@ export default function KakaoLogin() {
   };
 
   return (
-    <div>
-      <button>카카오로그인</button>
-      <button onClick={openEmailLogin}>이메일로 가입하기</button>
+    <div className="login-kakao">
+      <KakaoLoginContainer>카카오로그인</KakaoLoginContainer>
+      {/* <button onClick={openEmailLogin}>이메일로 가입하기</button>
       {emailLogin ? (
         <div>
           <p>email login</p>
@@ -19,7 +20,7 @@ export default function KakaoLogin() {
         </div>
       ) : (
         <></>
-      )}
+      )} */}
     </div>
   );
 }

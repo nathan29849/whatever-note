@@ -1,3 +1,4 @@
+// import "./styles/style.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./component/home";
 import NoteInsider from "./component/noteInsider";
