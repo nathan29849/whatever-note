@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { createContext, useReducer, useContext } from "react";
 import { app } from "../util/realm";
 
@@ -20,6 +21,10 @@ const removeUserNote = (data) => {
     noteId: data.noteId,
   });
 };
+=======
+import { createContext, useReducer, useContext, useEffect } from "react";
+import { getNoteListFromNathan, removeNote } from "./api";
+>>>>>>> ffc5dd9558301474b037acf9a6845a1e05edcb38
 
 const NoteStateContext = createContext(null);
 const NoteDispatchContext = createContext(null);
@@ -27,6 +32,7 @@ const NoteDispatchContext = createContext(null);
 function noteReducer(state, action) {
   switch (action.type) {
     case "SET_NOTE_LIST":
+<<<<<<< HEAD
       return action.data;
     case "ADD_NOTE":
       const newNoteIdForm = new Date();
@@ -57,6 +63,31 @@ function noteReducer(state, action) {
       console.log(action.noteId);
       removeUserNote({ noteId: action.noteId });
       return state.filter((item) => item.noteId !== action.noteId);
+=======
+      console.log(action.data);
+      return action.data;
+    case "ADD_NOTE":
+      const numForId = Math.floor(Math.random() * 10) + state.length * 10;
+      const newNoteId = numForId.toString();
+      const newNote = {
+        id: newNoteId,
+        seq: action.seq,
+        title: action.title,
+      };
+      return [...state, newNote];
+    case "EDIT_NOTE_NAME":
+      const editedNoteData = {
+        noteId: action.id,
+        seq: action.seq,
+        title: action.title,
+      };
+      return state.map((item) =>
+        item.noteId === action.id ? editedNoteData : item
+      );
+    case "REMOVE_NOTE":
+      removeNote({ id: action.id });
+      return state.filter((item) => item.noteId !== action.id);
+>>>>>>> ffc5dd9558301474b037acf9a6845a1e05edcb38
     case "EDIT_NOTE_POSITION":
       return action.newNoteOrder;
     default:
@@ -67,6 +98,13 @@ function noteReducer(state, action) {
 export function NoteProvider({ children }) {
   const [state, dispatch] = useReducer(noteReducer, []);
 
+<<<<<<< HEAD
+=======
+  useEffect(() => {
+    getNoteListFromNathan(dispatch);
+  }, []);
+
+>>>>>>> ffc5dd9558301474b037acf9a6845a1e05edcb38
   return (
     <NoteStateContext.Provider value={state}>
       <NoteDispatchContext.Provider value={dispatch}>

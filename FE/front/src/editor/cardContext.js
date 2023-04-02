@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { createContext, useReducer, useContext, useEffect } from "react";
 import { createCard, editCard, removeCard } from "./api";
 import { app } from "../util/realm";
@@ -11,6 +12,10 @@ const createUserCard = (noteId, cardTitle, cardId) => {
     cardId: cardId,
   });
 };
+=======
+import { createContext, useReducer, useContext } from "react";
+import { createCard, editCard, removeCard } from "./api";
+>>>>>>> ffc5dd9558301474b037acf9a6845a1e05edcb38
 
 const CardStateContext = createContext(null);
 const CardDispatchContext = createContext(null);
@@ -20,10 +25,17 @@ export function cardReducer(state, action) {
     case "SET_CARDS":
       return action.data;
     case "ADD_CARD":
+<<<<<<< HEAD
       const cardIdForm = new Date();
       const cardId = cardIdForm.toString().split(" ").join("").slice(3, 20);
       createUserCard(action.noteId, action.cardTitle, cardId);
       return [...state, { cardId: cardId, cardTitle: action.cardTitle }];
+=======
+      const newCard = { id: state.length, title: action.title };
+      const createcardquery = { noteid: action.noteId, card: newCard };
+      createCard(createcardquery);
+      return [...state, newCard];
+>>>>>>> ffc5dd9558301474b037acf9a6845a1e05edcb38
     case "EDIT_CARD":
       const editcardquery = {
         noteid: action.noteId,
@@ -48,6 +60,7 @@ export function cardReducer(state, action) {
 }
 
 export function CardProvider({ children }) {
+<<<<<<< HEAD
   const param = useParams();
   const noteId = param.id;
   const [state, dispatch] = useReducer(cardReducer, []);
@@ -66,6 +79,10 @@ export function CardProvider({ children }) {
     getUserCardPack();
   }, []);
 
+=======
+  const [state, dispatch] = useReducer(cardReducer, []);
+
+>>>>>>> ffc5dd9558301474b037acf9a6845a1e05edcb38
   return (
     <CardStateContext.Provider value={state}>
       <CardDispatchContext.Provider value={dispatch}>

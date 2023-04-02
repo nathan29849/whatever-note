@@ -1,4 +1,5 @@
 import { createContext, useReducer, useContext } from "react";
+<<<<<<< HEAD
 import { app } from "../util/realm";
 
 const createUserContent = (data) => {
@@ -11,6 +12,8 @@ const createUserContent = (data) => {
     isImage: data.isImage,
   });
 };
+=======
+>>>>>>> ffc5dd9558301474b037acf9a6845a1e05edcb38
 
 const ContentStateContext = createContext(null);
 const ContentDispatchContext = createContext(null);
@@ -18,6 +21,7 @@ const ContentDispatchContext = createContext(null);
 export function contentReducer(state, action) {
   switch (action.type) {
     case "SET_CONTENTS":
+<<<<<<< HEAD
       return action.data;
     case "ADD_CONTENT":
       const plaincontentidform = new Date();
@@ -65,6 +69,38 @@ export function contentReducer(state, action) {
           isImage: true,
         },
       ];
+=======
+      console.log({
+        noteId: action.noteId,
+        cardId: action.cardId,
+        content: action.data,
+      });
+      return {
+        noteId: action.noteId,
+        cardId: action.cardId,
+        content: action.data,
+      };
+
+    case "ADD_CONTENT":
+      const content = [
+        ...state.content,
+        { id: 0, info: action.newContent, isImage: false, seq: 1000 },
+      ];
+      const newState = { ...state, content };
+      console.log(content);
+      console.log(newState);
+      return newState;
+    // const newContent = {
+    //   id: 0,
+    //   info: action.newContent,
+    //   isImage: false,
+    //   seq: 1000,
+    // };
+    // const newList = state.content.push(newContent);
+
+    // return { ...state, content: newList };
+
+>>>>>>> ffc5dd9558301474b037acf9a6845a1e05edcb38
     case "EDIT_CONTENT":
       const editedContent = {
         id: action.contentId,

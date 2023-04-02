@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 header nav ul {
   display: flex;
 }
@@ -26,6 +27,17 @@ header {
 
 main {
   background-color: brown;
+=======
+.login-kakao button {
+  width: 200px;
+  height: 600px;
+  border: none;
+  margin: 10px;
+}
+
+body {
+  width: 100%;
+>>>>>>> ffc5dd9558301474b037acf9a6845a1e05edcb38
 }
 
 /*# sourceMappingURL=style.css.map */

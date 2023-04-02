@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 export async function getNoteList(data) {
   await fetch(
     "https://data.mongodb-api.com/app/note-ppfia/endpoint/getUserNoteList",
@@ -8,10 +9,16 @@ export async function getNoteList(data) {
       },
       body: JSON.stringify(data),
     }
+=======
+export async function getNoteList(dispatch) {
+  await fetch(
+    "https://data.mongodb-api.com/app/note-ppfia/endpoint/getnotelist"
+>>>>>>> ffc5dd9558301474b037acf9a6845a1e05edcb38
   )
     .then((res) => res.text())
     .then((res) => JSON.parse(res))
     // .then((res) => console.log(res))
+<<<<<<< HEAD
     .then((res) =>
       // dispatch({
       //   type: "SET_NOTE_LIST",
@@ -22,6 +29,17 @@ export async function getNoteList(data) {
       // )
 
       console.log(res)
+=======
+    .then(
+      (res) =>
+        dispatch({
+          type: "SET_NOTE_LIST",
+          data: res.data.notes,
+          hasNext: res.data.hasNext,
+          pageNumber: res.data.pageNumber,
+        })
+      // console.log(res)
+>>>>>>> ffc5dd9558301474b037acf9a6845a1e05edcb38
     )
     // .finally((res) => console.log(res))
     .catch((err) => console.log("err!" + err));
