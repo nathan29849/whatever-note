@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"version":3,"sourceRoot":"","sources":["header.scss","style.scss"],"names":[],"mappings":"AAEI;EACE;;AACA;EACE;EACA;EACA;EAEA;EACA;;;ACRR;EACE;EACA;EACA;EACA;;;AAEF;EACE;;;AAEF;EACE;;;AAEF;EACE","file":"style.css"}
-=======
 {"version":3,"sourceRoot":"","sources":["kakaoLogin.scss","style.scss"],"names":[],"mappings":"AACE;EACE;EACA;EACA;EACA;;;ACHJ;EACE","file":"style.css"}
->>>>>>> ffc5dd9558301474b037acf9a6845a1e05edcb38
