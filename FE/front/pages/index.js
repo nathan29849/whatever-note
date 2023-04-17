@@ -7,10 +7,6 @@ export default function HomePage() {
     window.location.href = whateverURL;
   };
 
-  const handleGithubLogin = () => {
-    window.location.href = githubURL;
-  };
-
   return (
     <div>
       <h1>아무단어장</h1>
@@ -23,18 +19,6 @@ export default function HomePage() {
         }}
         src="/images/kakao_login_medium_narrow.png"
         alt="Kakao Login"
-      />
-
-      <h2>깃헙 로그인</h2>
-      <img
-        style={{ cursor: "pointer" }}
-        onClick={() => {
-          handleGithubLogin();
-        }}
-        width="30px"
-        height="30px"
-        src="/images/github_login.png"
-        alt="Github Login"
       />
     </div>
   );
