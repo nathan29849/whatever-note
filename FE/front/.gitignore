@@ -48,5 +48,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/server
+
 /pages
+src/_tests
