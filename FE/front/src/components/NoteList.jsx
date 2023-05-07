@@ -1,3 +1,8 @@
 export default function NoteList() {
-  return <div>notelist</div>;
+  return (
+    <ul>
+      <li>note1</li>
+      <li>note2</li>
+    </ul>
+  );
 }
