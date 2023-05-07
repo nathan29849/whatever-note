@@ -8,7 +8,8 @@ import IndexMenu from "./components/IndexMenu";
 import LoginEmail from "./components/LoginEmail";
 
 function App() {
-  const [user, setUser] = useState(app.currentUser);
+  // const [user, setUser] = useState(app.currentUser);
+  const user = app.currentUser;
   const navigate = useNavigate();
 
   useEffect(() => {
