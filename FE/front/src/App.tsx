@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Outlet, useNavigate } from "react-router-dom";
 
@@ -8,24 +8,23 @@ import IndexMenu from "./components/IndexMenu";
 import LoginEmail from "./components/LoginEmail";
 
 function App() {
-  // const [user, setUser] = useState(app.currentUser);
-  const user = app.currentUser;
+  const [user, setUser] = useState(null);
+  const storage = app.currentUser;
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(user);
-    if (user) {
-      // redirect("/notelist");
+    if (storage !== null && storage.hasOwnProperty("_accessToken")) {
+      setUser(storage);
       navigate("/notelist");
     }
   }, []);
 
   return (
-    <>
+    <div className="app">
       <p>아무단어장 리팩토링</p>
       <IndexMenu />
       {user ? <Outlet /> : <LoginEmail />}
-    </>
+    </div>
   );
 }
 

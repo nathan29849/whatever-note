@@ -1,1 +1,11 @@
 @import "./black-white.scss";
+
+body {
+  margin: 0;
+}
+
+.app {
+  width: 100vh;
+  height: 100vh;
+  padding: 20px;
+}
