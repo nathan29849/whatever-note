@@ -29,7 +29,7 @@
 // }
 
 function App() {
-  return <div>app</div>;
+  return <div>vite server test</div>;
 }
 
 export { App };
