@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import express from "express";
-import { createServer as createViteSrver } from "vite";
+import { createServer as createViteServer } from "vite";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -16,6 +16,17 @@ async function createServer() {
 
   app.use(vite.middlewares);
 
+  //   let template, render;
+  //   template = fs.readFileSync(resolve("index.html"), "utf-8");
+  //   template = await vite.transformIndexHtml(url, template);
+  //   render = (await vite.ssrLoadModule("/src/entry-server.jsx")).render;
+
+  //   const appHTML = render(url, context);
+
+  //   const html = template.replace(`<!--app-html-->`, appHTML);
+
+  //   return { app, vite };
+
   app.use("*", async (req, res, next) => {
     // serve index.html
 
@@ -23,17 +34,14 @@ async function createServer() {
 
     try {
       // 1. Read index.html
-      let template = fs.readFileSync(
-        path.resolve(__dirname, "index.html"),
-        "utf-8"
-      );
+      let template = fs.readFileSync(path.resolve("index.html"), "utf-8");
 
       template = await vite.transformIndexHtml(url, template);
 
-      const { render } = await vite.ssrLoadModule("/src/entry-server.js");
+      const { render } = await vite.ssrLoadModule("/src/entry-server.jsx");
 
       const appHTML = await render(url);
-      const html = template.replace(`<div>ssr outlet</div>`, appHTML);
+      const html = template.replace(`<!--app-html-->`, appHTML);
 
       res.status(200).set({ "Content-Type": "text/html" }).end(html);
     } catch (e) {
