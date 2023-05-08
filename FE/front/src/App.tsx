@@ -1,24 +1,35 @@
-import { useState } from "react";
+// import { useEffect, useState } from "react";
+
+// import { Outlet, useNavigate } from "react-router-dom";
+
+// import { app } from "./util/realm";
+
+// import IndexMenu from "./components/IndexMenu";
+// import LoginEmail from "./components/LoginEmail";
+
+// function App() {
+//   const [user, setUser] = useState(null);
+//   const storage = app.currentUser;
+//   const navigate = useNavigate();
+
+//   useEffect(() => {
+//     if (storage !== null && storage.hasOwnProperty("_accessToken")) {
+//       setUser(storage);
+//       navigate("/notelist");
+//     }
+//   }, []);
+
+//   return (
+//     <div className="app">
+//       <p>아무단어장 리팩토링</p>
+//       <IndexMenu />
+//       {user ? <Outlet /> : <LoginEmail />}
+//     </div>
+//   );
+// }
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  );
+  return <div>vite server test</div>;
 }
 
 export { App };
