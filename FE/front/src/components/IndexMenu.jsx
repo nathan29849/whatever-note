@@ -3,9 +3,7 @@ import { useNavigate } from "react-router-dom";
 export default function IndexMenu() {
   const navigate = useNavigate();
   const theme = "black-white--";
-  const className = {
-    group: theme + "index-menu-group",
-  };
+  const className = theme + "index-menu";
 
   const goHome = () => {
     navigate("/");
@@ -16,9 +14,9 @@ export default function IndexMenu() {
   };
 
   return (
-    <ul className={className.group}>
-      <li>홈</li>
-      <li>노트</li>
+    <ul className={className}>
+      <li>Home</li>
+      <li>Notes</li>
     </ul>
   );
 }
