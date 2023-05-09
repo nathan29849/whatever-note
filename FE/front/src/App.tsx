@@ -8,13 +8,12 @@ import IndexMenu from "./components/IndexMenu";
 import LoginEmail from "./components/LoginEmail";
 
 function App() {
-  const [user, setUser] = useState(null);
-  const storage = app.currentUser;
+  // const [user, setUser] = useState(app.currentUser);
+  const user = app.currentUser;
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (storage !== null && storage.hasOwnProperty("_accessToken")) {
-      setUser(storage);
+    if (user !== null && user.hasOwnProperty("_accessToken")) {
       navigate("/notelist");
     }
   }, []);
