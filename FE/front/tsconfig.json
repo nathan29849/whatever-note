@@ -2,11 +2,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "ESNext",
     "skipLibCheck": true,
     "allowJs": true,
@@ -31,18 +27,11 @@
       }
     ]
   },
-  "include": [
-    "src",
-    "server",
-    "server.js",
-    ".next/types/**/*.ts"
-  ],
+  "include": ["src", "server", "server.js", ".next/types/**/*.ts", "app"],
   "references": [
     {
       "path": "./tsconfig.node.json"
     }
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

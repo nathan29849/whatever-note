@@ -1,3 +1,5 @@
+import { App } from "../src/App";
+
 export default function RootLayout({
   children,
 }: {
@@ -5,7 +7,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <header>{children}</header>
+        <main>
+          <App />
+        </main>
+      </body>
     </html>
   );
 }

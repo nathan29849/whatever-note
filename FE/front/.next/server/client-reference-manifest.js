@@ -741,6 +741,32 @@ self.__RSC_MANIFEST={
         ],
         "async": false
       }
+    },
+    "(app-client)/./src/App.tsx": {
+      "*": {
+        "id": "(sc_client)/./src/App.tsx",
+        "name": "*",
+        "chunks": [
+          "app/layout:static/chunks/app/layout.js"
+        ],
+        "async": false
+      },
+      "": {
+        "id": "(sc_client)/./src/App.tsx",
+        "name": "",
+        "chunks": [
+          "app/layout:static/chunks/app/layout.js"
+        ],
+        "async": false
+      },
+      "App": {
+        "id": "(sc_client)/./src/App.tsx",
+        "name": "App",
+        "chunks": [
+          "app/layout:static/chunks/app/layout.js"
+        ],
+        "async": false
+      }
     }
   },
   "edgeSSRModuleMapping": {},
@@ -2439,6 +2465,30 @@ self.__RSC_MANIFEST={
       "name": "default",
       "chunks": [
         "app-client-internals:static/chunks/app-client-internals.js"
+      ],
+      "async": false
+    },
+    "/Users/young/Desktop/code/whatever-note/whatever-fork-02/FE/front/src/App.tsx": {
+      "id": "(app-client)/./src/App.tsx",
+      "name": "*",
+      "chunks": [
+        "app/layout:static/chunks/app/layout.js"
+      ],
+      "async": false
+    },
+    "/Users/young/Desktop/code/whatever-note/whatever-fork-02/FE/front/src/App.tsx#": {
+      "id": "(app-client)/./src/App.tsx",
+      "name": "",
+      "chunks": [
+        "app/layout:static/chunks/app/layout.js"
+      ],
+      "async": false
+    },
+    "/Users/young/Desktop/code/whatever-note/whatever-fork-02/FE/front/src/App.tsx#App": {
+      "id": "(app-client)/./src/App.tsx",
+      "name": "App",
+      "chunks": [
+        "app/layout:static/chunks/app/layout.js"
       ],
       "async": false
     }
